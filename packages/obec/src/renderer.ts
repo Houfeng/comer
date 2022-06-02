@@ -50,7 +50,8 @@ function setStyle(
   if (!element || !style) return;
   if (element instanceof HTMLElement || element instanceof SVGElement) {
     Object.entries(style || {}).forEach(([key, value]) => {
-      element.style.setProperty(key, String(value));
+      //@ts-ignore
+      element.style[key] = String(value);
     });
   }
 }
