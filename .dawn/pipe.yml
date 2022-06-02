@@ -39,3 +39,12 @@ publish:
       - dn build
       - npm pu --registry=https://registry.npmjs.org/
   - name: submitter
+
+reinstall:
+  - name: clean
+    target:
+      - ./node_modules/
+      - ./packages/*/node_modules/
+  - name: shell
+    script:
+      - npm i
