@@ -30,6 +30,7 @@ function normalizeNode(node: ComponentNode) {
 }
 
 function setProps(element: ComponentElement, props: ComponentProps) {
+  if (!element || !props) return;
   Object.entries(props || {}).forEach(([key, value]) => {
     value = isFunction(value) ? value() : value;
     if (isEventProp(key)) {
@@ -39,6 +40,19 @@ function setProps(element: ComponentElement, props: ComponentProps) {
       element[key] = value;
     }
   });
+}
+
+function setStyle(
+  element: ComponentElement,
+  style: Partial<CSSStyleDeclaration>
+) {
+  style = isFunction(style) ? style() : style;
+  if (!element || !style) return;
+  if (element instanceof HTMLElement || element instanceof SVGElement) {
+    Object.entries(style || {}).forEach(([key, value]) => {
+      element.style.setProperty(key, String(value));
+    });
+  }
 }
 
 function appendChildren(parent: ComponentElement, children: ComponentNode[]) {
@@ -58,13 +72,14 @@ export function createElement(
   props: ComponentProps = {}
 ): ComponentNode {
   if (isFunction(type)) return type(props);
-  const { children, ...others } = props || {};
+  const { children, style, ...others } = props || {};
   const element = document.createElement(type);
   setProps(element, others);
+  setStyle(element, style);
   appendChildren(element, isArray(children) ? children : [children]);
   return element;
 }
 
-export function render(node: ComponentNode, container: Element): void {
-  container.appendChild(normalizeNode(node));
+export function render(node: ComponentNode, container: Element): Node {
+  return container.appendChild(normalizeNode(node));
 }

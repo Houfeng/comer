@@ -19,18 +19,20 @@ export function List({ children }: any) {
 export function App() {
   const message = "哈哈";
   return (
-    <div onclick={() => alert(0)}>
+    <div className="box" onclick={() => alert(0)} style={{ background: "red" }}>
       <List>
         {message}
         <List />
       </List>
       <div>
-        {["aaa", "bbb"].map((it) =>
-          it.split("").map((char) => <div>{char}</div>)
-        )}
+        {new Array(500).fill("").map((_it, index) => (
+          <div>{index}</div>
+        ))}
       </div>
     </div>
   );
 }
 
+console.time("render");
 render(<App />, document.getElementById("root"));
+console.timeEnd("render");

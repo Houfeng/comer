@@ -7,7 +7,9 @@
 declare namespace JSX {
   type IntrinsicElements = {
     [tagName in keyof HTMLElementTagNameMap]: {
-      [prop in keyof HTMLElementTagNameMap[tagName]]?: HTMLElementTagNameMap[tagName][prop];
+      [prop in keyof HTMLElementTagNameMap[tagName]]?: Partial<
+        HTMLElementTagNameMap[tagName][prop]
+      >;
     };
   };
 }
