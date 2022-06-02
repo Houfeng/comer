@@ -15,13 +15,13 @@ test:
 dev:
   - name: copy 
     files:
-      ./dist/(0).html: ./assets/*.html
+      ./packages/obec-demo/dist/(0).html: ./packages/obec-demo/assets/*.html
   - name: shell
     async: true
     script:
-      - rollup -w -c ./rollup.config.dev.js
+      - npm run start --workspace=obec-demo
   - name: server
-    public: ./dist/
+    public: ./packages/obec-demo/dist/
     port: 6008
 
 build:

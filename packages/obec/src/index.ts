@@ -4,4 +4,5 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-export const version = "1";
+import "./jsx";
+export * from "./renderer";

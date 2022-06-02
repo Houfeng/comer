@@ -4,11 +4,13 @@
     "baseUrl": "./",
     "outDir": "./build/",
     "declarationDir": "./types/",
+    "jsx": "preserve",
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
-    "../../@types/*.d.ts"
+    "./@types/*.d.ts",
+    "obec/@types/*.d.ts"
   ],
   "exclude": [
     "**/node_modules/**/*.*",

@@ -7,7 +7,7 @@
   "types": "./types/index.d.ts",
   "directories": {},
   "scripts": {
-    "clean": "rm -rf ./dist/",
+    "clean": "rm -rf ./dist/ && rm -rf ./types/",
     "test": "npm run clean && eslint --fix ./src/**/*.ts",
     "build": "npm run clean && rollup -c"
   },
@@ -17,6 +17,7 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
+    "ntils": "5.2.4",
     "ober": "^8.0.0",
     "tslib": "*"
   }

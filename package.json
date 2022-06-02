@@ -2,22 +2,20 @@
   "name": "obec-packages",
   "version": "0.1.0",
   "description": "",
-  "main": "./dist/index-cjs.js",
-  "module": "./dist/index-es.js",
-  "types": "./types/index.d.ts",
+  "author": "Houfeng",
+  "license": "MIT",
   "scripts": {
-    "test": ""
+    "postinstall": "dn run clean",
+    "clean": "dn run clean",
+    "start": "dn dev",
+    "test": "dn test",
+    "build": "dn build"
   },
-  "author": "",
-  "license": "ISC",
   "workspaces": [
     "./packages/babel-preset-obec",
     "./packages/obec",
     "./packages/obec-demo"
   ],
-  "dependencies": {
-    "tslib": "*"
-  },
   "devDependencies": {
     "@babel/cli": "7.17.10",
     "@babel/core": "7.18.0",
@@ -25,12 +23,10 @@
     "@types/babel__traverse": "7.17.1",
     "@types/babel-types": "7.0.11",
     "@types/mocha": "9.1.1",
-    "@types/react": "*",
-    "@types/react-dom": "*",
     "@typescript-eslint/eslint-plugin": "5.20.0",
     "@typescript-eslint/parser": "5.20.0",
     "coveralls": "3.0.0",
-    "dawn": "1.8.0",
+    "dawn": "1.10.2",
     "dn-middleware-browser-sync": "0.1.0",
     "dn-middleware-clean": "1.0.2",
     "dn-middleware-copy": "0.2.7",
@@ -43,10 +39,9 @@
     "dn-middleware-version": "1.0.4",
     "eslint": "8.13.0",
     "eslint-plugin-prettier": "4.0.0",
+    "npm": "8.12.0",
     "nyc": "11.4.1",
     "prettier": "2.6.2",
-    "react": "*",
-    "react-dom": "*",
     "rollup": "2.2.0",
     "rollup-plugin-cleanup": "3.2.1",
     "rollup-plugin-commonjs": "10.1.0",
