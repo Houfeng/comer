@@ -1,0 +1,41 @@
+info:
+  - name: file-header
+    files: ./packages/*/src/**/*.{ts,tsx}
+    text: 
+      - 'Copyright (c) 2015-present Houfeng'
+      - '@homepage https://github.com/Houfeng/mota'
+      - '@author Houfeng <houzhanfeng@gmail.com>'
+
+test:
+  - name: shell
+    script:
+      - npm run clean --workspaces
+      - npm run test --workspaces
+
+dev:
+  - name: copy 
+    files:
+      ./dist/(0).html: ./assets/*.html
+  - name: shell
+    async: true
+    script:
+      - rollup -w -c ./rollup.config.dev.js
+  - name: server
+    public: ./dist/
+    port: 6008
+
+build:
+  - name: shell
+    script:
+      - dn run info
+      - npm run clean --workspaces
+      - npm run build --workspaces
+
+publish:
+  - name: version
+  - name: shell
+    script:
+      - dn test
+      - dn build
+      - npm pu --registry=https://registry.npmjs.org/
+  - name: submitter

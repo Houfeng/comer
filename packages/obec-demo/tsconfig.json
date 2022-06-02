@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.dev.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./build/",
+    "declarationDir": "./types/",
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "../../@types/*.d.ts"
+  ],
+  "exclude": [
+    "**/node_modules/**/*.*",
+    "**/types/**/*.*"
+  ]
+}

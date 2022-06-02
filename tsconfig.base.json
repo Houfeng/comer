@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "composite": false,
+    "incremental": true,
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "pretty": true,
+    "module": "ESNext",
+    "target": "es5",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "maxNodeModuleJsDepth": 4,
+    "importHelpers": true,
+    /* 严格检查 */
+    //"strict": true,
+    "noImplicitAny": true,
+    //"strictNullChecks": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    //"noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    /* 严格检查 */
+    "lib": [
+      "ESNext",
+      "DOM",
+      "WebWorker",
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "obec-demo",
+  "version": "0.1.0",
+  "description": "",
+  "module": "./dist/index-es.js",
+  "main": "./dist/index-cjs.js",
+  "types": "./types/index.d.ts",
+  "directories": {},
+  "scripts": {
+    "clean": "rm -rf ./dist/",
+    "test": "npm run clean && eslint --fix ./src/**/*.{ts,tsx}",
+    "build": "npm run clean && rollup -c"
+  },
+  "author": "Houfeng",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "ober": "^8.0.0",
+    "tslib": "*"
+  }
+}

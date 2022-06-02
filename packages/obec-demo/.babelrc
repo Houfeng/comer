@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "@babel/plugin-syntax-jsx",
+    [
+      "@babel/plugin-transform-react-jsx",
+      {
+        "runtime": "automatic",
+        "importSource": "obec"
+      }
+    ],
+    "./lib/index-cjs.js"
+  ]
+}
