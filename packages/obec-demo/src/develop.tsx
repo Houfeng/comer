@@ -17,6 +17,8 @@ export function List({ count }: { count: number }) {
 }
 
 export function App() {
+  const btn = <button>点这儿</button> as HTMLButtonElement;
+  btn.onclick = () => alert(0);
   return (
     <div
       className="box"
@@ -27,7 +29,8 @@ export function App() {
         borderRadius: "8px",
       }}
     >
-      <List count={500} />
+      {btn}
+      <List count={1000} />
     </div>
   );
 }
