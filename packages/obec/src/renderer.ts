@@ -10,15 +10,15 @@ export type ComponentProps = Record<string, any> & {
   children?: JSX.Element;
 };
 
-export type Component<P extends ComponentProps = {}> = (
+export type Component<P extends ComponentProps = unknown> = (
   props: P
 ) => JSX.IntrinsicNode;
 
-function isIntrinsicNode(value: any): value is JSX.IntrinsicNode {
+function isIntrinsicNode(value: unknown): value is JSX.IntrinsicNode {
   return value instanceof Node;
 }
 
-function isIntrinsicElement(value: any): value is JSX.IntrinsicElement {
+function isIntrinsicElement(value: unknown): value is JSX.IntrinsicElement {
   return value instanceof Element;
 }
 
@@ -86,7 +86,7 @@ function unwrapProps(props: ComponentProps = {}) {
 }
 
 export function createElement(
-  type: string | Component<any>,
+  type: string | Component,
   props: ComponentProps = {}
 ): JSX.IntrinsicNode {
   if (isFunction(type)) {
@@ -100,9 +100,18 @@ export function createElement(
   return element;
 }
 
-export function render(
+export function mount(
   node: JSX.Element,
   container: JSX.IntrinsicElement
 ): JSX.IntrinsicNode[] {
   return appendIntrinsicChildren(container, node);
 }
+
+export function unmount(node: JSX.IntrinsicNode | JSX.IntrinsicNode[]) {
+  const nodes = isArray(node) ? node : [node];
+  nodes.slice(0).forEach((it) => {
+    if (it.parentNode) it.parentNode.removeChild(it);
+  });
+}
+
+export const render = mount;
