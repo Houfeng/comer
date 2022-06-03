@@ -4,7 +4,14 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+type AnyFunction = (...args: any) => any;
+
 declare namespace JSX {
+
+  type IntrinsicNode = Node;
+  type IntrinsicElement = Element & EventTarget;
+  type ComposeNode = IntrinsicNode | string | number | AnyFunction;
+
   type IntrinsicElements = {
     [tagName in keyof HTMLElementTagNameMap]: {
       [prop in keyof HTMLElementTagNameMap[tagName]]?: Partial<
@@ -12,5 +19,7 @@ declare namespace JSX {
       >;
     };
   };
-  type Element = Node;
+
+  type Element = ComposeNode | ComposeNode[];
+
 }

@@ -24,7 +24,7 @@ export function App() {
       padding: "20px",
       borderRadius: "8px"
     }}>
-      <List count={10} />
+      <List count={500} />
     </div>
   );
 }
