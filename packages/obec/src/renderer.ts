@@ -8,7 +8,7 @@ import { isArray, isFunction } from "ntils";
 
 export type AnyFunction = (...args: any) => any;
 export type ComponentElement = Element;
-export type ComponentNode = Node | string | number | AnyFunction | unknown;
+export type ComponentNode = Node | string | number | AnyFunction;
 
 export type ComponentProps = Record<string, any> & {
   children?: ComponentNode | ComponentNode[];
@@ -37,7 +37,7 @@ function setProps(element: ComponentElement, props: ComponentProps) {
       element.addEventListener(key.slice(2), value);
     } else {
       // @ts-ignore
-      element[key] = value; 
+      element[key] = value;
     }
   });
 }

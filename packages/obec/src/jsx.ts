@@ -12,4 +12,5 @@ declare namespace JSX {
       >;
     };
   };
+  type Element = Node;
 }
