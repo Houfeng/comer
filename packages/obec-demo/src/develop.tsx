@@ -6,34 +6,25 @@
 
 import { render } from "obec";
 
-export function List({ children }: any) {
+export function List({ count }: { count: number }) {
   return (
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>{children || "NONE"}</li>
-    </ul>
+    <div style={{ wordBreak: 'break-all' }}>
+      {new Array(count).fill("").map((_it, index) => (
+        <span>{index}</span>
+      ))}
+    </div>
   );
 }
 
 export function App() {
-  const message = "哈哈";
   return (
-    <div className="box" onclick={() => alert(0)} style={{
+    <div className="box" style={{
       background: "#eee",
       color: "#222",
       padding: "20px",
       borderRadius: "8px"
     }}>
-      <List>
-        {message}
-        <List />
-      </List>
-      <div>
-        {new Array(5000).fill("").map((_it, index) => (
-          <div>{index}</div>
-        ))}
-      </div> 
+      <List count={10} />
     </div>
   );
 }

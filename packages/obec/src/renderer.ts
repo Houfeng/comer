@@ -37,7 +37,7 @@ function setProps(element: ComponentElement, props: ComponentProps) {
       element.addEventListener(key.slice(2), value);
     } else {
       // @ts-ignore
-      element[key] = value;
+      element[key] = value; 
     }
   });
 }
