@@ -8,7 +8,7 @@ import { render } from "obec";
 
 export function List({ count }: { count: number }) {
   return (
-    <div style={{ wordBreak: 'break-all' }}>
+    <div style={{ wordBreak: "break-all" }}>
       {new Array(count).fill("").map((_it, index) => (
         <span>{index}</span>
       ))}
@@ -18,12 +18,15 @@ export function List({ count }: { count: number }) {
 
 export function App() {
   return (
-    <div className="box" style={{
-      background: "#eee",
-      color: "#222",
-      padding: "20px",
-      borderRadius: "8px"
-    }}>
+    <div
+      className="box"
+      style={{
+        background: "#eee",
+        color: "#222",
+        padding: "20px",
+        borderRadius: "8px",
+      }}
+    >
       <List count={500} />
     </div>
   );
