@@ -4,21 +4,25 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { render } from "obec";
+import { render } from "comer";
 
 export function List({ count }: { count: number }) {
   return (
     <div style={{ wordBreak: "break-all" }}>
       {new Array(count).fill("").map((_it, index) => (
-        <span>{index}</span>
+        <span style={{
+          margin: '4px',
+          padding: '4px',
+          background: '#faa',
+          display: 'inline-block'
+        }}>{index}</span>
       ))}
     </div>
   );
 }
 
 export function App() {
-  const btn = (<button>点这儿</button>) as HTMLButtonElement;
-  btn.onclick = () => alert(0);
+  const x = { count: 2000 };
   return (
     <div
       className="box"
@@ -29,8 +33,7 @@ export function App() {
         borderRadius: "8px",
       }}
     >
-      {btn}
-      <List count={1000} />
+      <List {...x} count={100}/>
     </div>
   );
 }

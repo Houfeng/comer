@@ -1,5 +1,5 @@
 {
-  "name": "obec-demo",
+  "name": "comer-demo",
   "version": "0.1.0",
   "description": "",
   "module": "./dist/index-es.js",
@@ -20,7 +20,7 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "obec": "*",
+    "comer": "*",
     "tslib": "*"
   }
 }

@@ -1,6 +1,6 @@
 {
   "presets": [
     "@babel/preset-typescript",
-    "babel-preset-obec"
+    "babel-preset-comer"
   ]
 }

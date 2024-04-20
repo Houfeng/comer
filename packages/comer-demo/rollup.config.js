@@ -13,7 +13,7 @@ const createConf = (page) => {
         file: `./dist/js/${page}.js`,
         format: 'iife',
         sourcemap: true,
-        name: 'ObecDemo'
+        name: 'ComerDemo'
       }
     ],
     plugins: [

@@ -1,5 +1,5 @@
 {
-  "name": "obec-packages",
+  "name": "comer-packages",
   "version": "0.1.0",
   "description": "",
   "author": "Houfeng",
@@ -12,9 +12,9 @@
     "build": "dn build"
   },
   "workspaces": [
-    "./packages/babel-preset-obec",
-    "./packages/obec",
-    "./packages/obec-demo"
+    "./packages/babel-preset-comer",
+    "./packages/comer",
+    "./packages/comer-demo"
   ],
   "devDependencies": {
     "@babel/cli": "7.17.10",

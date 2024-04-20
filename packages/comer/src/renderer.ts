@@ -39,7 +39,7 @@ function setIntrinsicProps(
   Object.entries(props || {}).forEach(([key, value]) => {
     value = isFunction(value) ? value() : value;
     if (isEventName(key)) {
-      element.addEventListener(key.slice(2), value);
+      element.addEventListener(key.slice(2), value, false);
     } else {
       // @ts-ignore
       element[key] = value;
