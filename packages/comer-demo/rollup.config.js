@@ -1,4 +1,3 @@
-import { ObserveMode } from 'ober';
 import commonjs from 'rollup-plugin-commonjs';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import resolve from 'rollup-plugin-node-resolve';
@@ -11,7 +10,7 @@ const createConf = (page) => {
     output: [
       {
         file: `./dist/js/${page}.js`,
-        format: 'iife',
+        format: "umd",
         sourcemap: true,
         name: 'ComerDemo'
       }
@@ -27,7 +26,7 @@ const createConf = (page) => {
       }),
       sourcemaps(),
       injectProcessEnv({
-        OBER_CONFIG: { mode: ObserveMode.property },
+        OBER_CONFIG: { mode: "property" },
       }),
     ]
   };
