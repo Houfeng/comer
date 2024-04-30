@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.dev.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./build/",
@@ -10,7 +10,7 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./@types/*.d.ts",
-    "obec/@types/*.d.ts"
+    "comer/@types/*.d.ts"
   ],
   "exclude": [
     "**/node_modules/**/*.*",

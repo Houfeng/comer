@@ -4,18 +4,9 @@
   "description": "",
   "main": "./lib/index.js",
   "directories": {},
-  "scripts": {
-    "clean": "rm -rf ./dist/",
-    "test": "npm run clean && eslint --fix ./src/**/*.ts",
-    "build": "npm run clean && tsc"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "author": "Houfeng",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/babel__traverse": "7.17.1",
-    "@types/babel-types": "7.0.11",
-    "@babel/traverse": "^7.18.2",
-    "@babel/types": "^7.18.4",
-    "typescript": "^4.7.2"
-  }
+  "license": "MIT"
 }

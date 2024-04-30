@@ -2,23 +2,15 @@
   "name": "comer",
   "version": "0.1.0",
   "description": "",
-  "module": "./dist/index-es.js",
-  "main": "./dist/index-cjs.js",
+  "module": "./lib/index.js",
+  "main": "./lib/index.js",
   "types": "./types/index.d.ts",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "directories": {},
-  "scripts": {
-    "clean": "rm -rf ./dist/ && rm -rf ./types/",
-    "test": "npm run clean && eslint --fix ./src/**/*.ts",
-    "build": "npm run clean && rollup -c"
-  },
   "author": "Houfeng",
   "license": "MIT",
-  "devDependencies": {
-    "typescript": "^4.7.2"
-  },
   "dependencies": {
     "ntils": "5.2.4",
     "ober": "^8.0.0",

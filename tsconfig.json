@@ -1,10 +1,4 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "paths": {
-      "@ali/slide-*": [
-        "../slide-*/src/"
-      ]
-    }
-  }
+  "compilerOptions": {}
 }

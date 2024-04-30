@@ -1,0 +1,4 @@
+packages:
+  - ./packages/babel-preset-comer/
+  - ./packages/comer/
+  - ./packages/comer-demo/

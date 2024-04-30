@@ -4,18 +4,22 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { render } from "comer";
+import { render } from 'comer';
 
 export function List({ count }: { count: number }) {
   return (
-    <div style={{ wordBreak: "break-all" }}>
-      {new Array(count).fill("").map((_it, index) => (
-        <span style={{
-          margin: '4px',
-          padding: '4px',
-          background: '#faa',
-          display: 'inline-block'
-        }}>{index}</span>
+    <div style={{ wordBreak: 'break-all' }}>
+      {new Array(count).fill('').map((_it, index) => (
+        <span
+          style={{
+            margin: '4px',
+            padding: '4px',
+            background: '#faa',
+            display: 'inline-block',
+          }}
+        >
+          {index}
+        </span>
       ))}
     </div>
   );
@@ -27,17 +31,17 @@ export function App() {
     <div
       className="box"
       style={{
-        background: "#eee",
-        color: "#222",
-        padding: "20px",
-        borderRadius: "8px",
+        background: '#eee',
+        color: '#222',
+        padding: '20px',
+        borderRadius: '8px',
       }}
     >
-      <List {...x} count={100}/>
+      <List {...x} count={100} />
     </div>
   );
 }
 
-console.time("render");
-render(<App />, document.getElementById("root"));
-console.timeEnd("render");
+console.time('render');
+render(<App />, document.getElementById('root'));
+console.timeEnd('render');

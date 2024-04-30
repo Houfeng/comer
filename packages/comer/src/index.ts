@@ -4,5 +4,6 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import "./jsx";
-export * from "./renderer";
+import './jsx';
+
+export * from './renderer';

@@ -4,13 +4,13 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
-import { isArray, isFunction } from "ntils";
+import { isArray, isFunction } from 'ntils';
 
-export type ComponentProps = Record<string, any> & {
+export type ComponentProps = Record<string, unknown> & {
   children?: JSX.Element;
 };
 
-export type Component<P extends ComponentProps = unknown> = (
+export type Component<P extends ComponentProps = ComponentProps> = (
   props: P
 ) => JSX.IntrinsicNode;
 
@@ -23,25 +23,25 @@ function isIntrinsicElement(value: unknown): value is JSX.IntrinsicElement {
 }
 
 function isEventName(key: string) {
-  return key && key.startsWith("on");
+  return key && key.startsWith('on');
 }
 
 function toIntrinsicNode(node: JSX.ComposeNode) {
   if (isIntrinsicNode(node)) return node;
-  return document.createTextNode(String(node ?? ""));
+  return document.createTextNode(String(node ?? ''));
 }
 
 function setIntrinsicProps(
   element: JSX.IntrinsicElement,
-  props: ComponentProps
+  props: ComponentProps,
 ) {
   if (!element || !props) return;
   Object.entries(props || {}).forEach(([key, value]) => {
     value = isFunction(value) ? value() : value;
-    if (isEventName(key)) {
-      element.addEventListener(key.slice(2), value, false);
+    if (isEventName(key) && isFunction(value)) {
+      element.addEventListener(key.slice(2), value as EventListener, false);
     } else {
-      // @ts-ignore
+      // @ts-expect-error xxx
       element[key] = value;
     }
   });
@@ -49,19 +49,19 @@ function setIntrinsicProps(
 
 function setIntrinsicStyle(
   element: JSX.IntrinsicElement,
-  style: Partial<CSSStyleDeclaration>
+  style: Partial<CSSStyleDeclaration>,
 ) {
   style = isFunction(style) ? style() : style;
   if (!element || !style || !isIntrinsicElement(element)) return;
   Object.entries(style || {}).forEach(([key, value]) => {
-    //@ts-ignore
+    //@ts-expect-error xxx
     element.style[key] = String(value);
   });
 }
 
 function appendIntrinsicChildren(
   parent: JSX.IntrinsicElement,
-  children: JSX.Element
+  children: JSX.Element,
 ): JSX.IntrinsicNode[] {
   if (!isIntrinsicNode(parent) || !children) return;
   children = isArray(children) ? children : [children];
@@ -87,7 +87,7 @@ function unwrapProps(props: ComponentProps = {}) {
 
 export function createElement(
   type: string | Component,
-  props: ComponentProps = {}
+  props: ComponentProps = {},
 ): JSX.IntrinsicNode {
   if (isFunction(type)) {
     return toIntrinsicNode(type(unwrapProps(props)));
@@ -95,14 +95,14 @@ export function createElement(
   const { children, style, ...others } = props || {};
   const element = document.createElement(type);
   setIntrinsicProps(element, others);
-  setIntrinsicStyle(element, style);
+  setIntrinsicStyle(element, style as Partial<CSSStyleDeclaration>);
   appendIntrinsicChildren(element, children);
   return element;
 }
 
 export function mount(
   node: JSX.Element,
-  container: JSX.IntrinsicElement
+  container: JSX.IntrinsicElement,
 ): JSX.IntrinsicNode[] {
   return appendIntrinsicChildren(container, node);
 }

@@ -4,6 +4,8 @@
  * @author Houfeng <houzhanfeng@gmail.com>
  */
 
+/* eslint-disable */
+
 type AnyFunction = (...args: any) => any;
 
 declare namespace JSX {
@@ -21,3 +23,5 @@ declare namespace JSX {
 
   type Element = ComposeNode | ComposeNode[];
 }
+
+/* eslint-enable */
