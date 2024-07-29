@@ -6,4 +6,6 @@
 
 import './jsx';
 
-export * from './renderer';
+export * from './HostAdapter';
+export * from './DOMAdapter';
+export * from './ComerRenderer';

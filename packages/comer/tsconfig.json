@@ -7,8 +7,6 @@
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "../../@types/*.d.ts"
   ],
   "exclude": [
     "**/node_modules/**/*.*",
