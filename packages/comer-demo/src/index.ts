@@ -1,5 +1,5 @@
 import { Component, Fragment, Ref } from "comer";
-import { Div, Footer, Header, Main, renderer, Video } from "comer-dom";
+import { Button, Div, Footer, Header, Main, renderer } from "comer-dom";
 
 class App extends Component {
   mainRef = new Ref<Main>();
@@ -11,13 +11,16 @@ class App extends Component {
         new Main({
           ref: this.mainRef,
           innerText: "Hello word",
-          onClick: (event: MouseEvent) => {
-            console.log("click", event.target);
-          },
-          children: new Video(),
         }),
         new Fragment(),
-        new Footer(),
+        new Footer({
+          children: new Button({
+            innerText: "Click me",
+            onClick: (event: MouseEvent) => {
+              console.log("click", event.target);
+            },
+          }),
+        }),
       ],
     });
   }
