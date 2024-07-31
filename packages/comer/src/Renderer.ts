@@ -4,6 +4,7 @@ import { Component } from './Component';
 import { AnyFunction } from './TypeUtil';
 import { nextTick, observable } from 'ober';
 import { HostComponent } from './HostComponent';
+import { Fragment } from './Fragment';
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -30,6 +31,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return this.isComponent(value) && value instanceof HostComponent
   }
 
+  private isFragment(value: unknown): value is Fragment {
+    return this.isComponent(value) && value instanceof Fragment
+  }
+
   private dispatch<
     M extends keyof Component,
     A extends Component[M] extends AnyFunction ? Component[M] : () => void
@@ -42,14 +47,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     });
   }
 
-
   private build(element: Component): Component[] {
     // Make the props of the instance observable
     element.__props__ = observable(element.__props__);
     // Execute build method
     // TODO: Collect dependencies 
     const result = element.build();
-    const children = result !== element ? result.__children__ : [result];
+    const children = this.isFragment(result) || result === element
+      ? result.__children__ : [result];
     return (children || []).flat(1);
   }
 

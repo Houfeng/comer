@@ -1,17 +1,18 @@
 import { Component } from "./Component";
+import { Fragment } from "./Fragment";
 import { HostElement } from "./HostAdapter";
 
-export abstract class HostComponent<
-  T extends object,
-  E extends HostElement
-> extends Component<T> {
+export type HostComponentProps = {
+  children?: Component[];
+}
 
+export abstract class HostComponent<
+  P extends HostComponentProps,
+  E extends HostElement,
+> extends Component<P> {
   type = '';
   hostElement: E;
-
   build(): Component {
-    this.__children__ = [];
-    return this;
+    return new Fragment(this.props.children || []);
   }
-
 }

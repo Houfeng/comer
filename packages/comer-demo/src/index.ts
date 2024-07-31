@@ -12,6 +12,6 @@ renderer.render(new Div({
       }
     }),
   ]
-}), document.getElementById('root'));
+}), document.getElementById('root')!);
 
 console.log('renderer', renderer);
