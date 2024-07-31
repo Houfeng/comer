@@ -27,7 +27,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private isHostComponent(value: unknown):
-    value is HostComponent<object, object> {
+    value is HostComponent {
     return this.isComponent(value) && value instanceof HostComponent
   }
 
@@ -58,8 +58,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return (children || []).flat(1);
   }
 
-  private findParentHostComponent(element?: Component):
-    HostComponent<object, object> | void {
+  private findParentHostComponent(element?: Component): HostComponent | void {
     if (!element || !element.__parent__) return;
     if (this.isHostComponent(element.__parent__)) {
       return element.__parent__;
@@ -73,8 +72,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return hostComponent.hostElement;
   }
 
-  private findHostComponents(element?: Component):
-    HostComponent<object, object>[] {
+  private findHostComponents(element?: Component): HostComponent[] {
     if (!element) return [];
     return [];
   }

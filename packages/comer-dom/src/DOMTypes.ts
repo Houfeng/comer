@@ -1,15 +1,14 @@
-import { ValueOf } from "comer";
+import { StringKeyOf, ValueOf } from "comer";
 
 export type DOMElement = HTMLElement | SVGElement;
 
 export type DOMEventMap = HTMLElementEventMap & SVGElementEventMap;
 
-export type DOMEvents = {
-  [K in keyof DOMEventMap]: (event?: DOMEventMap[K]) => void;
-}
-
-export type DOMEventProps<K extends keyof DOMEventMap = keyof DOMEventMap> =
-  Record<`on${Capitalize<K>}`, (event?: DOMEventMap[K]) => void>
+export type DOMEventProps<
+  M extends DOMEventMap = DOMEventMap,
+  K extends StringKeyOf<M> = StringKeyOf<M>
+> =
+  Record<`on${Capitalize<K>}`, (event?: M[K]) => void>
 
 export type DOMPropKeyOf<T extends DOMElement> = {
   [K in keyof T]-?: ValueOf<T, K> extends string | number ? K : never

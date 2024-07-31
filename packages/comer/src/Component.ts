@@ -1,11 +1,11 @@
-import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
+import { Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
 
-type RefProps = { ref?: Ref<Component> };
+type Props = { ref?: Ref<Component> };
 type Args<P> = RequiredKeyOf<P> extends never
   ? OptionalKeyOf<P> extends never
-  ? Parameters<() => void> : Parameters<(props?: P & RefProps) => void>
-  : Parameters<(props: P & RefProps) => void>
+  ? Parameters<() => void> : Parameters<(props?: Modify<Props, P>) => void>
+  : Parameters<(props: Modify<Props, P>) => void>
 
 /**
  * Component abstract class, the base class for all components
