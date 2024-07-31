@@ -1,4 +1,4 @@
-import { Component, Fragment, Ref } from "comer";
+import { Component, Ref } from "comer";
 import { Button, Div, Footer, Header, Main, renderer } from "comer-dom";
 
 class App extends Component {
@@ -12,7 +12,6 @@ class App extends Component {
           ref: this.mainRef,
           innerText: "Hello word",
         }),
-        new Fragment(),
         new Footer({
           children: new Button({
             innerText: "Click me",
