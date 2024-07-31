@@ -10,6 +10,7 @@ export const clean = task("清理", async () => {
   rm -rf ./packages/*/tsconfig.tsbuildinfo
   rm -rf ./packages/*/types/
   rm -rf ./packages/*/dist/
+  rm -rf ./packages/*/build/
   rm -rf ./packages/*/lib/
   `;
 });
