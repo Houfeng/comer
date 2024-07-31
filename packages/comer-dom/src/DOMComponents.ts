@@ -2,12 +2,12 @@ import { Component, Fragment, HostComponent } from "comer";
 import { DOMElement, DOMEventProps, DOMProps } from "./DOMTypes";
 
 export type DOMComponentProps<E extends DOMElement = DOMElement> =
-  DOMProps<E> & { children?: Component[]; }
+  DOMProps<E> & { children?: Component[] | Component; }
 
 export class DOMComponent<E extends DOMElement, T, P = {}>
   extends HostComponent<DOMComponentProps<E> & P, E, T> {
   build(): Component {
-    return new Fragment(this.props.children || []);
+    return new Fragment(this.props.children);
   }
 }
 

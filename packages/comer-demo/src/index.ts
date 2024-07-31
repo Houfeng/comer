@@ -1,4 +1,4 @@
-import { Ref } from 'comer';
+import { Fragment, Ref } from 'comer';
 import { Div, Footer, Header, Main, renderer, Span, Video } from 'comer-dom';
 
 const span = new Span();
@@ -13,8 +13,9 @@ renderer.render(new Div({
       onClick: (event: MouseEvent) => {
         console.log('click', event.target);
       },
-      children: [new Video()]
+      children: new Video()
     }),
+    new Fragment(),
     new Footer(),
   ]
 }), document.getElementById('root')!);
