@@ -38,3 +38,10 @@ export abstract class Component<P extends object = {}> {
   unmount?: () => void;
 
 }
+
+export function fn<T extends typeof Component<any>>(ComponentClass: T) {
+  return (...args: ConstructorParameters<T>): InstanceType<T> => {
+    //@ts-ignore
+    return new ComponentClass(...args);
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, Fragment, HostComponent } from "comer";
+import { Component, Fragment, HostComponent, fn } from "comer";
 import { DOMElement, DOMEventProps, DOMProps } from "./DOMTypes";
 
 export type DOMComponentProps<E extends DOMElement = DOMElement> =
@@ -46,3 +46,5 @@ export class Video
     HTMLVideoElement, 'video',
     Partial<DOMEventProps<HTMLVideoElementEventMap>>
   > { type = 'video'; }
+
+export const div = fn(Div);
