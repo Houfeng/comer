@@ -84,6 +84,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       element.hostElement = this.adapter.createElement(element.type);
     }
     element.__children__.forEach(child => this.composeToHost(child, element));
+    // handle children
     const parentHostElement = this.findParentHostElement(parent);
     if (!parentHostElement) return;
     const childrenHostElements = this.findHostElements(element);
@@ -134,9 +135,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.adapter.isHostElement(container)) {
       throw new Error('Invalid host container');
     }
-    if (!this.isComponent(element)) {
-      throw new Error('Invalid component element');
-    }
     this.compose(element);
     const hostElements = this.findHostElements(element);
     if (hostElements.some(it => !this.adapter.isHostElement(it))) {
@@ -148,9 +146,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   unmount(element: Component): void {
-    if (!this.isComponent(element)) {
-      throw new Error('Invalid component element');
-    }
     const hostElements = this.findHostElements(element);
     if (hostElements.some(it => !this.adapter.isHostElement(it))) {
       throw new Error('Invalid host element');
