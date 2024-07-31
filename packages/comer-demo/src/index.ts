@@ -1,14 +1,14 @@
 import { Fragment, Ref } from 'comer';
-import { div, Footer, Header, Main, renderer, Span, Video } from 'comer-dom';
+import { Div, Footer, Header, Main, renderer, Video } from 'comer-dom';
 
-const span = new Span();
-console.log('span', span);
+const mainRef = new Ref<Main>();
+console.log('mainRef', mainRef);
 
-renderer.render(div({
+renderer.render(new Div({
   children: [
     new Header(),
     new Main({
-      ref: new Ref<Main>(),
+      ref: mainRef,
       innerText: 'Hello word',
       onClick: (event: MouseEvent) => {
         console.log('click', event.target);
