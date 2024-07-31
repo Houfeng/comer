@@ -1,8 +1,8 @@
 import { Fragment, Ref } from 'comer';
-import { Div, Footer, Header, Main, renderer, Span, Video } from 'comer-dom';
+import { div, Footer, Header, Main, renderer, Span, Video } from 'comer-dom';
 const span = new Span();
 console.log('span', span);
-renderer.render(new Div({
+renderer.render(div({
     children: [
         new Header(),
         new Main({
