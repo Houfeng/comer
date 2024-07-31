@@ -19,18 +19,21 @@ export abstract class Component<
     this.__props__ = { ...(args[0] as P) };
   }
 
-  protected get props(): P {
+  protected get props(): Readonly<P> {
     return this.__props__;
   }
-
-  mount(): void { }
-
-  unmount(): void { }
 
   build(): Component {
     throw new Error('Unimplemented build method');
   }
 
+  update(newProps: P): boolean {
+    return !!newProps;
+  }
+
+  mount(): void { }
+
+  unmount(): void { }
 
 }
 

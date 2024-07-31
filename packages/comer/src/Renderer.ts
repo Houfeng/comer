@@ -1,7 +1,8 @@
 import { isFunction } from 'ntils';
-import { HostAdapter, HostElement, HostElementProps, HostEventListener } from './HostAdapter';
+import { HostAdapter, HostElement } from './HostAdapter';
 import { Component } from './Component';
 import { AnyFunction } from './TypeUtil';
+import { observable } from 'ober';
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -13,60 +14,63 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   constructor(protected adapter: T) { }
 
-  /** @internal */
-  isComponent(value: unknown): value is Component {
+  private isComponent(value: unknown): value is Component {
     return value && value instanceof Component;
   }
 
-  /** @internal */
-  createElement(
-    type: string,
-    props: HostElementProps,
-    ...children: HostElement[]
-  ) {
-    const element = this.adapter.createElement(type)
-    // Set props
-    Object.keys(props || {}).forEach(key => {
-      const value = props[key];
-      if (/^on/.test(key) && isFunction(value)) {
-        const eventName = key.slice(2);
-        const eventListener = value as HostEventListener;
-        this.adapter.removeEvent(element, eventName, eventListener);
-        this.adapter.attachEvent(element, eventName, eventListener);
-      } else {
-        this.adapter.updateElement(element, { [key]: value });
-      }
-    });
-    // Append children
-    children?.forEach(child => this.adapter.appendElement(element, child));
+  private isSomeComponentType(el1: Component, el2: Component): boolean {
+    return el1 && el2 && el1.constructor !== el2.constructor;
   }
 
-  /** @internal */
-  build(element: Component, deep = true): void {
-    if (!this.isComponent(element)) return;
+  private build(element: Component): Component[] {
+    // Make the props of the instance observable
+    element.__props__ = observable(element.__props__);
+    // Execute build method
+    // TODO: Collect dependencies 
     const result = element.build();
     const children = result !== element ? result.__children__ : result;
-    element.__children__ = [].concat(children);
-    if (!deep) return;
-    element.__children__.forEach(child => this.build(child, deep));
+    return [].concat(children);
   }
 
-  /** @internal */
-  update(oldElement: Component, newElement: Component): void {
+  private compose(element: Component): void {
+    if (!this.isComponent(element)) return;
+    element.__children__ = this.build(element)
+    element.__children__.forEach(child => this.compose(child));
+  }
+
+  private update(oldElement: Component, newElement: Component): void {
     if (oldElement === newElement) return;
-    if (oldElement.constructor !== newElement.constructor) {
+    if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error('Update with mismatched types');
     }
+    const allowRendererUpdate = oldElement.update(newElement.__props__);
+    if (!allowRendererUpdate) return;
     Object.assign(oldElement.__props__, newElement.__props__);
   }
 
   /** @internal */
+  requestUpdate(element: Component) {
+    if (!this.isComponent(element)) return;
+    const oldChildren = element.__children__.slice(0);
+    const newChildren = this.build(element);
+    element.__children__ = [];
+    newChildren.forEach((newChild, index) => {
+      const oldChild = oldChildren[index];
+      if (this.isSomeComponentType(oldChild, newChild)) {
+        this.update(oldChild, newChild);
+        element.__children__.push(oldChild);
+      } else {
+        this.compose(newChild);
+        element.__children__.push(newChild);
+      }
+    });
+  }
+
   private findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
     return [];
   }
 
-  /** @internal */
   private dispatch<
     M extends keyof Component,
     A extends Component[M] extends AnyFunction ? Component[M] : never
@@ -86,7 +90,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isComponent(element)) {
       throw new Error('Invalid component element');
     }
-    this.build(element, true);
+    this.compose(element);
     const hostElements = this.findHostElements(element);
     if (hostElements.some(it => !this.adapter.isHostElement(it))) {
       throw new Error('Invalid host element');
