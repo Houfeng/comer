@@ -1,10 +1,13 @@
 *.log
+*.map
+*.tsbuildinfo
 .DS_Store
-node_modules/
 .nyc_output/
+node_modules/
 coverage/
 debug/
 dist/
+build/
 types/
 logs/
 lib/
