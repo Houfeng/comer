@@ -9,7 +9,9 @@ import { Fragment } from './Fragment';
 /**
  * Comer renderer, rendering elements to the host surface
  */
-export class Renderer<T extends HostAdapter<HostElement>> {
+export class Renderer<
+  T extends HostAdapter<HostElement>, HE = ReturnType<T['createElement']>
+> {
   /**
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
@@ -131,7 +133,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     });
   }
 
-  render<T extends Component>(element: T, container: HostElement): T {
+  render<T extends Component>(element: T, container: HE): T {
     if (!this.adapter.isHostElement(container)) {
       throw new Error('Invalid host container');
     }
