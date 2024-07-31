@@ -30,10 +30,7 @@ export abstract class Component<
     throw new Error('Unimplemented build method');
   }
 
-  update(newProps: P, force = false): boolean {
-    return !!newProps || force;
-  }
-
+  update?: () => void;
   mount?: () => void;
   unmount?: () => void;
 

@@ -111,8 +111,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error('Update with mismatched types');
     }
-    const allowRendererUpdate = oldElement.update(newElement.__props__);
-    if (!allowRendererUpdate) return;
     Object.assign(oldElement.__props__, newElement.__props__);
   }
 
@@ -133,7 +131,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         nextTick(() => this.dispatch(newChild, 'mount'));
       }
     });
-    element.update(element.__props__, true);
   }
 
   render<T extends Component>(element: T, container: HostElement): T {
