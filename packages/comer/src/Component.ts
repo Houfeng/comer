@@ -1,5 +1,8 @@
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 
+/**
+ * Component abstract class, the base class for all components
+ */
 export abstract class Component<
   P extends object = object,
   A extends Array<any> =
