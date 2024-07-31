@@ -25,6 +25,6 @@ class App extends Component {
   }
 }
 
-renderer.render(new App(), document.getElementById("root")!);
+const app = renderer.render(new App(), document.getElementById("root")!);
 
-console.log("renderer", renderer);
+Object.assign(window, { renderer, app });
