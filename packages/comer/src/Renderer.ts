@@ -17,7 +17,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -57,10 +57,9 @@ export class Renderer<
     // Execute build method
     // TODO: Collect dependencies
     const result = element.build();
-    const children =
-      this.isFragment(result) || result === element
-        ? result.__children__
-        : [result];
+    const isFragmentResult = this.isFragment(result) || result === element;
+    if (isFragmentResult) result.build();
+    const children = isFragmentResult ? result.__children__ : [result];
     return (children || []).flat(1);
   }
 
@@ -91,26 +90,18 @@ export class Renderer<
     return this.findHostComponents(element).map((it) => it.hostElement);
   }
 
-  private composeToHost(element: Component, parent?: Component) {
-    if (this.isHostComponent(element)) {
-      element.hostElement = this.adapter.createElement(element.type);
-    }
-    element.__children__.forEach((child) => this.composeToHost(child, element));
-    // handle children
-    const parentHostElement = this.findParentHostElement(parent);
-    if (!parentHostElement) return;
-    const childrenHostElements = this.findHostElements(element);
-    childrenHostElements.forEach((childHostElement) => {
-      this.adapter.appendElement(parentHostElement, childHostElement);
-    });
-  }
-
   private compose(element: Component, parent?: Component): void {
     if (!this.isComponent(element)) return;
     element.__parent__ = parent;
+    if (this.isHostComponent(element)) {
+      element.hostElement = this.adapter.createElement(element.type);
+      const parentHostElement = this.findParentHostElement(element);
+      if (parentHostElement) {
+        this.adapter.appendElement(parentHostElement, element.hostElement);
+      }
+    }
     element.__children__ = this.build(element);
     element.__children__.forEach((child) => this.compose(child, element));
-    this.composeToHost(element);
   }
 
   private update(oldElement: Component, newElement: Component): void {
