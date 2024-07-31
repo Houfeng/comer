@@ -41,7 +41,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   >(element: Component, method: M, ...args: Parameters<A>) {
     if (!element) return;
     const fn = element[method];
-    if (isFunction(fn)) fn.call(element, ...args);
+    if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
     element.__children__.forEach(child => {
       if (element !== child) this.dispatch(child, method, ...args);
     });
