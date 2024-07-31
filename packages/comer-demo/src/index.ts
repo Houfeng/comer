@@ -1,5 +1,5 @@
 import { Component, Ref } from "comer";
-import { Button, Div, Footer, Header, Main, renderer } from "comer-dom";
+import { Button, Div, Footer, Header, Main, renderer, Span } from "comer-dom";
 
 class App extends Component {
   mainRef = new Ref<Main>();
@@ -7,7 +7,9 @@ class App extends Component {
     return new Div({
       innerText: "Demo",
       children: [
-        new Header(),
+        new Header({
+          children: new Span({ innerText: "Header" }),
+        }),
         new Main({
           ref: this.mainRef,
           innerText: "Hello word",
