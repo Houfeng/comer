@@ -1,4 +1,3 @@
-import { HostElement } from "./HostAdapter";
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 
 export abstract class Component<
@@ -17,7 +16,7 @@ export abstract class Component<
   __children__: Component[];
 
   /**  @internal */
-  __compose__?: () => HostElement;
+  __parent__?: Component;
 
   constructor(...args: A) {
     this.__props__ = { ...(args[0] as P) };

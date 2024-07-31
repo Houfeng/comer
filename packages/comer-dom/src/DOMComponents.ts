@@ -1,16 +1,25 @@
-import { HostComponent } from "comer";
-import { DOMProps } from "./DOMTypes";
+import { Component, HostComponent } from "comer";
+import { DOMElement, DOMProps } from "./DOMTypes";
 
-export class Div extends HostComponent<DOMProps<HTMLDivElement>> {
-  protected type = 'div';
+export type DOMComponentProps<
+  T extends DOMElement = DOMElement,
+  C extends Component = Component
+> = DOMProps<T> & {
+  children?: C[];
 }
 
-export class Span extends HostComponent<DOMProps<HTMLSpanElement>> {
-  protected type = 'Span';
-}
+export class DOMComponent<T extends DOMElement>
+  extends HostComponent<DOMComponentProps<T>, T> { }
 
-export const s = new Span({
-  onClick: (event: MouseEvent) => {
-    console.log(event);
-  }
-});
+export class Div
+  extends DOMComponent<HTMLDivElement> { type = 'div'; }
+export class Span
+  extends DOMComponent<HTMLSpanElement> { type = 'span'; }
+export class P
+  extends DOMComponent<HTMLParagraphElement> { type = 'p'; }
+export class A
+  extends DOMComponent<HTMLAnchorElement> { type = 'a'; }
+export class Img
+  extends DOMComponent<HTMLImageElement> { type = 'img'; }
+export class Iframe
+  extends DOMComponent<HTMLIFrameElement> { type = 'iframe'; }
