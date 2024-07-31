@@ -1,12 +1,8 @@
 import { Component, Fragment, HostComponent } from "comer";
 import { DOMElement, DOMProps } from "./DOMTypes";
 
-export type DOMComponentProps<
-  E extends DOMElement = DOMElement,
-  C extends Component = Component
-> = DOMProps<E> & {
-  children?: C[];
-}
+export type DOMComponentProps<E extends DOMElement = DOMElement> =
+  DOMProps<E> & { children?: Component[]; }
 
 export class DOMComponent<E extends DOMElement>
   extends HostComponent<DOMComponentProps<E>, E> {

@@ -1,16 +1,16 @@
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
+import { Ref } from "./Ref";
+
+type RefProps = { ref?: Ref<Component> };
+type Args<P> = RequiredKeyOf<P> extends never
+  ? OptionalKeyOf<P> extends never
+  ? Parameters<() => void> : Parameters<(props?: P & RefProps) => void>
+  : Parameters<(props: P & RefProps) => void>
 
 /**
  * Component abstract class, the base class for all components
  */
-export abstract class Component<
-  P extends object = object,
-  A extends Array<any> =
-  RequiredKeyOf<P> extends never
-  ? OptionalKeyOf<P> extends never
-  ? Parameters<() => void> : Parameters<(props?: P) => void>
-  : Parameters<(props: P) => void>,
-> {
+export abstract class Component<P extends object = {}> {
 
   /**  @internal */
   __props__: P;
@@ -21,7 +21,7 @@ export abstract class Component<
   /**  @internal */
   __parent__?: Component;
 
-  constructor(...args: A) {
+  constructor(...args: Args<P>) {
     this.__props__ = { ...(args[0] as P) };
   }
 
@@ -37,7 +37,4 @@ export abstract class Component<
   mount?: () => void;
   unmount?: () => void;
 
-}
-
-export class View extends Component<{ x?: number, children: 1 }> {
 }

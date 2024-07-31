@@ -8,3 +8,4 @@ export * from './HostComponent';
 export * from './Context';
 export * from './Provider';
 export * from './Renderer';
+export * from './Ref';
