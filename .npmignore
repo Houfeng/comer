@@ -18,6 +18,7 @@ node_modules/
 coverage/
 debug/
 src/
+build/
 assets/
 test/
 examples/
