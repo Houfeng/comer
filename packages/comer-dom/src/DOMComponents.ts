@@ -1,4 +1,4 @@
-import { Component, HostComponent } from "comer";
+import { Component, Fragment, HostComponent } from "comer";
 import { DOMElement, DOMProps } from "./DOMTypes";
 
 export type DOMComponentProps<
@@ -9,7 +9,11 @@ export type DOMComponentProps<
 }
 
 export class DOMComponent<E extends DOMElement>
-  extends HostComponent<DOMComponentProps<E>, E> { }
+  extends HostComponent<DOMComponentProps<E>, E> {
+  build(): Component {
+    return new Fragment(this.props.children || []);
+  }
+}
 
 export class Div
   extends DOMComponent<HTMLDivElement> { type = 'div'; }
