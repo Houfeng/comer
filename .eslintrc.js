@@ -38,7 +38,6 @@ module.exports = {
     "@typescript-eslint/no-unsafe-declaration-merging": 0,
     "prettier/prettier": "error",
     "no-useless-catch": 0,
-    "no-console": 0,
     "comma-dangle": [
       "error",
       "always-multiline"
