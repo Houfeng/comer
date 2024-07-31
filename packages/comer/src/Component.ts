@@ -22,7 +22,7 @@ export abstract class Component<P extends object = {}> {
   __parent__?: Component;
 
   constructor(...args: Args<P>) {
-    this.__props__ = { ...(args[0] as P) };
+    this.__props__ = (args[0] as P) || {};
   }
 
   protected get props(): Readonly<P> {
