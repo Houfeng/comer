@@ -4,6 +4,7 @@
     "incremental": true,
     "sourceMap": true,
     "declaration": true,
+    "declarationMap": true,
     "moduleResolution": "node",
     "pretty": true,
     "module": "ESNext",

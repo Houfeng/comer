@@ -39,7 +39,7 @@ export abstract class Component<P extends object = {}> {
 
 }
 
-export function fn<T extends typeof Component<any>>(ComponentClass: T) {
+export function func<T extends typeof Component<any>>(ComponentClass: T) {
   return (...args: ConstructorParameters<T>): InstanceType<T> => {
     //@ts-ignore
     return new ComponentClass(...args);
