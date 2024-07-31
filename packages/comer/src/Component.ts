@@ -4,17 +4,17 @@ import { Ref } from "./Ref";
 type Props = { ref?: Ref<Component> };
 type Args<P> =
   RequiredKeyOf<P> extends never
-    ? OptionalKeyOf<P> extends never
-      ? Parameters<() => void>
-      : Parameters<(props?: Modify<Props, P>) => void>
-    : Parameters<(props: Modify<Props, P>) => void>;
+  ? OptionalKeyOf<P> extends never
+  ? Parameters<() => void>
+  : Parameters<(props?: Modify<Props, P>) => void>
+  : Parameters<(props: Modify<Props, P>) => void>;
 
 /**
  * Component abstract class, the base class for all components
  */
 export abstract class Component<P extends object = {}> {
   /**  @internal */
-  __props__: P;
+  __props__: Modify<Props, P>;
 
   /**  @internal */
   __children__: Component[];
@@ -23,7 +23,7 @@ export abstract class Component<P extends object = {}> {
   __parent__?: Component;
 
   constructor(...args: Args<P>) {
-    this.__props__ = (args[0] as P) || {};
+    this.__props__ = (args[0] as Modify<Props, P>) || {};
   }
 
   protected get props(): Readonly<P> {
