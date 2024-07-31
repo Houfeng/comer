@@ -46,6 +46,7 @@ module.exports = {
           },
         },
         exclude: /node_modules/,
+        include: /comer/,
       },
     ]
   },

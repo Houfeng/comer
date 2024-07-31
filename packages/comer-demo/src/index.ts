@@ -5,6 +5,7 @@ class App extends Component {
   mainRef = new Ref<Main>();
   build(): Component {
     return new Div({
+      innerText: 'Demo',
       children: [
         new Header(),
         new Main({

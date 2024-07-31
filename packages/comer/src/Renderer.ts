@@ -80,7 +80,10 @@ export class Renderer<
 
   private findHostComponents(element?: Component): HostComponent[] {
     if (!element) return [];
-    return [];
+    if (this.isHostComponent(element)) return [element];
+    return element.__children__
+      .map((child) => this.findHostComponents(child))
+      .flat(1);
   }
 
   private findHostElements(element: Component): HostElement[] {
