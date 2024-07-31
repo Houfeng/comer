@@ -12,8 +12,8 @@
     "build": "dn build"
   },
   "workspaces": [
-    "./packages/babel-preset-comer",
     "./packages/comer",
+    "./packages/comer-dom",
     "./packages/comer-demo"
   ],
   "devDependencies": {
@@ -46,7 +46,7 @@
     "rollup-plugin-typescript2": "0.31.2",
     "rollup-plugin-uglify": "6.0.4",
     "taskd": "0.1.7",
-    "typescript": "5.4.5",
+    "typescript": "5.5.4",
     "typescript-eslint": "7.8.0"
   }
 }

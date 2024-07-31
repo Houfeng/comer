@@ -16,6 +16,7 @@
     "resolveJsonModule": true,
     "maxNodeModuleJsDepth": 4,
     "importHelpers": true,
+    "stripInternal": true,
     /* 严格检查 */
     //"strict": true,
     "noImplicitAny": true,
@@ -30,8 +31,6 @@
     /* 严格检查 */
     "lib": [
       "ESNext",
-      "DOM",
-      "WebWorker",
     ]
   }
 }

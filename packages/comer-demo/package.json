@@ -15,8 +15,8 @@
   "author": "Houfeng",
   "license": "MIT",
   "dependencies": {
-    "babel-preset-comer": "workspace:*",
     "comer": "workspace:*",
+    "comer-dom": "workspace:*",
     "tslib": "*"
   }
 }

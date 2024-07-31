@@ -1,13 +1,18 @@
 export type HostElement = object;
-export type HostEventListener = (...args: any) => void;
-export type HostElementProps = Record<string, unknown | HostEventListener>;
+export type HostEvent = object;
+export type HostEventListener = (event: HostEvent) => void;
+export type HostElementProps = Record<string, unknown>;
 
-export interface HostAdapter<T extends HostElement> {
-  isElement(value: unknown): value is T;
-  setElementProp(element: T, name: string, value: unknown): void;
-  bindElementEvent(element: T, name: string, listener: HostEventListener): void;
-  unbindElementEvent(element: T, name: string, listener: HostEventListener): void;
-  createElement(type: string, props: HostElementProps, ...children: T[]): T;
-  removeElement(element: T): void;
-  appendChildElement(parent: T, child: T): void;
+/**
+ * Adapt to host platform elements or components
+ */
+export interface HostAdapter<E extends HostElement> {
+  isHostElement(value: unknown): value is E;
+  createElement(type: string): E;
+  removeElement(element: E): void;
+  appendElement(parent: E, child: E): void;
+  insertElement(parent: E, index: number, child: E): void;
+  updateElement(element: E, props: HostElementProps): void;
+  attachEvent(element: E, name: string, listener: HostEventListener): void;
+  removeEvent(element: E, name: string, listener: HostEventListener): void;
 }

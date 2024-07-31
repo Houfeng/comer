@@ -10,6 +10,11 @@ export default tslint.config(
         project: ['./tsconfig.json', './packages/*/tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
       },
+    },
+    rules: {
+      'no-useless-catch': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     }
   }
 );

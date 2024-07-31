@@ -1,4 +1,4 @@
 packages:
-  - ./packages/babel-preset-comer/
   - ./packages/comer/
+  - ./packages/comer-dom/
   - ./packages/comer-demo/

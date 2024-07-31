@@ -1,0 +1,10 @@
+*.log
+.DS_Store
+node_modules/
+.nyc_output/
+coverage/
+debug/
+dist/
+types/
+logs/
+lib/

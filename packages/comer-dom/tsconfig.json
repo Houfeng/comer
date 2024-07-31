@@ -2,9 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./build/",
+    "outDir": "./lib/",
     "declarationDir": "./types/",
-    "jsx": "preserve",
     "lib": [
       "ESNext",
       "DOM",
@@ -13,9 +12,6 @@
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./@types/*.d.ts",
-    "comer/@types/*.d.ts"
   ],
   "exclude": [
     "**/node_modules/**/*.*",

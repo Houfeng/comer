@@ -1,0 +1,20 @@
+{
+  "name": "comer-dom",
+  "version": "0.1.0",
+  "description": "",
+  "module": "./lib/index.js",
+  "main": "./lib/index.js",
+  "types": "./types/index.d.ts",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "directories": {},
+  "author": "Houfeng",
+  "license": "MIT",
+  "dependencies": {
+    "ntils": "5.2.4",
+    "ober": "^8.0.0",
+    "tslib": "*",
+    "comer": "workspace:*"
+  }
+}

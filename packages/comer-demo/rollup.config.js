@@ -6,7 +6,7 @@ const babel = require('rollup-plugin-babel');
 
 const createConf = (page) => {
   return {
-    input: `./src/${page}.tsx`,
+    input: `./src/${page}.ts`,
     output: [
       {
         file: `./dist/js/${page}.js`,
@@ -33,5 +33,5 @@ const createConf = (page) => {
 };
 
 export default [
-  createConf('develop'),
+  createConf('index'),
 ];
