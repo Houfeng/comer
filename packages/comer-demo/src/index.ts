@@ -1,5 +1,5 @@
-import { Component, Fragment, Ref } from 'comer';
-import { Div, Footer, Header, Main, renderer, Video } from 'comer-dom';
+import { Component, Fragment, Ref } from "comer";
+import { Div, Footer, Header, Main, renderer, Video } from "comer-dom";
 
 class App extends Component {
   mainRef = new Ref<Main>();
@@ -9,19 +9,19 @@ class App extends Component {
         new Header(),
         new Main({
           ref: this.mainRef,
-          innerText: 'Hello word',
+          innerText: "Hello word",
           onClick: (event: MouseEvent) => {
-            console.log('click', event.target);
+            console.log("click", event.target);
           },
-          children: new Video()
+          children: new Video(),
         }),
         new Fragment(),
         new Footer(),
-      ]
+      ],
     });
   }
 }
 
-renderer.render(new App(), document.getElementById('root')!);
+renderer.render(new App(), document.getElementById("root")!);
 
-console.log('renderer', renderer);
+console.log("renderer", renderer);

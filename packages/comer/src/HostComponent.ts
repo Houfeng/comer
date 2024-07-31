@@ -3,7 +3,7 @@ import { HostElement } from "./HostAdapter";
 import { Ref } from "./Ref";
 
 /**
- * Host platform component abstract class, 
+ * Host platform component abstract class,
  * the base class for all host platform components
  */
 export abstract class HostComponent<

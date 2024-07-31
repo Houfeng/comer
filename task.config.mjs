@@ -1,11 +1,15 @@
-import { task, $ } from "taskd";
+import { task, $ } from 'taskd';
 
-export const lint = task("代码风格检查", async () => {
+export const lint = task('代码风格检查', async () => {
   await $`eslint -v`;
-  await $`eslint --fix ./packages/*/src/**/*.ts`;
+  await $`eslint --fix --ext .ts ./packages/*/{src,tests}/`;
 });
 
-export const clean = task("清理", async () => {
+export const test = task('测试', [lint], async () => {
+  await $`c8 node --require ts-node/register --test tests/*.spec.ts`;
+});
+
+export const clean = task('清理', async () => {
   await $`
   rm -rf ./packages/*/tsconfig.tsbuildinfo
   rm -rf ./packages/*/types/
@@ -15,9 +19,13 @@ export const clean = task("清理", async () => {
   `;
 });
 
-export const build = task("构建", [clean, lint], async () => {
+export const build = task('构建', [clean, lint], async () => {
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
   await $`tsc -p ./packages/comer-demo`;
   await $`pnpm -F comer-demo build`;
+});
+
+export const dev = task('本地开发', [clean, lint], async () => {
+  await $`pnpm -F comer-demo dev`;
 });

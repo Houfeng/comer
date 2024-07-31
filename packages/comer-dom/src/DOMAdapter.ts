@@ -2,7 +2,6 @@ import { HostEventListener, HostAdapter } from "comer";
 import { DOMElement } from "./DOMTypes";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
-
   isHostElement(value: unknown): value is DOMElement {
     return !!value && value instanceof Element;
   }
@@ -33,7 +32,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   updateElement(element: DOMElement, props: Record<string, unknown>): void {
     if (!this.isHostElement(element)) return;
     const target = element as any;
-    Object.keys(props).forEach(name => {
+    Object.keys(props).forEach((name) => {
       target[name] = props[name];
     });
   }
@@ -41,7 +40,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   attachEvent(
     element: DOMElement,
     name: string,
-    listener: HostEventListener
+    listener: HostEventListener,
   ): void {
     if (!this.isHostElement(element)) return;
     element.addEventListener(name, listener, false);
@@ -50,7 +49,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   removeEvent(
     element: DOMElement,
     name: string,
-    listener: HostEventListener
+    listener: HostEventListener,
   ): void {
     if (!this.isHostElement(element)) return;
     element.removeEventListener(name, listener, false);

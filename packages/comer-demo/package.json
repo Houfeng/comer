@@ -7,10 +7,7 @@
   "types": "./types/index.d.ts",
   "directories": {},
   "scripts": {
-    "clean": "rm -rf ./dist/",
-    "test": "npm run clean && eslint --fix ./src/**/*.tsx",
-    "build": "npm run clean && rollup -c",
-    "start": "rollup -w -c"
+    "dev": "NODE_ENV=development webpack serve"
   },
   "author": "Houfeng",
   "license": "MIT",
