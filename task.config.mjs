@@ -16,7 +16,6 @@ export const clean = task("清理", async () => {
 });
 
 export const build = task("构建", [clean, lint], async () => {
-  // await $`tsc -p ./packages/babel-preset-comer`;
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
   await $`tsc -p ./packages/comer-demo`;
