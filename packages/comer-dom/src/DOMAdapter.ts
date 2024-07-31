@@ -4,7 +4,7 @@ import { DOMElement } from "./DOMTypes";
 export class DOMAdapter implements HostAdapter<DOMElement> {
 
   isHostElement(value: unknown): value is DOMElement {
-    return value && value instanceof Element;
+    return !!value && value instanceof Element;
   }
 
   createElement(type: string): DOMElement {

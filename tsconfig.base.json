@@ -20,7 +20,7 @@
     /* 严格检查 */
     //"strict": true,
     "noImplicitAny": true,
-    //"strictNullChecks": true,
+    "strictNullChecks": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

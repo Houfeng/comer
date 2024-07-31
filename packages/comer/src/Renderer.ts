@@ -2,7 +2,7 @@ import { isFunction } from 'ntils';
 import { HostAdapter, HostElement } from './HostAdapter';
 import { Component } from './Component';
 import { AnyFunction } from './TypeUtil';
-import { observable } from 'ober';
+import { nextTick, observable } from 'ober';
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -15,11 +15,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
-    return value && value instanceof Component;
+    return !!value && value instanceof Component;
   }
 
   private isSomeComponentType(el1: Component, el2: Component): boolean {
-    return el1 && el2 && el1.constructor !== el2.constructor;
+    return !!el1 && !!el2 && el1.constructor !== el2.constructor;
   }
 
   private build(element: Component): Component[] {
@@ -28,14 +28,15 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Execute build method
     // TODO: Collect dependencies 
     const result = element.build();
-    const children = result !== element ? result.__children__ : result;
-    return [].concat(children);
+    const children = result !== element ? result.__children__ : [result];
+    return (children || []).flat(1);
   }
 
   private compose(element: Component): void {
     if (!this.isComponent(element)) return;
-    element.__children__ = this.build(element)
+    element.__children__ = this.build(element);
     element.__children__.forEach(child => this.compose(child));
+    element.__compose__?.();
   }
 
   private update(oldElement: Component, newElement: Component): void {
@@ -51,7 +52,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   /** @internal */
   requestUpdate(element: Component) {
     if (!this.isComponent(element)) return;
-    const oldChildren = element.__children__.slice(0);
+    const oldChildren = element.__children__;
     const newChildren = this.build(element);
     element.__children__ = [];
     newChildren.forEach((newChild, index) => {
@@ -62,8 +63,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       } else {
         this.compose(newChild);
         element.__children__.push(newChild);
+        nextTick(() => this.dispatch(newChild, 'mount'));
       }
     });
+    element.update(element.__props__, true);
   }
 
   private findHostElements(element: Component): HostElement[] {
@@ -73,7 +76,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private dispatch<
     M extends keyof Component,
-    A extends Component[M] extends AnyFunction ? Component[M] : never
+    A extends Component[M] extends AnyFunction ? Component[M] : () => void
   >(element: Component, method: M, ...args: Parameters<A>) {
     if (!element) return;
     const fn = element[method];

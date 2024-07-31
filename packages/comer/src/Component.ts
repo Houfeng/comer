@@ -1,3 +1,4 @@
+import { HostElement } from "./HostAdapter";
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 
 export abstract class Component<
@@ -15,6 +16,9 @@ export abstract class Component<
   /**  @internal */
   __children__: Component[];
 
+  /**  @internal */
+  __compose__?: () => HostElement;
+
   constructor(...args: A) {
     this.__props__ = { ...(args[0] as P) };
   }
@@ -27,13 +31,12 @@ export abstract class Component<
     throw new Error('Unimplemented build method');
   }
 
-  update(newProps: P): boolean {
-    return !!newProps;
+  update(newProps: P, force = false): boolean {
+    return !!newProps || force;
   }
 
-  mount(): void { }
-
-  unmount(): void { }
+  mount?: () => void;
+  unmount?: () => void;
 
 }
 
