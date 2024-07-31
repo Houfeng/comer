@@ -95,6 +95,7 @@ export class Renderer<
     element.__parent__ = parent;
     if (this.isHostComponent(element)) {
       element.hostElement = this.adapter.createElement(element.type);
+      this.adapter.updateElement(element.hostElement, element.__props__);
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement) {
         this.adapter.appendElement(parentHostElement, element.hostElement);

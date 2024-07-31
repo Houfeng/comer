@@ -33,6 +33,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     if (!this.isHostElement(element)) return;
     const target = element as any;
     Object.keys(props).forEach((name) => {
+      if (['children'].includes(name)) return;
       target[name] = props[name];
     });
   }
