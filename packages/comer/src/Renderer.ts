@@ -6,6 +6,7 @@ import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS } from "./Symbols";
+import { takeHostEvents } from "./EventUtil";
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -18,7 +19,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -79,9 +80,9 @@ export class Renderer<
   private findHostComponents(element?: Component): HostComponent[] {
     if (!element) return [];
     if (this.isHostComponent(element)) return [element];
-    return element[CHILDREN]
-      .map((child) => this.findHostComponents(child))
-      .flat(1);
+    return element[CHILDREN].map((child) =>
+      this.findHostComponents(child),
+    ).flat(1);
   }
 
   private findHostElements(element: Component): HostElement[] {
@@ -94,7 +95,7 @@ export class Renderer<
     element[PARENT] = parent;
     if (this.isHostComponent(element)) {
       element.hostElement = this.adapter.createElement(element.type);
-      this.adapter.updateElement(element.hostElement, element[PROPS]);
+      this.update(element);
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement) {
         this.adapter.appendElement(element.hostElement, parentHostElement);
@@ -135,8 +136,10 @@ export class Renderer<
     // update to host element
     if (this.isHostComponent(oldElement)) {
       const { hostElement, [PROPS]: props } = oldElement;
-      this.adapter.updateElement(hostElement, props);
-      // TODO: handle events
+      const { events, others } = takeHostEvents(props);
+      this.adapter.updateProps(hostElement, others);
+      this.adapter.removeEvents(hostElement, events);
+      this.adapter.attachEvents(hostElement, events);
     }
   }
 

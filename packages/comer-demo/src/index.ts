@@ -29,4 +29,4 @@ class App extends Component {
 
 const app = renderer.render(new App(), document.getElementById("root")!);
 
-Object.assign(window, { renderer, app }); 
+Object.assign(window, { renderer, app });

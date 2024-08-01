@@ -1,4 +1,4 @@
-import { HostEventListener, HostAdapter } from "comer";
+import { HostAdapter, HostElementProps, HostElementEvents } from "comer";
 import { DOMElement } from "./DOMTypes";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
@@ -32,30 +32,25 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     parentElement.removeChild(element);
   }
 
-  updateElement(element: DOMElement, props: Record<string, unknown>): void {
+  updateProps(element: DOMElement, props: HostElementProps): void {
     if (!this.isHostElement(element)) return;
     const target = element as any;
-    Object.keys(props).forEach((name) => {
-      if (["children"].includes(name)) return;
-      target[name] = props[name];
+    Object.entries(props).forEach(([name, value]) => {
+      if (!["children"].includes(name)) target[name] = value;
     });
   }
 
-  attachEvent(
-    element: DOMElement,
-    name: string,
-    listener: HostEventListener,
-  ): void {
+  attachEvents(element: DOMElement, events: HostElementEvents): void {
     if (!this.isHostElement(element)) return;
-    element.addEventListener(name, listener, false);
+    Object.entries(events).forEach(([name, listener]) => {
+      element.addEventListener(name.toLowerCase(), listener, false);
+    });
   }
 
-  removeEvent(
-    element: DOMElement,
-    name: string,
-    listener: HostEventListener,
-  ): void {
+  removeEvents(element: DOMElement, events: HostElementEvents): void {
     if (!this.isHostElement(element)) return;
-    element.removeEventListener(name, listener, false);
+    Object.entries(events).forEach(([name, listener]) => {
+      element.removeEventListener(name.toLowerCase(), listener, false);
+    });
   }
 }
