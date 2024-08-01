@@ -1,6 +1,6 @@
 import { Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS } from "./Symbols";
+import { PROPS, CHILDREN } from "./Symbols";
 
 type Props = { ref?: Ref<Component> };
 type Args<P> =
@@ -18,7 +18,7 @@ export abstract class Component<P extends object = {}> {
   [PROPS]: Modify<Props, P>;
 
   /**  @internal */
-  __children__: Component[];
+  [CHILDREN]: Component[];
 
   /**  @internal */
   __parent__?: Component;

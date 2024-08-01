@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { PROPS } from "./Symbols";
+import { CHILDREN, PROPS } from "./Symbols";
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -47,7 +47,7 @@ export class Renderer<
     if (!element) return;
     const fn = element[method];
     if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
-    element.__children__.forEach((child) => {
+    element[CHILDREN].forEach((child) => {
       if (element !== child) this.dispatch(child, method, ...args);
     });
   }
@@ -58,7 +58,7 @@ export class Renderer<
     // Execute build method
     // TODO: Collect dependencies
     const result = element.build();
-    const children = this.isFragment(element) ? element.__children__ : [result];
+    const children = this.isFragment(element) ? element[CHILDREN] : [result];
     return (children || []).flat(1);
   }
 
@@ -79,7 +79,7 @@ export class Renderer<
   private findHostComponents(element?: Component): HostComponent[] {
     if (!element) return [];
     if (this.isHostComponent(element)) return [element];
-    return element.__children__
+    return element[CHILDREN]
       .map((child) => this.findHostComponents(child))
       .flat(1);
   }
@@ -102,8 +102,8 @@ export class Renderer<
     }
     this.update(element);
     if (deep) {
-      element.__children__ = this.build(element);
-      element.__children__.forEach((child) => {
+      element[CHILDREN] = this.build(element);
+      element[CHILDREN].forEach((child) => {
         this.compose(child, element, deep);
       });
     }
@@ -152,20 +152,20 @@ export class Renderer<
   /** @internal */
   requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
-    const oldChildren = element.__children__;
+    const oldChildren = element[CHILDREN];
     const newChildren = this.build(element);
-    element.__children__ = [];
+    element[CHILDREN] = [];
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
       if (this.isSomeComponentType(oldChild, newChild)) {
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
-        element.__children__.push(oldChild);
+        element[CHILDREN].push(oldChild);
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
-        element.__children__.push(newChild);
+        element[CHILDREN].push(newChild);
       }
       // TODO: remove useless elements
     });
