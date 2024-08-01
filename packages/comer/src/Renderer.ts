@@ -19,7 +19,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;

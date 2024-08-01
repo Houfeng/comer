@@ -1,6 +1,6 @@
 import { AnyFunction, Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER } from "./Symbols";
+import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER, KEY } from "./Symbols";
 import { type ProviderType } from "./Provider";
 
 export type ComponentPropsBase = { ref?: Ref<Component> };
@@ -15,17 +15,20 @@ export type ComponentConstructorParameters<P> =
  * Component abstract class, the base class for all components
  */
 export abstract class Component<P extends object = {}> {
-  /**  @internal */
+  /** @internal */
   [PROPS]: Modify<ComponentPropsBase, P>;
 
-  /**  @internal */
+  /** @internal */
   [CHILDREN]: Component[];
 
-  /**  @internal */
+  /** @internal */
   [PARENT]?: Component;
 
-  /**  @internal */
+  /** @internal */
   [EVENTS]?: Record<string, AnyFunction>;
+
+  /** @internal */
+  [KEY]?: unknown;
 
   constructor(...args: ComponentConstructorParameters<P>) {
     this[PROPS] = (args[0] as Modify<ComponentPropsBase, P>) || {};
