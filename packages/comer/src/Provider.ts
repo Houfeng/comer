@@ -16,3 +16,12 @@ export abstract class Provider<T> extends Component<{
     return this.props.value;
   }
 }
+
+export function createProvider<T>(defaultValue: T): typeof Provider<T> {
+  return class SubProvider extends Provider<T> {
+    constructor(props: ConstructorParameters<typeof Provider<T>>[0]) {
+      props.value = props.value ?? defaultValue;
+      super(props);
+    }
+  };
+}
