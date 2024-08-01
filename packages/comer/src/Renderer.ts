@@ -17,7 +17,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -27,7 +27,7 @@ export class Renderer<
     return (
       this.isComponent(el1) &&
       this.isComponent(el2) &&
-      el1.constructor !== el2.constructor
+      el1.constructor === el2.constructor
     );
   }
 
@@ -57,9 +57,8 @@ export class Renderer<
     // Execute build method
     // TODO: Collect dependencies
     const result = element.build();
-    const isFragmentResult = this.isFragment(result) || result === element;
-    if (isFragmentResult) result.build();
-    const children = isFragmentResult ? result.__children__ : [result];
+    const children = this.isFragment(element)
+      ? element.__children__ : [result];
     return (children || []).flat(1);
   }
 
@@ -101,19 +100,37 @@ export class Renderer<
         this.adapter.appendElement(parentHostElement, element.hostElement);
       }
     }
+    this.update(element);
     element.__children__ = this.build(element);
     element.__children__.forEach((child) => this.compose(child, element));
-    // attach ref
+    this.bindRef(element);
+  }
+
+  private bindRef(element: Component): void {
+    if (!this.isComponent(element)) return;
     const { ref } = element.__props__;
     if (ref) ref.current = element;
   }
 
-  private update(oldElement: Component, newElement: Component): void {
-    if (oldElement === newElement) return;
+  private update(oldElement: Component, newElement: Component = oldElement): void {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
-    Object.assign(oldElement.__props__, newElement.__props__);
+    // update props
+    if (oldElement !== newElement) {
+      const oldProps: Record<string, unknown> = oldElement.__props__;
+      const newProps: Record<string, unknown> = newElement.__props__;
+      for (let key in oldProps) {
+        oldProps[key] = newProps[key] ?? void 0;
+        delete oldProps[key];
+      }
+    }
+    // update to host element
+    if (this.isHostComponent(oldElement)) {
+      const { hostElement, __props__ } = oldElement;
+      this.adapter.updateElement(hostElement, __props__);
+      // TODO: handle events
+    }
   }
 
   /** @internal */
