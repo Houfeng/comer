@@ -1,20 +1,21 @@
 import { Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
+import { PROPS } from "./Symbols";
 
 type Props = { ref?: Ref<Component> };
 type Args<P> =
   RequiredKeyOf<P> extends never
-    ? OptionalKeyOf<P> extends never
-      ? Parameters<() => void>
-      : Parameters<(props?: Modify<Props, P>) => void>
-    : Parameters<(props: Modify<Props, P>) => void>;
+  ? OptionalKeyOf<P> extends never
+  ? Parameters<() => void>
+  : Parameters<(props?: Modify<Props, P>) => void>
+  : Parameters<(props: Modify<Props, P>) => void>;
 
 /**
  * Component abstract class, the base class for all components
  */
 export abstract class Component<P extends object = {}> {
   /**  @internal */
-  __props__: Modify<Props, P>;
+  [PROPS]: Modify<Props, P>;
 
   /**  @internal */
   __children__: Component[];
@@ -23,11 +24,11 @@ export abstract class Component<P extends object = {}> {
   __parent__?: Component;
 
   constructor(...args: Args<P>) {
-    this.__props__ = (args[0] as Modify<Props, P>) || {};
+    this[PROPS] = (args[0] as Modify<Props, P>) || {};
   }
 
   protected get props(): Readonly<P> {
-    return this.__props__;
+    return this[PROPS];
   }
 
   build(): Component {

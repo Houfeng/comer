@@ -1,4 +1,5 @@
 import { Component } from "./Component";
+import { PROPS } from "./Symbols";
 
 export class Fragment extends Component<Component[]> {
   constructor(props?: Component[] | Component) {
@@ -6,7 +7,7 @@ export class Fragment extends Component<Component[]> {
     super(Array.isArray(items) ? items : [items]);
   }
   build(): Component {
-    this.__children__ = this.__props__ || [];
+    this.__children__ = this[PROPS] || [];
     return this;
   }
 }

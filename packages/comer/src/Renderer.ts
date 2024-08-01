@@ -5,6 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
+import { PROPS } from "./Symbols";
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -17,7 +18,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -53,7 +54,7 @@ export class Renderer<
 
   private build(element: Component): Component[] {
     // Make the props of the instance observable
-    element.__props__ = observable(element.__props__);
+    element[PROPS] = observable(element[PROPS]);
     // Execute build method
     // TODO: Collect dependencies
     const result = element.build();
@@ -93,7 +94,7 @@ export class Renderer<
     element.__parent__ = parent;
     if (this.isHostComponent(element)) {
       element.hostElement = this.adapter.createElement(element.type);
-      this.adapter.updateElement(element.hostElement, element.__props__);
+      this.adapter.updateElement(element.hostElement, element[PROPS]);
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement) {
         this.adapter.appendElement(element.hostElement, parentHostElement);
@@ -111,7 +112,7 @@ export class Renderer<
 
   private bindRef(element: Component): void {
     if (!this.isComponent(element)) return;
-    const { ref } = element.__props__;
+    const { ref } = element[PROPS];
     if (ref) ref.current = element;
   }
 
@@ -124,8 +125,8 @@ export class Renderer<
     }
     // update props
     if (oldElement !== newElement) {
-      const oldProps: Record<string, unknown> = oldElement.__props__;
-      const newProps: Record<string, unknown> = newElement.__props__;
+      const oldProps: Record<string, unknown> = oldElement[PROPS];
+      const newProps: Record<string, unknown> = newElement[PROPS];
       for (const key in oldProps) {
         oldProps[key] = newProps[key] ?? void 0;
         delete oldProps[key];
@@ -133,7 +134,7 @@ export class Renderer<
     }
     // update to host element
     if (this.isHostComponent(oldElement)) {
-      const { hostElement, __props__ } = oldElement;
+      const { hostElement, [PROPS]: __props__ } = oldElement;
       this.adapter.updateElement(hostElement, __props__);
       // TODO: handle events
     }
