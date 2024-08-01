@@ -1,7 +1,7 @@
 import { Component, createProvider, Ref } from "comer";
 import { Button, Div, Footer, Header, Main, renderer, text } from "comer-dom";
 
-const ThemeProvider = createProvider<number>();
+const ThemeProvider = createProvider<number>(1);
 
 class ThemeButton extends Component {
   build(): Component {
@@ -19,21 +19,23 @@ class App extends Component {
   };
   build(): Component {
     return new Div({
-      children: [
-        new Header({ children: text("Header") }),
-        new Main({
-          ref: this.mainRef,
-          children: [
-            text("Main"),
-            new Button({
-              children: text("Click me"),
-              onClick: this.onButtonClick,
-            }),
-            new ThemeButton(),
-          ],
-        }),
-        new Footer({ children: text("Footer") }),
-      ],
+      children: new ThemeProvider({
+        children: [
+          new Header({ children: text("Header") }),
+          new Main({
+            ref: this.mainRef,
+            children: [
+              text("Main"),
+              new Button({
+                children: text("Click me"),
+                onClick: this.onButtonClick,
+              }),
+              new ThemeButton(),
+            ],
+          }),
+          new Footer({ children: text("Footer") }),
+        ],
+      }),
     });
   }
 }
