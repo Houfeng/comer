@@ -23,7 +23,6 @@ export const build = task('构建', [clean, lint], async () => {
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
   await $`tsc -p ./packages/comer-demo`;
-  await $`pnpm -F comer-demo build`;
 });
 
 export const dev = task('本地开发', [build], async () => {

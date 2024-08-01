@@ -6,7 +6,7 @@ import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS, EVENTS } from "./Symbols";
-import { takeHostEvents } from "./EventUtil";
+import { takeHostEvents } from "./PropsUtil";
 
 /**
  * Comer renderer, rendering elements to the host surface

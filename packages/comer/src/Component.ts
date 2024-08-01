@@ -43,10 +43,11 @@ export abstract class Component<P extends object = {}> {
     providerClass: T,
   ): InstanceType<T>["value"] | undefined {
     if (!providerClass[PROVIDER]) return;
-    const parent = this[PARENT];
-    if (!parent) return;
-    if (parent instanceof providerClass) return parent.value;
-    return parent.use(providerClass);
+    let target = this[PARENT];
+    while (target) {
+      if (target instanceof providerClass) return target.value;
+      target = target[PARENT];
+    }
   }
 
   build(): Component {

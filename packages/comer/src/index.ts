@@ -1,6 +1,6 @@
 export * from "ober";
 
-export * from "./EventUtil";
+export * from "./PropsUtil";
 export type * from "./TypeUtil";
 
 export * from "./Component";
