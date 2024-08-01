@@ -1,9 +1,13 @@
 import { AnyFunction, Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER, KEY } from "./Symbols";
+import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER } from "./Symbols";
 import { type ProviderType } from "./Provider";
 
-export type ComponentPropsBase = { ref?: Ref<Component> };
+export type ComponentPropsBase = {
+  ref?: Ref<Component>;
+  key?: unknown;
+};
+
 export type ComponentConstructorParameters<P> =
   RequiredKeyOf<P> extends never
     ? OptionalKeyOf<P> extends never
@@ -26,9 +30,6 @@ export abstract class Component<P extends object = {}> {
 
   /** @internal */
   [EVENTS]?: Record<string, AnyFunction>;
-
-  /** @internal */
-  [KEY]?: unknown;
 
   constructor(...args: ComponentConstructorParameters<P>) {
     this[PROPS] = (args[0] as Modify<ComponentPropsBase, P>) || {};
