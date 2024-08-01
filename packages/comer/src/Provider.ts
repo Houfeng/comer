@@ -2,10 +2,12 @@ import { Component } from "./Component";
 import { Fragment } from "./Fragment";
 import { PROVIDER } from "./Symbols";
 
-export abstract class Provider<T> extends Component<{
-  value: T;
+export type ProviderProps<T> = {
+  value?: T;
   children: Component[] | Component;
-}> {
+};
+
+export abstract class Provider<T> extends Component<ProviderProps<T>> {
   static readonly [PROVIDER] = true;
 
   build(): Component {
@@ -17,9 +19,15 @@ export abstract class Provider<T> extends Component<{
   }
 }
 
-export function createProvider<T>(defaultValue: T): typeof Provider<T> {
-  return class SubProvider extends Provider<T> {
-    constructor(props: ConstructorParameters<typeof Provider<T>>[0]) {
+export type ProviderType<T = any> = {
+  new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
+} & {
+  readonly [PROVIDER]: true;
+};
+
+export function createProvider<T>(defaultValue?: T): ProviderType<T> {
+  return class extends Provider<T> {
+    constructor(props: ProviderProps<T>) {
       props.value = props.value ?? defaultValue;
       super(props);
     }

@@ -1,7 +1,7 @@
-import { Component, Provider, Ref } from "comer";
+import { Component, createProvider, Ref } from "comer";
 import { Button, Div, Footer, Header, Main, renderer, text } from "comer-dom";
 
-class ThemeProvider extends Provider<number> {}
+const ThemeProvider = createProvider<number>();
 
 class ThemeButton extends Component {
   build(): Component {
@@ -16,7 +16,7 @@ class App extends Component {
   mainRef = new Ref<Main>();
   build(): Component {
     return new ThemeProvider({
-      value: 100,
+      value: 0,
       children: new Div({
         children: [
           new Header({ children: text("Header") }),
