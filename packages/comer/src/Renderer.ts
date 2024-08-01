@@ -19,7 +19,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -95,11 +95,6 @@ export class Renderer<
     element[PARENT] = parent;
     if (this.isHostComponent(element)) {
       element.hostElement = this.adapter.createElement(element.type);
-      this.update(element);
-      const parentHostElement = this.findParentHostElement(element);
-      if (parentHostElement) {
-        this.adapter.appendElement(element.hostElement, parentHostElement);
-      }
     }
     this.update(element);
     if (deep) {
@@ -107,6 +102,12 @@ export class Renderer<
       element[CHILDREN].forEach((child) => {
         this.compose(child, element, deep);
       });
+    }
+    if (this.isHostComponent(element)) {
+      const parentHostElement = this.findParentHostElement(element);
+      if (parentHostElement) {
+        this.adapter.appendElement(element.hostElement, parentHostElement);
+      }
     }
     this.bindRef(element);
   }

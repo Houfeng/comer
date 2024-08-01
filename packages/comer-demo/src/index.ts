@@ -29,6 +29,12 @@ class App extends Component {
                   console.log("click", event.target, this.mainRef.current);
                 },
               }),
+              ...new Array(5000).fill(1).map(
+                (it, ix) =>
+                  new Button({
+                    children: text(`${it}:${ix}`),
+                  }),
+              ),
               new ThemeButton(),
             ],
           }),
