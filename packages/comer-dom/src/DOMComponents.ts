@@ -29,52 +29,103 @@ export class Text extends DOMComponent<
 }
 
 export const TextContent = Text;
+export const text = func(Text);
 
 export class Div extends DOMComponent<HTMLDivElement, "div"> {
   type = "div";
 }
+export const div = func(Div);
+
 export class Span extends DOMComponent<HTMLSpanElement, "span"> {
   type = "span";
 }
+export const span = func(Span);
+
 export class P extends DOMComponent<HTMLParagraphElement, "p"> {
   type = "p";
 }
+export const p = func(P);
+
 export class A extends DOMComponent<HTMLAnchorElement, "a"> {
   type = "a";
 }
+export const a = func(A);
+
 export class Img extends DOMComponent<HTMLImageElement, "img"> {
   type = "img";
 }
+export const img = func(Img);
+
 export class Iframe extends DOMComponent<HTMLIFrameElement, "iframe"> {
   type = "iframe";
 }
+export const iframe = func(Iframe);
+
 export class Button extends DOMComponent<HTMLButtonElement, "button"> {
   type = "button";
 }
+export const button = func(Button);
+
 export class Input extends DOMComponent<HTMLInputElement, "input"> {
   type = "input";
 }
+export const input = func(Input);
+
 export class Form extends DOMComponent<HTMLFormElement, "from"> {
   type = "from";
 }
+export const form = func(Form);
+
 export class Dialog extends DOMComponent<HTMLDialogElement, "dialog"> {
   type = "dialog";
 }
+export const dialog = func(Dialog);
+
 export class Header extends DOMComponent<HTMLElement, "header"> {
   type = "header";
 }
+export const header = func(Header);
+
 export class Main extends DOMComponent<HTMLElement, "main"> {
   type = "main";
 }
+export const main = func(Main);
+
 export class Footer extends DOMComponent<HTMLElement, "footer"> {
   type = "footer";
 }
+export const footer = func(Footer);
+
+export class Ul extends DOMComponent<HTMLElement, "ul"> {
+  type = "ul";
+}
+export const ul = func(Ul);
+
+export class Ol extends DOMComponent<HTMLElement, "ol"> {
+  type = "ol";
+}
+export const ol = func(Ol);
+
+export class Li extends DOMComponent<HTMLElement, "li"> {
+  type = "li";
+}
+export const li = func(Li);
+
 export class Article extends DOMComponent<HTMLElement, "article"> {
   type = "article";
 }
+export const article = func(Article);
+
 export class Section extends DOMComponent<HTMLElement, "section"> {
   type = "section";
 }
+export const section = func(Section);
+
+export class Summary extends DOMComponent<HTMLElement, "summary"> {
+  type = "section";
+}
+export const summary = func(Summary);
+
 export class Video extends DOMComponent<
   HTMLVideoElement,
   "video",
@@ -82,5 +133,13 @@ export class Video extends DOMComponent<
 > {
   type = "video";
 }
+export const video = func(Video);
 
-export const div = func(Div);
+export class Audio extends DOMComponent<
+  HTMLAudioElement,
+  "audio",
+  Partial<DOMEventProps<HTMLVideoElementEventMap>>
+> {
+  type = "audio";
+}
+export const audio = func(Audio);
