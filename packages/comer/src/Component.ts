@@ -4,10 +4,10 @@ import { Ref } from "./Ref";
 type Props = { ref?: Ref<Component> };
 type Args<P> =
   RequiredKeyOf<P> extends never
-  ? OptionalKeyOf<P> extends never
-  ? Parameters<() => void>
-  : Parameters<(props?: Modify<Props, P>) => void>
-  : Parameters<(props: Modify<Props, P>) => void>;
+    ? OptionalKeyOf<P> extends never
+      ? Parameters<() => void>
+      : Parameters<(props?: Modify<Props, P>) => void>
+    : Parameters<(props: Modify<Props, P>) => void>;
 
 /**
  * Component abstract class, the base class for all components
@@ -45,4 +45,3 @@ export function func<T extends typeof Component<any>>(ComponentClass: T) {
     return new ComponentClass(...args);
   };
 }
-

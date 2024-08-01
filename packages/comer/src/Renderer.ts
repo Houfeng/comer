@@ -17,7 +17,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -57,8 +57,7 @@ export class Renderer<
     // Execute build method
     // TODO: Collect dependencies
     const result = element.build();
-    const children = this.isFragment(element)
-      ? element.__children__ : [result];
+    const children = this.isFragment(element) ? element.__children__ : [result];
     return (children || []).flat(1);
   }
 
@@ -112,7 +111,10 @@ export class Renderer<
     if (ref) ref.current = element;
   }
 
-  private update(oldElement: Component, newElement: Component = oldElement): void {
+  private update(
+    oldElement: Component,
+    newElement: Component = oldElement,
+  ): void {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
@@ -120,7 +122,7 @@ export class Renderer<
     if (oldElement !== newElement) {
       const oldProps: Record<string, unknown> = oldElement.__props__;
       const newProps: Record<string, unknown> = newElement.__props__;
-      for (let key in oldProps) {
+      for (const key in oldProps) {
         oldProps[key] = newProps[key] ?? void 0;
         delete oldProps[key];
       }
