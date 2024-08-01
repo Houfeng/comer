@@ -2,7 +2,7 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { nextTick, observable } from "ober";
+import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 
@@ -88,7 +88,7 @@ export class Renderer<
     return this.findHostComponents(element).map((it) => it.hostElement);
   }
 
-  private compose(element: Component, parent?: Component): void {
+  private compose(element: Component, parent?: Component, deep = false): void {
     if (!this.isComponent(element)) return;
     element.__parent__ = parent;
     if (this.isHostComponent(element)) {
@@ -100,8 +100,12 @@ export class Renderer<
       }
     }
     this.update(element);
-    element.__children__ = this.build(element);
-    element.__children__.forEach((child) => this.compose(child, element));
+    if (deep) {
+      element.__children__ = this.build(element);
+      element.__children__.forEach((child) => {
+        this.compose(child, element, deep);
+      });
+    }
     this.bindRef(element);
   }
 
@@ -135,6 +139,15 @@ export class Renderer<
     }
   }
 
+  private replace(oldElement: Component, newElement: Component) {
+    // const oldHostElements = this.findHostElements(oldElement);
+    // const newHostElements = this.findHostElements(oldElement);
+    // newHostElements.forEach(it =>this.adapter.appendElement(it));
+    // oldHostElements.forEach((it) => this.adapter.removeElement(it));
+    this.dispatch(oldElement, "unmount");
+    this.dispatch(newElement, "mount");
+  }
+
   /** @internal */
   requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
@@ -144,13 +157,16 @@ export class Renderer<
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
       if (this.isSomeComponentType(oldChild, newChild)) {
+        // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element.__children__.push(oldChild);
       } else {
+        // Different types, replace with new host element
         this.compose(newChild, element);
+        this.replace(oldChild, newChild);
         element.__children__.push(newChild);
-        nextTick(() => this.dispatch(newChild, "mount"));
       }
+      // TODO: remove useless elements
     });
   }
 
@@ -158,7 +174,7 @@ export class Renderer<
     if (!this.adapter.isHostElement(container)) {
       throw new Error("Invalid host container");
     }
-    this.compose(element);
+    this.compose(element, void 0, true);
     const hostElements = this.findHostElements(element);
     if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
       throw new Error("Invalid host element");
