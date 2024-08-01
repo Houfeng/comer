@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, PARENT, PROPS } from "./Symbols";
+import { CHILDREN, PARENT, PROPS, EVENTS } from "./Symbols";
 import { takeHostEvents } from "./EventUtil";
 
 /**
@@ -135,11 +135,14 @@ export class Renderer<
     }
     // update to host element
     if (this.isHostComponent(oldElement)) {
-      const { hostElement, [PROPS]: props } = oldElement;
+      const { hostElement, [PROPS]: props, [EVENTS]: oldEvents } = oldElement;
       const { events, others } = takeHostEvents(props);
       this.adapter.updateProps(hostElement, others);
-      this.adapter.removeEvents(hostElement, events);
+      if (oldEvents) {
+        this.adapter.removeEvents(hostElement, oldEvents);
+      }
       this.adapter.attachEvents(hostElement, events);
+      oldElement[EVENTS] = events;
     }
   }
 
