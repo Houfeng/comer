@@ -1,13 +1,13 @@
 import { Component } from "./Component";
-import { CHILDREN, PROPS } from "./Symbols";
+import { CHILDREN } from "./Symbols";
 
-export class Fragment extends Component<Component[]> {
-  constructor(children?: Component[] | Component) {
-    const items = children || [];
-    super(Array.isArray(items) ? items : [items]);
+export class Fragment extends Component<{ children: Component[] }> {
+  constructor(items?: Readonly<Component[] | Component>) {
+    const children = items ? (Array.isArray(items) ? items : [items]) : [];
+    super({ children });
   }
   build(): Component {
-    this[CHILDREN] = this[PROPS] || [];
+    this[CHILDREN] = this.props.children || [];
     return this;
   }
 }

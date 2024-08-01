@@ -1,34 +1,25 @@
 import { observable } from "ober";
-import { AnyFunction } from "./TypeUtil";
+import { Component } from "./Component";
 
-export class Context<T extends object> {
-  private stack: Array<T> = [];
-
-  constructor(defaultValue?: T) {
-    if (defaultValue) this.stack = [observable(defaultValue)];
+export class Context<T = unknown> {
+  private state: { value: T | null };
+  constructor(initialValue: T) {
+    this.state = observable({ value: initialValue ?? null });
   }
-
-  /** @internal */
-  run<F extends AnyFunction>(value: T, fn: F): ReturnType<F> {
-    try {
-      this.stack.push(observable(value));
-      return fn();
-    } catch (err) {
-      throw err;
-    } finally {
-      this.stack.pop();
-    }
-  }
-
-  /** @internal */
-  get current(): T {
-    return this.stack[this.stack.length - 1];
+  get value(): T | null {
+    return this.state.value;
   }
 }
 
-export function use<
-  T extends Context<any>,
-  V extends T extends Context<infer P> ? P : never,
->(context: T): V {
-  return context.current;
+export class Provider<
+  T extends Context,
+  V extends T extends Context<infer IV> ? IV : unknown,
+> extends Component<{
+  context: T;
+  value: V | null;
+  children: Component[] | Component;
+}> {
+  get value() {
+    return this.props.value;
+  }
 }
