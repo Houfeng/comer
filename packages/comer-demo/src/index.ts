@@ -6,18 +6,13 @@ class App extends Component {
   build(): Component {
     return new Div({
       children: [
-        new Header({
-          children: text("Header"),
-        }),
-        new Main({
-          ref: this.mainRef,
-          children: text("Main"),
-        }),
+        new Header({ children: text("Header") }),
+        new Main({ ref: this.mainRef, children: text("Main") }),
         new Footer({
           children: new Button({
             children: text("Click me"),
             onClick: (event: MouseEvent) => {
-              console.log("click", event.target);
+              console.log("click", event.target, this.mainRef.current);
             },
           }),
         }),

@@ -1,6 +1,8 @@
 import { Component, Fragment, HostComponent, func } from "comer";
 import { DOMElement, DOMEventProps, DOMProps, DOMText } from "./DOMTypes";
 
+// ------------------------------- Base --------------------------------------
+
 export type DOMComponentProps<E extends DOMElement = DOMElement> =
   DOMProps<E> & { children?: Component[] | Component };
 
@@ -14,12 +16,14 @@ export class DOMComponent<
   }
 }
 
-export class Text extends DOMComponent<
+// ------------------------------- Text --------------------------------------
+
+export class TextNode extends DOMComponent<
   DOMText,
-  "text",
+  "text_node",
   { textContent: string }
 > {
-  type = "text";
+  type = "text_node";
   constructor(textContent: string) {
     super({ textContent });
   }
@@ -28,8 +32,11 @@ export class Text extends DOMComponent<
   }
 }
 
-export const TextContent = Text;
-export const text = func(Text);
+export const Text = TextNode;
+export const TextContent = TextNode;
+export const text = func(TextNode);
+
+// ------------------------------- HTML --------------------------------------
 
 export class Div extends DOMComponent<HTMLDivElement, "div"> {
   type = "div";
@@ -143,3 +150,51 @@ export class Audio extends DOMComponent<
   type = "audio";
 }
 export const audio = func(Audio);
+
+// ------------------------------- SVG ---------------------------------------
+
+export class Svg extends DOMComponent<
+  SVGElement,
+  "svg",
+  Partial<DOMEventProps<SVGElementEventMap>>
+> {
+  type = "svg";
+}
+export const svg = func(Svg);
+
+export class G extends DOMComponent<
+  SVGGElement,
+  "g",
+  Partial<DOMEventProps<SVGElementEventMap>>
+> {
+  type = "g";
+}
+export const g = func(G);
+
+export class Image extends DOMComponent<
+  SVGImageElement,
+  "image",
+  Partial<DOMEventProps<SVGElementEventMap>>
+> {
+  type = "image";
+}
+export const image = func(Image);
+
+export class SvgText extends DOMComponent<
+  SVGTextElement,
+  "text",
+  Partial<DOMEventProps<SVGElementEventMap>>
+> {
+  type = "text";
+}
+export const svgText = func(SvgText);
+export const sText = func(SvgText);
+
+export class TSpan extends DOMComponent<
+  SVGTSpanElement,
+  "tspan",
+  Partial<DOMEventProps<SVGElementEventMap>>
+> {
+  type = "tspan";
+}
+export const tspan = func(TSpan);

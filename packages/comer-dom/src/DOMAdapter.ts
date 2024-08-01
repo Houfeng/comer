@@ -12,7 +12,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   }
 
   createElement(type: string): DOMElement {
-    if (type === "text") return document.createTextNode("");
+    if (type === "text_node") return document.createTextNode("");
     return document.createElement(type);
   }
 
