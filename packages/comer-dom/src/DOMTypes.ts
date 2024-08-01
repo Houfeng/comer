@@ -1,6 +1,7 @@
 import { StringKeyOf, ValueOf } from "comer";
 
-export type DOMElement = HTMLElement | SVGElement;
+export type DOMText = Text;
+export type DOMElement = HTMLElement | SVGElement | Text;
 
 export type DOMEventMap = HTMLElementEventMap & SVGElementEventMap;
 

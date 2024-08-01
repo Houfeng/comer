@@ -1,5 +1,5 @@
 import { Component, Fragment, HostComponent, func } from "comer";
-import { DOMElement, DOMEventProps, DOMProps } from "./DOMTypes";
+import { DOMElement, DOMEventProps, DOMProps, DOMText } from "./DOMTypes";
 
 export type DOMComponentProps<E extends DOMElement = DOMElement> =
   DOMProps<E> & { children?: Component[] | Component };
@@ -13,6 +13,22 @@ export class DOMComponent<
     return new Fragment(this.props.children);
   }
 }
+
+export class Text extends DOMComponent<
+  DOMText,
+  "text",
+  { textContent: string }
+> {
+  type = "text";
+  constructor(textContent: string) {
+    super({ textContent });
+  }
+  build(): Component {
+    return new Fragment();
+  }
+}
+
+export const TextContent = Text;
 
 export class Div extends DOMComponent<HTMLDivElement, "div"> {
   type = "div";

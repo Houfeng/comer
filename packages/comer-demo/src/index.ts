@@ -1,22 +1,21 @@
 import { Component, Ref } from "comer";
-import { Button, Div, Footer, Header, Main, renderer, Span } from "comer-dom";
+import { Button, Div, Footer, Header, Main, renderer, Text } from "comer-dom";
 
 class App extends Component {
   mainRef = new Ref<Main>();
   build(): Component {
     return new Div({
-      innerText: "Demo",
       children: [
         new Header({
-          children: new Span({ innerText: "Header" }),
+          children: new Text("Header"),
         }),
         new Main({
           ref: this.mainRef,
-          innerText: "Hello word",
+          children: new Text("Main"),
         }),
         new Footer({
           children: new Button({
-            innerText: "Click me",
+            children: new Text("Click me"),
             onClick: (event: MouseEvent) => {
               console.log("click", event.target);
             },

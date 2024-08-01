@@ -3,10 +3,16 @@ import { DOMElement } from "./DOMTypes";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
   isHostElement(value: unknown): value is DOMElement {
-    return !!value && value instanceof Element;
+    return (
+      !!value &&
+      (value instanceof HTMLElement ||
+        value instanceof SVGAElement ||
+        value instanceof Text)
+    );
   }
 
   createElement(type: string): DOMElement {
+    if (type === "text") return document.createTextNode("");
     return document.createElement(type);
   }
 
