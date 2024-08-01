@@ -1,6 +1,6 @@
 import { Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN } from "./Symbols";
+import { PROPS, CHILDREN, PARENT } from "./Symbols";
 
 type Props = { ref?: Ref<Component> };
 type Args<P> =
@@ -21,7 +21,7 @@ export abstract class Component<P extends object = {}> {
   [CHILDREN]: Component[];
 
   /**  @internal */
-  __parent__?: Component;
+  [PARENT]?: Component;
 
   constructor(...args: Args<P>) {
     this[PROPS] = (args[0] as Modify<Props, P>) || {};

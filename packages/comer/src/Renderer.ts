@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { observable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, PROPS } from "./Symbols";
+import { CHILDREN, PARENT, PROPS } from "./Symbols";
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -63,11 +63,11 @@ export class Renderer<
   }
 
   private findParentHostComponent(element?: Component): HostComponent | void {
-    if (!element || !element.__parent__) return;
-    if (this.isHostComponent(element.__parent__)) {
-      return element.__parent__;
+    if (!element || !element[PARENT]) return;
+    if (this.isHostComponent(element[PARENT])) {
+      return element[PARENT];
     }
-    return this.findParentHostComponent(element.__parent__);
+    return this.findParentHostComponent(element[PARENT]);
   }
 
   private findParentHostElement(element?: Component): HostElement | void {
@@ -91,7 +91,7 @@ export class Renderer<
 
   private compose(element: Component, parent?: Component, deep = false): void {
     if (!this.isComponent(element)) return;
-    element.__parent__ = parent;
+    element[PARENT] = parent;
     if (this.isHostComponent(element)) {
       element.hostElement = this.adapter.createElement(element.type);
       this.adapter.updateElement(element.hostElement, element[PROPS]);
@@ -134,8 +134,8 @@ export class Renderer<
     }
     // update to host element
     if (this.isHostComponent(oldElement)) {
-      const { hostElement, [PROPS]: __props__ } = oldElement;
-      this.adapter.updateElement(hostElement, __props__);
+      const { hostElement, [PROPS]: props } = oldElement;
+      this.adapter.updateElement(hostElement, props);
       // TODO: handle events
     }
   }
