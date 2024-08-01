@@ -1,6 +1,7 @@
 import { AnyFunction, Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN, PARENT, EVENTS } from "./Symbols";
+import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER } from "./Symbols";
+import { type Provider } from "./Provider";
 
 type Props = { ref?: Ref<Component> };
 type Args<P> =
@@ -32,6 +33,16 @@ export abstract class Component<P extends object = {}> {
 
   protected get props(): Readonly<P> {
     return this[PROPS];
+  }
+
+  protected use<T extends typeof Provider<any>>(
+    providerClass: T,
+  ): InstanceType<T>["value"] {
+    if (!providerClass[PROVIDER]) return;
+    const parent = this[PARENT];
+    if (!parent) return;
+    if (parent instanceof providerClass) return parent.value;
+    return parent.use(providerClass);
   }
 
   build(): Component {
