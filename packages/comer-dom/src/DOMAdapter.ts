@@ -17,19 +17,19 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     element.parentElement.removeChild(element);
   }
 
-  appendElement(parentElement: DOMElement, childElement: DOMElement): void {
-    if (!this.isHostElement(parentElement)) return;
-    if (!this.isHostElement(childElement)) return;
-    parentElement.appendChild(childElement);
+  appendElement(element: DOMElement, parent: DOMElement): void {
+    if (!this.isHostElement(parent)) return;
+    if (!this.isHostElement(element)) return;
+    parent.appendChild(element);
   }
 
-  replaceElement(oldElement: DOMElement, newElement: DOMElement): void {
-    if (!this.isHostElement(oldElement)) return;
-    if (!this.isHostElement(newElement)) return;
-    const { parentElement } = oldElement;
+  insertElement(element: DOMElement, anchor: DOMElement): void {
+    if (!this.isHostElement(element)) return;
+    if (!this.isHostElement(anchor)) return;
+    const { parentElement } = element;
     if (!parentElement) return;
-    parentElement.insertBefore(oldElement, newElement);
-    parentElement.removeChild(oldElement);
+    parentElement.insertBefore(anchor, element);
+    parentElement.removeChild(element);
   }
 
   updateElement(element: DOMElement, props: Record<string, unknown>): void {

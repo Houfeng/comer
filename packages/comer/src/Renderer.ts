@@ -96,7 +96,7 @@ export class Renderer<
       this.adapter.updateElement(element.hostElement, element.__props__);
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement) {
-        this.adapter.appendElement(parentHostElement, element.hostElement);
+        this.adapter.appendElement(element.hostElement, parentHostElement);
       }
     }
     this.update(element);
@@ -179,7 +179,7 @@ export class Renderer<
     if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
       throw new Error("Invalid host element");
     }
-    hostElements.forEach((it) => this.adapter.appendElement(container, it));
+    hostElements.forEach((it) => this.adapter.appendElement(it, container));
     this.dispatch(element, "mount");
     return element;
   }

@@ -10,8 +10,8 @@ export interface HostAdapter<E extends HostElement> {
   isHostElement(value: unknown): value is E;
   createElement(type: string): E;
   removeElement(element: E): void;
-  appendElement(parentElement: E, childElement: E): void;
-  replaceElement(oldElement: E, newElement: E): void;
+  appendElement(element: E, parent: E): void;
+  insertElement(element: E, anchor: E): void;
   updateElement(element: E, props: HostElementProps): void;
   attachEvent(element: E, name: string, listener: HostEventListener): void;
   removeEvent(element: E, name: string, listener: HostEventListener): void;
