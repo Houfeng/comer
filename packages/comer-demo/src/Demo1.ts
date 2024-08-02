@@ -13,11 +13,12 @@ class ThemeButton extends Component {
 }
 
 export class Demo extends Component {
-  ref = new Ref<Button>();
+  ref = new Ref<ThemeButton>();
   state = observable({ value: 0 });
   onButtonClick = () => {
     this.state.value++;
     console.log("click", this.ref.current);
+    // this.ref.current?.hostElement.value; 
   };
   build() {
     return new Div({
@@ -25,11 +26,11 @@ export class Demo extends Component {
         children: [
           new Header({ children: text("Header") }),
           new Main({
-            ref: this.ref,
             children: [
               text("Main"),
               text(`Current: ${this.state.value}`),
               new Button({
+                ref: this.ref,
                 children: text("Click me"),
                 onClick: this.onButtonClick,
               }),

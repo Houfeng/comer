@@ -5,14 +5,14 @@ import {
   CHILDREN,
   PARENT,
   EVENTS,
-  PROVIDER,
+  IDENTIFY,
   REACTIVER,
 } from "./Symbols";
 import { type ProviderType } from "./Provider";
 import { ReactiveFunction } from "ober";
 
 export type ComponentProps<P extends object> = {
-  ref?: Ref<Component<ComponentProps<P>>>;
+  ref?: Ref<Component<P>>;
   key?: unknown;
 } & P;
 
@@ -23,14 +23,14 @@ export type ComponentParameters<P extends object> =
       : Parameters<(props?: ComponentProps<P>) => void>
     : Parameters<(props: ComponentProps<P>) => void>;
 
-export type ComponentType<P extends object = {}> = {
+export type ComponentType<P extends object = any> = {
   new (...params: ComponentParameters<P>): Component<P>;
 };
 
 /**
  * Component abstract class, the base class for all components
  */
-export abstract class Component<P extends object = {}> {
+export abstract class Component<P extends object = any> {
   /** @internal */
   [PROPS]: ComponentProps<P>;
 
@@ -56,8 +56,8 @@ export abstract class Component<P extends object = {}> {
 
   protected use<T extends ProviderType>(
     providerClass: T,
-  ): InstanceType<T>["value"] | undefined {
-    if (!providerClass[PROVIDER]) return;
+  ): InstanceType<T>["value"] | void {
+    if (providerClass[IDENTIFY] !== "Provider") return;
     let target = this[PARENT];
     while (target) {
       if (target instanceof providerClass) return target.value;
@@ -74,7 +74,7 @@ export abstract class Component<P extends object = {}> {
   unmount?: () => void;
 }
 
-export function func<T extends ComponentType<any>>(ComponentClass: T) {
+export function func<T extends ComponentType>(ComponentClass: T) {
   return (...args: ConstructorParameters<T>): Component<T> => {
     return new ComponentClass(...args);
   };

@@ -1,6 +1,6 @@
 import { Component } from "./Component";
 import { Fragment } from "./Fragment";
-import { PROVIDER } from "./Symbols";
+import { IDENTIFY } from "./Symbols";
 
 export type ProviderProps<T> = {
   value?: T;
@@ -8,7 +8,7 @@ export type ProviderProps<T> = {
 };
 
 export abstract class Provider<T> extends Component<ProviderProps<T>> {
-  static readonly [PROVIDER] = true;
+  static readonly [IDENTIFY] = "Provider";
 
   build(): Component {
     return new Fragment(this.props.children);
@@ -22,7 +22,7 @@ export abstract class Provider<T> extends Component<ProviderProps<T>> {
 export type ProviderType<T = any> = {
   new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
 } & {
-  readonly [PROVIDER]: true;
+  readonly [IDENTIFY]: "Provider";
 };
 
 export function createProvider<T>(defaultValue?: T): ProviderType<T> {

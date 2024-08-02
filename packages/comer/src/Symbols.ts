@@ -4,4 +4,4 @@ export const PARENT = Symbol("Parent");
 export const EVENTS = Symbol("Events");
 export const REACTIVER = Symbol("Reactiver");
 
-export const PROVIDER = Symbol("Provider");
+export const IDENTIFY = Symbol("Identify");
