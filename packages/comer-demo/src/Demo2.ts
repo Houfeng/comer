@@ -4,7 +4,8 @@ import { Button, Div, Text } from "comer-dom";
 export class Demo extends Component {
   state = observable({ value: 0 });
   onButtonClick = () => {
-    this.state.value++;
+    this.state.value = 1;
+    this.state.value = 2;
   };
   build() {
     return new Div({

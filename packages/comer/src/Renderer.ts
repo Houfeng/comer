@@ -2,7 +2,7 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { observable, reactivable } from "ober";
+import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS, EVENTS, REACTIVER } from "./Symbols";
@@ -23,7 +23,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -66,12 +66,13 @@ export class Renderer<
       // Make the props of the instance observable
       element[PROPS] = observable(element[PROPS]);
       // Create a reactiver
+      const requestUpdate = () => this.requestUpdate(element);
       element[REACTIVER] = createReactiver(
         () => {
-          console.log("element", element);
+          console.log("build", element);
           return element.build();
         },
-        () => this.requestUpdate(element),
+        () => nextTick(requestUpdate),
       );
     }
     // execute the build wrapper
@@ -195,13 +196,13 @@ export class Renderer<
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element[CHILDREN].push(oldChild);
-        console.log("update");
+        console.log("update", { oldChild, newChild });
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
         element[CHILDREN].push(newChild);
-        console.log("replace");
+        console.log("replace", { oldChild, newChild });
       }
       // TODO: remove useless elements
     });
