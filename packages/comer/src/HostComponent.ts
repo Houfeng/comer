@@ -1,6 +1,5 @@
 import { Component } from "./Component";
 import { HostElement } from "./HostAdapter";
-import { IDENTIFY } from "./Symbols";
 
 /**
  * Host platform component abstract class,
@@ -8,9 +7,9 @@ import { IDENTIFY } from "./Symbols";
  */
 export abstract class HostComponent<
   P extends object = {},
+  R extends object = {},
   E extends HostElement = HostElement,
-> extends Component<P> {
-  [IDENTIFY]: keyof E;
+> extends Component<P, R> {
   type: string;
   hostElement: E;
 }

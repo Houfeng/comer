@@ -14,34 +14,34 @@ import { ReactiveFunction } from "ober";
 /**
  * ComponentProps type utils
  */
-export type ComponentProps<P extends object> = {
-  ref?: Ref<Component<P>>;
+export type ComponentProps<P extends object, R extends object> = {
+  ref?: Ref<R>;
   key?: unknown;
 } & P;
 
 /**
  * ComponentParameters type utils
  */
-export type ComponentParameters<P extends object> =
+export type ComponentParameters<P extends object, R extends object> =
   RequiredKeyOf<P> extends never
     ? OptionalKeyOf<P> extends never
       ? Parameters<() => void>
-      : Parameters<(props?: ComponentProps<P>) => void>
-    : Parameters<(props: ComponentProps<P>) => void>;
+      : Parameters<(props?: ComponentProps<P, R>) => void>
+    : Parameters<(props: ComponentProps<P, R>) => void>;
 
 /**
  * Component class
  */
-export type ComponentType<P extends object> = {
-  new (...params: ComponentParameters<P>): Component<P>;
+export type ComponentType<P extends object, R extends object> = {
+  new (...params: ComponentParameters<P, R>): Component<P, R>;
 };
 
 /**
  * Component abstract class, the base class for all components
  */
-export abstract class Component<P extends object = {}> {
+export abstract class Component<P extends object = {}, R extends object = {}> {
   /** @internal */
-  [PROPS]: ComponentProps<P>;
+  [PROPS]: ComponentProps<P, R>;
 
   /** @internal */
   [CHILDREN]: Component[];
@@ -55,11 +55,11 @@ export abstract class Component<P extends object = {}> {
   /** @internal */
   [REACTIVER]?: ReactiveFunction;
 
-  constructor(...params: ComponentParameters<P>) {
-    this[PROPS] = { ...params[0] } as ComponentProps<P>;
+  constructor(...params: ComponentParameters<P, R>) {
+    this[PROPS] = { ...params[0] } as ComponentProps<P, R>;
   }
 
-  get props(): Readonly<ComponentProps<P>> {
+  get props(): Readonly<ComponentProps<P, R>> {
     return this[PROPS];
   }
 
@@ -83,7 +83,7 @@ export abstract class Component<P extends object = {}> {
   unmount?: () => void;
 }
 
-export function func<T extends ComponentType<any>>(ComponentClass: T) {
+export function func<T extends ComponentType<any, any>>(ComponentClass: T) {
   return (...args: ConstructorParameters<T>): Component<T> => {
     return new ComponentClass(...args);
   };

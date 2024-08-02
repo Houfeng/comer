@@ -13,7 +13,7 @@ class ThemeButton extends Component {
 }
 
 export class Demo extends Component {
-  ref = new Ref<ThemeButton>();
+  ref = new Ref<Button>();
   state = observable({ value: 0 });
   onButtonClick = () => {
     this.state.value++;
@@ -43,6 +43,3 @@ export class Demo extends Component {
     });
   }
 }
-
-const btn = new Button();
-btn.props.ref?.current;
