@@ -118,6 +118,18 @@ export class Renderer<
     if (ref) ref.current = element;
   }
 
+  private updateHostElement(element: Component) {
+    if (!this.isHostComponent(element)) return;
+    const { hostElement, [PROPS]: props, [EVENTS]: oldEvents } = element;
+    const { events, others } = takeHostEvents(props);
+    this.adapter.updateProps(hostElement, others);
+    if (oldEvents) {
+      this.adapter.removeEvents(hostElement, oldEvents);
+    }
+    this.adapter.attachEvents(hostElement, events);
+    element[EVENTS] = events;
+  }
+
   private update(
     oldElement: Component,
     newElement: Component = oldElement,
@@ -125,26 +137,23 @@ export class Renderer<
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
-    // update props
+    // update props : new -> old
     if (oldElement !== newElement) {
       const oldProps: Record<string, unknown> = oldElement[PROPS];
       const newProps: Record<string, unknown> = newElement[PROPS];
-      for (const key in oldProps) {
-        oldProps[key] = newProps[key] ?? void 0;
-        delete oldProps[key];
-      }
+      const allKeys = new Set([
+        ...Object.keys(oldProps),
+        ...Object.keys(newProps),
+      ]);
+      allKeys.forEach((key) => {
+        // props is observable object，Can trigger updates
+        // key that does not exist on newProps,
+        // needs to be cleared on Old by setting null
+        oldProps[key] = newProps[key] ?? null;
+      });
     }
     // update to host element
-    if (this.isHostComponent(oldElement)) {
-      const { hostElement, [PROPS]: props, [EVENTS]: oldEvents } = oldElement;
-      const { events, others } = takeHostEvents(props);
-      this.adapter.updateProps(hostElement, others);
-      if (oldEvents) {
-        this.adapter.removeEvents(hostElement, oldEvents);
-      }
-      this.adapter.attachEvents(hostElement, events);
-      oldElement[EVENTS] = events;
-    }
+    if (this.isHostComponent(oldElement)) this.updateHostElement(oldElement);
   }
 
   private replace(oldElement: Component, newElement: Component) {
