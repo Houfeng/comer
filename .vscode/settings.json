@@ -4,6 +4,8 @@
     "csstype",
     "jsxs",
     "lazyify",
+    "reactivable",
+    "Reactiver",
     "taskd"
   ]
 }

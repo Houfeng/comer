@@ -1,7 +1,15 @@
 import { AnyFunction, Modify, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN, PARENT, EVENTS, PROVIDER } from "./Symbols";
+import {
+  PROPS,
+  CHILDREN,
+  PARENT,
+  EVENTS,
+  PROVIDER,
+  REACTIVER,
+} from "./Symbols";
 import { type ProviderType } from "./Provider";
+import { ReactiveFunction } from "ober";
 
 export type ComponentPropsBase = {
   ref?: Ref<Component>;
@@ -30,6 +38,9 @@ export abstract class Component<P extends object = {}> {
 
   /** @internal */
   [EVENTS]?: Record<string, AnyFunction>;
+
+  /** @internal */
+  [REACTIVER]?: ReactiveFunction;
 
   constructor(...args: ComponentConstructorParameters<P>) {
     this[PROPS] = (args[0] as Modify<ComponentPropsBase, P>) || {};

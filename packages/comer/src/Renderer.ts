@@ -2,11 +2,15 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { observable } from "ober";
+import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, PARENT, PROPS, EVENTS } from "./Symbols";
+import { CHILDREN, PARENT, PROPS, EVENTS, REACTIVER } from "./Symbols";
 import { takeHostEvents } from "./PropsUtil";
+
+function createReactiver(build: () => Component, requestUpdate: () => void) {
+  return reactivable(build, { update: requestUpdate });
+}
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -46,19 +50,33 @@ export class Renderer<
     A extends Component[M] extends AnyFunction ? Component[M] : () => void,
   >(element: Component, method: M, ...args: Parameters<A>) {
     if (!element) return;
+    // if unmount，dispose reactiver
+    if (method === "unmount") element[REACTIVER]?.unsubscribe();
+    // invoke the method
     const fn = element[method];
     if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
+    // broadcast to children
     element[CHILDREN].forEach((child) => {
       if (element !== child) this.dispatch(child, method, ...args);
     });
   }
 
   private build(element: Component): Component[] {
-    // Make the props of the instance observable
-    element[PROPS] = observable(element[PROPS]);
-    // Execute build method
-    // TODO: Collect dependencies
-    const result = element.build();
+    if (!element[REACTIVER]) {
+      // Make the props of the instance observable
+      element[PROPS] = observable(element[PROPS]);
+      // Create a reactiver
+      element[REACTIVER] = createReactiver(
+        () => {
+          console.log("element", element);
+          return element.build();
+        },
+        () => this.requestUpdate(element),
+      );
+    }
+    // execute the build wrapper
+    const result = element[REACTIVER]();
+    // normalize the children
     const children = this.isFragment(element) ? element[CHILDREN] : [result];
     return (children || []).flat(1);
   }
@@ -177,11 +195,13 @@ export class Renderer<
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element[CHILDREN].push(oldChild);
+        console.log("update");
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
         element[CHILDREN].push(newChild);
+        console.log("replace");
       }
       // TODO: remove useless elements
     });
