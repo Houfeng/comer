@@ -2,14 +2,14 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { nextTick, observable, reactivable } from "ober";
+import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS, EVENTS, REACTIVER } from "./Symbols";
 import { takeHostEvents } from "./PropsUtil";
 
-function createReactiver(build: () => Component, requestUpdate: () => void) {
-  return reactivable(build, { update: requestUpdate });
+function createReactiver(build: () => Component, update: () => void) {
+  return reactivable(build, { update, batch: true });
 }
 
 /**
@@ -23,7 +23,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -66,13 +66,9 @@ export class Renderer<
       // Make the props of the instance observable
       element[PROPS] = observable(element[PROPS]);
       // Create a reactiver
-      const requestUpdate = () => this.requestUpdate(element);
       element[REACTIVER] = createReactiver(
-        () => {
-          console.log("build", element);
-          return element.build();
-        },
-        () => nextTick(requestUpdate),
+        () => element.build(),
+        () => this.requestUpdate(element),
       );
     }
     // execute the build wrapper
