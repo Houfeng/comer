@@ -18,7 +18,7 @@ export class Demo extends Component {
   onButtonClick = () => {
     this.state.value++;
     console.log("click", this.ref.current);
-    // this.ref.current?.hostElement.value; 
+    // this.ref.current?.hostElement.value;
   };
   build() {
     return new Div({
@@ -43,3 +43,6 @@ export class Demo extends Component {
     });
   }
 }
+
+const btn = new Button();
+btn.props.ref?.current;

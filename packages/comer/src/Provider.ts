@@ -19,7 +19,7 @@ export abstract class Provider<T> extends Component<ProviderProps<T>> {
   }
 }
 
-export type ProviderType<T = any> = {
+export type ProviderType<T = unknown> = {
   new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
 } & {
   readonly [IDENTIFY]: "Provider";

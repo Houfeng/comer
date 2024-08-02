@@ -11,11 +11,17 @@ import {
 import { type ProviderType } from "./Provider";
 import { ReactiveFunction } from "ober";
 
+/**
+ * ComponentProps type utils
+ */
 export type ComponentProps<P extends object> = {
   ref?: Ref<Component<P>>;
   key?: unknown;
 } & P;
 
+/**
+ * ComponentParameters type utils
+ */
 export type ComponentParameters<P extends object> =
   RequiredKeyOf<P> extends never
     ? OptionalKeyOf<P> extends never
@@ -23,14 +29,17 @@ export type ComponentParameters<P extends object> =
       : Parameters<(props?: ComponentProps<P>) => void>
     : Parameters<(props: ComponentProps<P>) => void>;
 
-export type ComponentType<P extends object = any> = {
+/**
+ * Component class
+ */
+export type ComponentType<P extends object> = {
   new (...params: ComponentParameters<P>): Component<P>;
 };
 
 /**
  * Component abstract class, the base class for all components
  */
-export abstract class Component<P extends object = any> {
+export abstract class Component<P extends object = {}> {
   /** @internal */
   [PROPS]: ComponentProps<P>;
 
@@ -50,11 +59,11 @@ export abstract class Component<P extends object = any> {
     this[PROPS] = { ...params[0] } as ComponentProps<P>;
   }
 
-  protected get props(): Readonly<ComponentProps<P>> {
+  get props(): Readonly<ComponentProps<P>> {
     return this[PROPS];
   }
 
-  protected use<T extends ProviderType>(
+  protected use<T extends ProviderType<any>>(
     providerClass: T,
   ): InstanceType<T>["value"] | void {
     if (providerClass[IDENTIFY] !== "Provider") return;
@@ -74,7 +83,7 @@ export abstract class Component<P extends object = any> {
   unmount?: () => void;
 }
 
-export function func<T extends ComponentType>(ComponentClass: T) {
+export function func<T extends ComponentType<any>>(ComponentClass: T) {
   return (...args: ConstructorParameters<T>): Component<T> => {
     return new ComponentClass(...args);
   };

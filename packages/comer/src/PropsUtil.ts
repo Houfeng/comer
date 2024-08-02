@@ -7,7 +7,7 @@ export function isEventName(name: string) {
 
 export function takeHostEvents(props: object) {
   const events: Record<string, HostEventListener> = {};
-  const others: Record<string, any> = {};
+  const others: Record<string, unknown> = {};
   Object.entries(props).forEach(([key, value]) => {
     if (key === "ref") return;
     if (isEventName(key) && isFunction(value)) {
