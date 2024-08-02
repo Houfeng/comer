@@ -1,6 +1,6 @@
 import { renderer } from "comer-dom";
-import { Demo } from "./Demo2";
+import { Demo } from "./Demo0";
 
-const app = renderer.render(new Demo(), document.getElementById("root")!);
-
+const root = document.getElementById("root")!;
+const app = renderer.render(new Demo(), root);
 Object.assign(window, { renderer, app });
