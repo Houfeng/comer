@@ -1,10 +1,10 @@
 import { Component, Fragment, HostComponent } from "comer";
-import { DOMElement, DOMProps } from "./DOMTypes";
+import { DOMElement, DOMElementProps } from "./DOMTypes";
 
 export type DOMComponentProps<
   E extends DOMElement = DOMElement,
   P extends object = {},
-> = DOMProps<E> & { children?: Component[] | Component } & P;
+> = DOMElementProps<E> & { children?: Component[] | Component } & P;
 
 export class DOMComponent<
   E extends DOMElement = DOMElement,

@@ -1,4 +1,4 @@
-import { StringKeyOf, ValueOf } from "comer";
+import { StringKeyOf, ValueOf, WritablePart } from "comer";
 
 export type DOMText = Text;
 export type DOMElement = HTMLElement | SVGElement | Text;
@@ -14,6 +14,10 @@ export type DOMPropKeyOf<T extends DOMElement> = {
   [K in keyof T]-?: ValueOf<T, K> extends string | number ? K : never;
 }[keyof T];
 
-export type DOMProps<T extends DOMElement> = Partial<
-  Pick<T, DOMPropKeyOf<T>> & DOMEventProps
+export type DOMCustomAttributes = {
+  [K in `x-${string}` | `data-${string}`]: string | number;
+};
+
+export type DOMElementProps<T extends DOMElement> = Partial<
+  WritablePart<Pick<T, DOMPropKeyOf<T>>> & DOMEventProps & DOMCustomAttributes
 >;

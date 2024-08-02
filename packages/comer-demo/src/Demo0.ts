@@ -10,6 +10,7 @@ export class Demo extends Component {
     return new Button({
       children: new Text(`Click: ${this.state.value}`),
       onClick: this.onButtonClick,
+      "x-a": "1",
     });
   }
 }
