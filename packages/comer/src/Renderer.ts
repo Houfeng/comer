@@ -164,8 +164,10 @@ export class Renderer<
         // props is observable object，Can trigger updates
         // key that does not exist on newProps,
         // needs to be cleared on Old by setting null
+        // if (key === "children") return;
         oldProps[key] = newProps[key] ?? null;
       });
+      console.log("Update allKeys:", { allKeys });
     }
     // update to host element
     if (this.isHostComponent(oldElement)) this.updateHostElement(oldElement);
