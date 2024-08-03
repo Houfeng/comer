@@ -12,4 +12,4 @@ export * from "./Renderer";
 export * from "./HostAdapter";
 export * from "./HostComponent";
 
-export * from "./Widget";
+export * from "./Delegate";

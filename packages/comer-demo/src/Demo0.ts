@@ -1,7 +1,7 @@
-import { Component, observable, widget } from "comer";
+import { Component, observable, delegate } from "comer";
 import { Button, Div, Text } from "comer-dom";
 
-@widget
+@delegate
 export class Display extends Component<{ value: number }> {
   build(): Component {
     return new Text(`Value: ${this.props.value}`);
