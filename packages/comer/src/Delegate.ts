@@ -15,11 +15,11 @@ export class Delegate extends Component<any> {
 
 /**
  * Declare a component as a delegate to reduce the cost of re rendering.
- * 
- * Tips: When a delegated component is inherited, it contains the properties  
- * and methods of the target component. 
+ *
+ * Tips: When a delegated component is inherited, it contains the properties
+ * and methods of the target component.
  * But when creating an instance through new, it is an instance of Delegate
- * 
+ *
  * @param Target Target component
  * @returns Delegate component
  */

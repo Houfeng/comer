@@ -1,4 +1,3 @@
-import { func } from "comer";
 import { DOMEventProps } from "../DOMTypes";
 import { DOMComponent } from "../DOMComponent";
 
@@ -9,7 +8,6 @@ export class Svg extends DOMComponent<
 > {
   type = "svg";
 }
-export const svg = func(Svg);
 
 export class G extends DOMComponent<
   SVGGElement,
@@ -18,7 +16,6 @@ export class G extends DOMComponent<
 > {
   type = "g";
 }
-export const g = func(G);
 
 export class Image extends DOMComponent<
   SVGImageElement,
@@ -27,7 +24,6 @@ export class Image extends DOMComponent<
 > {
   type = "image";
 }
-export const image = func(Image);
 
 export class SvgText extends DOMComponent<
   SVGTextElement,
@@ -36,8 +32,6 @@ export class SvgText extends DOMComponent<
 > {
   type = "text";
 }
-export const svgText = func(SvgText);
-export const sText = func(SvgText);
 
 export class TSpan extends DOMComponent<
   SVGTSpanElement,
@@ -46,4 +40,3 @@ export class TSpan extends DOMComponent<
 > {
   type = "tspan";
 }
-export const tspan = func(TSpan);

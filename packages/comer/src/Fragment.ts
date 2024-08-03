@@ -1,4 +1,4 @@
-import { Component, func } from "./Component";
+import { Component } from "./Component";
 import { CHILDREN } from "./Symbols";
 
 export class Fragment extends Component<{ children: Component[] }> {
@@ -11,5 +11,3 @@ export class Fragment extends Component<{ children: Component[] }> {
     return this;
   }
 }
-
-export const fragment = func(Fragment);

@@ -83,7 +83,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
   unmount?: () => void;
 }
 
-export function func<T extends ComponentType<any, any>>(ComponentClass: T) {
+export function factory<T extends ComponentType<any, any>>(ComponentClass: T) {
   return (...args: ConstructorParameters<T>): Component<T> => {
     return new ComponentClass(...args);
   };

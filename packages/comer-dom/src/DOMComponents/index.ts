@@ -1,4 +1,4 @@
-import { Component, Fragment, func } from "comer";
+import { Component, Fragment } from "comer";
 import { DOMComponent } from "../DOMComponent";
 import { DOMEventProps, DOMText } from "../DOMTypes";
 
@@ -21,7 +21,6 @@ export class TextNode extends DOMComponent<
 
 export const Text = TextNode;
 export const TextContent = TextNode;
-export const text = func(TextNode);
 
 export class Video extends DOMComponent<
   HTMLVideoElement,
@@ -31,8 +30,6 @@ export class Video extends DOMComponent<
   type = "video";
 }
 
-export const video = func(Video);
-
 export class Audio extends DOMComponent<
   HTMLAudioElement,
   Partial<DOMEventProps<HTMLVideoElementEventMap>>,
@@ -40,5 +37,3 @@ export class Audio extends DOMComponent<
 > {
   type = "audio";
 }
-
-export const audio = func(Audio);
