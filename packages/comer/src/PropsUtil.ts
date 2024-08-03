@@ -1,10 +1,12 @@
 import { isFunction } from "ntils";
 import { HostEventListener } from "./HostAdapter";
 
+/** @internal */
 export function isEventName(name: string) {
   return !!name && /^on/.test(name);
 }
 
+/** @internal */
 export function takeHostEvents(props: object) {
   const events: Record<string, HostEventListener> = {};
   const others: Record<string, unknown> = {};

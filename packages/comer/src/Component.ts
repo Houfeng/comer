@@ -14,7 +14,7 @@ import { ReactiveFunction } from "ober";
 /**
  * ComponentProps type utils
  */
-export type ComponentProps<P extends object, R extends object> = {
+type ComponentProps<P extends object, R extends object> = {
   ref?: Ref<R>;
   key?: unknown;
 } & P;
@@ -22,7 +22,7 @@ export type ComponentProps<P extends object, R extends object> = {
 /**
  * ComponentParameters type utils
  */
-export type ComponentParameters<P extends object, R extends object> =
+type ComponentParameters<P extends object, R extends object> =
   RequiredKeyOf<P> extends never
     ? OptionalKeyOf<P> extends never
       ? Parameters<() => void>
@@ -30,7 +30,8 @@ export type ComponentParameters<P extends object, R extends object> =
     : Parameters<(props: ComponentProps<P, R>) => void>;
 
 /**
- * Component class
+ * Component class type
+ * @internal
  */
 export type ComponentType<P extends object, R extends object> = {
   new (...params: ComponentParameters<P, R>): Component<P, R>;

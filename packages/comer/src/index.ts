@@ -1,6 +1,10 @@
-export * from "ober";
+export {
+  observable,
+  takeDependencies,
+  ObserveConfig,
+  type ObserveMode,
+} from "ober";
 
-export * from "./PropsUtil";
 export type * from "./TypeUtil";
 
 export * from "./Component";

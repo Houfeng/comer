@@ -1,7 +1,7 @@
 import { Component, type ComponentType } from "./Component";
 
 /** @internal */
-export class Delegate extends Component<any> {
+class Delegate extends Component<any> {
   constructor(
     props: any,
     private Target: ComponentType<any, any>,

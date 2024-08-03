@@ -2,7 +2,7 @@ import { Component } from "./Component";
 import { Fragment } from "./Fragment";
 import { IDENTIFY } from "./Symbols";
 
-export type ProviderProps<T> = {
+type ProviderProps<T> = {
   value?: T;
   children: Component[] | Component;
 };
@@ -19,6 +19,7 @@ export abstract class Provider<T> extends Component<ProviderProps<T>> {
   }
 }
 
+/** @internal */
 export type ProviderType<T = unknown> = {
   new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
 } & {
