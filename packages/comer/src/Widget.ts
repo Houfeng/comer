@@ -10,7 +10,7 @@ export class Widget extends Component<any> {
   }
   build(): Component {
     const element = new this.RawComponent(this.props);
-    return element.build();
+    return element;
   }
 }
 
