@@ -8,6 +8,7 @@ export class Display extends Component<{ value: number }> {
   }
 }
 
+@delegate
 export class Demo extends Component {
   state = observable({ value: 0 });
   onButtonClick = () => {
