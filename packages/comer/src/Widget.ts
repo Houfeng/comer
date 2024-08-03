@@ -1,6 +1,7 @@
 import { Component, type ComponentType } from "./Component";
 
-class Widget extends Component<any> {
+/** @internal */
+export class Widget extends Component<any> {
   constructor(
     props: any,
     public RawComponent: ComponentType<any, any>,
@@ -14,7 +15,7 @@ class Widget extends Component<any> {
 }
 
 /**
- *
+ * Declare a component as a widget to reduce the cost of re rendering
  * @param Raw component
  * @returns
  */
