@@ -4,13 +4,12 @@ import { Component, type ComponentType } from "./Component";
 export class Widget extends Component<any> {
   constructor(
     props: any,
-    public RawComponent: ComponentType<any, any>,
+    public Raw: ComponentType<any, any>,
   ) {
     super(props);
   }
   build(): Component {
-    const element = new this.RawComponent(this.props);
-    return element;
+    return new this.Raw(this.props);
   }
 }
 
