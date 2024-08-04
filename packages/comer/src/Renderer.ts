@@ -243,13 +243,11 @@ export class Renderer<
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element[CHILDREN]?.push(oldChild);
-        console.log("update", { element, oldChild, newChild });
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
         element[CHILDREN]?.push(newChild);
-        console.log("replace", { oldChild, newChild });
       }
       // TODO: remove useless elements
       // TODO: append new elements

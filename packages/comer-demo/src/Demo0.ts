@@ -1,5 +1,5 @@
 import { Component, observable, delegate } from "comer";
-import { Button, Div, Text } from "comer-dom";
+import { Button, Div, Span, Text } from "comer-dom";
 
 @delegate
 export class Display extends Component<{ value: number }> {
@@ -20,6 +20,11 @@ export class Demo extends Component {
       children: [
         new Display({ value: this.state.value }),
         new Display({ value: 100 }),
+        new Button({
+          children: new Span({
+            children: new Text(`Click: ${this.state.value}`),
+          }),
+        }),
         new Button({
           children: new Text(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
