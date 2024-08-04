@@ -185,6 +185,13 @@ export class Renderer<
     this.dispatch(newElement, "mount");
   }
 
+  private canUpdate(oldElement: Component, newElement: Component) {
+    return (
+      this.isSomeComponentType(oldElement, newElement) &&
+      oldElement.props.key === newElement.props.key
+    );
+  }
+
   /** @internal */
   requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
@@ -194,7 +201,7 @@ export class Renderer<
     let childrenChanged = false;
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
-      if (this.isSomeComponentType(oldChild, newChild)) {
+      if (this.canUpdate(oldChild, newChild)) {
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element[CHILDREN]?.push(oldChild);
