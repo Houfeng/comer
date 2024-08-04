@@ -56,6 +56,7 @@ export class Renderer<
     const fn = element[method];
     if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
     // broadcast to children
+    if (!element[CHILDREN]) return;
     element[CHILDREN].forEach((child) => {
       if (element !== child) this.dispatch(child, method, ...args);
     });
@@ -93,7 +94,7 @@ export class Renderer<
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
-    if (!element) return [];
+    if (!element || !element[CHILDREN]) return [];
     if (this.isHostComponent(element)) return [element];
     return element[CHILDREN].map((child) =>
       this.findHostComponents(child),
@@ -188,21 +189,21 @@ export class Renderer<
   /** @internal */
   requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
-    const oldChildren = element[CHILDREN];
-    const newChildren = this.build(element);
+    const oldChildren = element[CHILDREN] || [];
+    const newChildren = this.build(element) || [];
     element[CHILDREN] = [];
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
       if (this.isSomeComponentType(oldChild, newChild)) {
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
-        element[CHILDREN].push(oldChild);
+        element[CHILDREN]?.push(oldChild);
         console.log("update", { oldChild, newChild });
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
-        element[CHILDREN].push(newChild);
+        element[CHILDREN]?.push(newChild);
         console.log("replace", { oldChild, newChild });
       }
       // TODO: remove useless elements
