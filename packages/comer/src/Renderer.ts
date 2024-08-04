@@ -168,10 +168,9 @@ export class Renderer<
         // props is observable object，Can trigger updates
         // key that does not exist on newProps,
         // needs to be cleared on Old by setting null
-        //if (key === "children") return;
+        // if (key === "children") return;
         oldProps[key] = newProps[key] ?? null;
       });
-      console.log("Update allKeys:", { allKeys });
     }
     // update to host element
     if (this.isHostComponent(oldElement)) this.updateHostElement(oldElement);
@@ -192,22 +191,27 @@ export class Renderer<
     const oldChildren = element[CHILDREN] || [];
     const newChildren = this.build(element) || [];
     element[CHILDREN] = [];
+    let childrenChanged = false;
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
       if (this.isSomeComponentType(oldChild, newChild)) {
         // Same type, reuse host element, update props
         this.update(oldChild, newChild);
         element[CHILDREN]?.push(oldChild);
-        console.log("update", { oldChild, newChild });
+        console.log("update", { element, oldChild, newChild });
       } else {
         // Different types, replace with new host element
         this.compose(newChild, element);
         this.replace(oldChild, newChild);
         element[CHILDREN]?.push(newChild);
         console.log("replace", { oldChild, newChild });
+        childrenChanged = true;
       }
       // TODO: remove useless elements
     });
+    if (childrenChanged) {
+      // TODO: update children prop
+    }
   }
 
   render<T extends Component>(element: T, container: HE): T {

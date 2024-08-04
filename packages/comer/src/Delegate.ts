@@ -1,4 +1,5 @@
 import { Component, type ComponentType } from "./Component";
+import { PROPS } from "./Symbols";
 
 /** @internal */
 class Delegate extends Component<any> {
@@ -8,8 +9,14 @@ class Delegate extends Component<any> {
   ) {
     super(props);
   }
+  private instance?: InstanceType<ComponentType<any, any>>;
   build(): Component {
-    return new this.Target(this.props);
+    if (!this.instance) {
+      this.instance = new this.Target(this.props);
+    } else {
+      Object.assign(this.instance[PROPS], this[PROPS]);
+    }
+    return this.instance;
   }
 }
 
@@ -33,6 +40,7 @@ export function delegate<T extends ComponentType<any, any>>(Target: T): T {
       super(props);
     }
   }
+  Object.defineProperty(Wrapper, "Target", { value: Target });
   Object.defineProperty(Wrapper, "name", { value: Target.name });
   return Wrapper as T;
 }
