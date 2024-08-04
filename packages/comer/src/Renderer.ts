@@ -242,11 +242,11 @@ export class Renderer<
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // append
-        this.compose(newChild, element);
+        this.compose(newChild, element, true);
         items.push(newChild);
       } else if (oldChild && newChild) {
         // replace
-        this.compose(newChild, element);
+        this.compose(newChild, element, true);
         this.unmount(oldChild);
         items.push(newChild);
       } else {
