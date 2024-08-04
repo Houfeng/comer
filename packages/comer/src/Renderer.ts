@@ -125,7 +125,6 @@ export class Renderer<
     if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
-    this.update(element);
     if (deep) {
       element[CHILDREN] = this.build(element);
       element[CHILDREN].forEach((child) => {
@@ -138,6 +137,7 @@ export class Renderer<
         this.adapter.appendElement(element.hostElement, parentHostElement);
       }
     }
+    this.update(element);
     this.bindRef(element);
   }
 
@@ -212,16 +212,8 @@ export class Renderer<
     }
   }
 
-  private replace(oldElement: Component, newElement: Component) {
-    // const oldHostElements = this.findHostElements(oldElement);
-    // const newHostElements = this.findHostElements(oldElement);
-    // newHostElements.forEach(it =>this.adapter.appendElement(it));
-    // oldHostElements.forEach((it) => this.adapter.removeElement(it));
-    this.dispatch(oldElement, "unmount");
-    this.dispatch(newElement, "mount");
-  }
-
   private canUpdate(oldElement: Component, newElement: Component): boolean {
+    if (!oldElement || !newElement) return false;
     const isSameKey = oldElement.props.key === newElement.props.key;
     if (!isSameKey) return false;
     if (this.isDelegate(oldElement) && this.isDelegate(newElement)) {
@@ -236,22 +228,32 @@ export class Renderer<
     if (!this.isComponent(element)) return;
     const oldChildren = element[CHILDREN] || [];
     const newChildren = this.build(element) || [];
-    element[CHILDREN] = [];
-    newChildren.forEach((newChild, index) => {
-      const oldChild = oldChildren[index];
+    const items: Component[] = [];
+    const length = Math.max(oldChildren.length, newChildren.length);
+    for (let i = 0; i < length; i++) {
+      const oldChild = oldChildren[i];
+      const newChild = newChildren[i];
       if (this.canUpdate(oldChild, newChild)) {
-        // Same type, reuse host element, update props
+        // update
         this.update(oldChild, newChild);
-        element[CHILDREN]?.push(oldChild);
-      } else {
-        // Different types, replace with new host element
+        items.push(newChild);
+      } else if (oldChild && !newChild) {
+        // remove
+        this.unmount(oldChild);
+      } else if (!oldChild && newChild) {
+        // append
         this.compose(newChild, element);
-        this.replace(oldChild, newChild);
-        element[CHILDREN]?.push(newChild);
+        items.push(newChild);
+      } else if (oldChild && newChild) {
+        // replace
+        this.compose(newChild, element);
+        this.unmount(oldChild);
+        items.push(newChild);
+      } else {
+        throw new Error("Request update error");
       }
-      // TODO: remove useless elements
-      // TODO: append new elements
-    });
+    }
+    element[CHILDREN] = items;
   }
 
   render<T extends Component>(element: T, container: HE): T {

@@ -1,13 +1,5 @@
 import { Component, observable, delegate } from "comer";
-import { Button, Div, Span, Text } from "comer-dom";
-
-@delegate
-export class Display extends Component<{ value: number }> {
-  build(): Component {
-    console.log("Display++++++++build");
-    return new Text(`Value: ${this.props.value}`);
-  }
-}
+import { Button, Div, Text } from "comer-dom";
 
 @delegate
 export class Demo extends Component {
@@ -16,19 +8,15 @@ export class Demo extends Component {
     this.state.value++;
   };
   build() {
+    const { value } = this.state;
     return new Div({
       children: [
-        new Display({ value: this.state.value }),
-        new Display({ value: 100 }),
-        new Button({
-          children: new Span({
-            children: new Text(`Click: ${this.state.value}`),
-          }),
-        }),
+        new Text(`~${value}`),
+        // value % 2 === 0 ? new Text(`#${value}`) : new Text(`@${value}`),
+        // ...new Array(value).fill("").map((it) => new Text(String(it))),
         new Button({
           children: new Text(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
-          "x-a": "1",
         }),
       ],
     });
