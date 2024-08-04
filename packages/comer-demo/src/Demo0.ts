@@ -4,7 +4,7 @@ import { Button, Div, Text } from "comer-dom";
 @delegate
 export class Display extends Component<{ value: number }> {
   build(): Component {
-    return new Text(`Value: ${this.props.value}`);
+    return new Text(`Value: ${this.props.value}`); 
   }
 }
 

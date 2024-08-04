@@ -1,8 +1,9 @@
 import { Component, type ComponentType } from "./Component";
-import { PROPS } from "./Symbols";
+import { IDENTIFY, PROPS } from "./Symbols";
 
 /** @internal */
 class Delegate extends Component<any> {
+  [IDENTIFY]: 'Delegate' = 'Delegate';
   constructor(
     props: any,
     private Target: ComponentType<any, any>,
@@ -40,7 +41,6 @@ export function delegate<T extends ComponentType<any, any>>(Target: T): T {
       super(props);
     }
   }
-  Object.defineProperty(Wrapper, "Target", { value: Target });
   Object.defineProperty(Wrapper, "name", { value: Target.name });
   return Wrapper as T;
 }
