@@ -5,8 +5,8 @@ import { AnyFunction } from "./TypeUtil";
 import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, PARENT, PROPS, EVENTS, REACTIVER } from "./Symbols";
-import { takeHostEvents } from "./PropsUtil";
+import { CHILDREN, PARENT, PROPS, REACTIVER } from "./Symbols";
+import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 
 function createReactiver(build: () => Component, update: () => void) {
@@ -24,7 +24,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -147,17 +147,16 @@ export class Renderer<
     if (ref) ref.current = element;
   }
 
-  private updateHostElement(element: Component) {
-    if (!this.isHostComponent(element)) return;
-    const { hostElement, [PROPS]: props, [EVENTS]: oldEvents } = element;
+  private flushToHostElement(
+    hostElement: HostElement,
+    willUpdateProps: Record<string, any>,
+    willAttachEvents: Record<string, any>,
+    willRemoveEvents: Record<string, any>,
+  ) {
     if (!hostElement) return;
-    const { events, others } = takeHostEvents(props);
-    this.adapter.updateProps(hostElement, others);
-    if (oldEvents) {
-      this.adapter.removeEvents(hostElement, oldEvents);
-    }
-    this.adapter.attachEvents(hostElement, events);
-    element[EVENTS] = events;
+    this.adapter.updateProps(hostElement, willUpdateProps);
+    this.adapter.removeEvents(hostElement, willRemoveEvents);
+    this.adapter.attachEvents(hostElement, willAttachEvents);
   }
 
   private update(
@@ -167,10 +166,13 @@ export class Renderer<
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
+    const oldProps: Record<string, any> = oldElement[PROPS];
+    const newProps: Record<string, any> = newElement[PROPS];
+    const willUpdateHostProps: Record<string, any> = {};
+    const willAttachHostEvents: Record<string, any> = {};
+    const willRemoveHostEvents: Record<string, any> = {};
     // update props : new -> old
     if (oldElement !== newElement) {
-      const oldProps: Record<string, unknown> = oldElement[PROPS];
-      const newProps: Record<string, unknown> = newElement[PROPS];
       const allKeys = new Set([
         ...Object.keys(oldProps),
         ...Object.keys(newProps),
@@ -179,11 +181,35 @@ export class Renderer<
         // props is observable object，Can trigger updates
         // key that does not exist on newProps,
         // needs to be cleared on Old by setting null
-        oldProps[key] = newProps[key] ?? null;
+        if (oldProps[key] === newProps[key] || key === "ref") return;
+        if (isEventName(key)) {
+          willAttachHostEvents[key] = newProps[key];
+          willRemoveHostEvents[key] = oldProps[key];
+          oldProps[key] = newProps[key] ?? null;
+        } else {
+          oldProps[key] = newProps[key] ?? null;
+          willUpdateHostProps[key] = oldProps[key];
+        }
+      });
+    } else {
+      Object.entries(oldProps).forEach(([key, value]) => {
+        if (key === "ref") return;
+        if (isEventName(key)) {
+          willAttachHostEvents[key] = value;
+        } else {
+          willUpdateHostProps[key] = value;
+        }
       });
     }
-    // update to host element
-    if (this.isHostComponent(oldElement)) this.updateHostElement(oldElement);
+    // flush to host element
+    if (this.isHostComponent(oldElement) && oldElement.hostElement) {
+      this.flushToHostElement(
+        oldElement.hostElement,
+        willUpdateHostProps,
+        willAttachHostEvents,
+        willRemoveHostEvents,
+      );
+    }
   }
 
   private replace(oldElement: Component, newElement: Component) {

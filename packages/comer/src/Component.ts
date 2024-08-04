@@ -1,13 +1,6 @@
-import { AnyFunction, OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
+import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import {
-  PROPS,
-  CHILDREN,
-  PARENT,
-  EVENTS,
-  IDENTIFY,
-  REACTIVER,
-} from "./Symbols";
+import { PROPS, CHILDREN, PARENT, IDENTIFY, REACTIVER } from "./Symbols";
 import { type ProviderType } from "./Provider";
 import { ReactiveFunction } from "ober";
 
@@ -49,9 +42,6 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
 
   /** @internal */
   [PARENT]?: Component;
-
-  /** @internal */
-  [EVENTS]?: Record<string, AnyFunction>;
 
   /** @internal */
   [REACTIVER]?: ReactiveFunction;

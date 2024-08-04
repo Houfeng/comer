@@ -52,14 +52,16 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   attachEvents(element: DOMElement, events: HostElementEvents): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
-      element.addEventListener(name.toLowerCase(), listener, false);
+      const normalizedName = name.slice(2).toLowerCase();
+      element.addEventListener(normalizedName, listener, false);
     });
   }
 
   removeEvents(element: DOMElement, events: HostElementEvents): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
-      element.removeEventListener(name.toLowerCase(), listener, false);
+      const normalizedName = name.slice(2).toLowerCase();
+      element.removeEventListener(normalizedName, listener, false);
     });
   }
 }
