@@ -1,9 +1,8 @@
 import { Component, type ComponentType } from "./Component";
-import { IDENTIFY, PROPS } from "./Symbols";
+import { PROPS } from "./Symbols";
 
 /** @internal */
 class Delegate extends Component<any> {
-  [IDENTIFY]: 'Delegate' = 'Delegate';
   constructor(
     props: any,
     private Target: ComponentType<any, any>,

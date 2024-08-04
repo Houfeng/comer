@@ -4,7 +4,8 @@ import { Button, Div, Text } from "comer-dom";
 @delegate
 export class Display extends Component<{ value: number }> {
   build(): Component {
-    return new Text(`Value: ${this.props.value}`); 
+    console.log("Display++++++++build");
+    return new Text(`Value: ${this.props.value}`);
   }
 }
 
@@ -18,6 +19,7 @@ export class Demo extends Component {
     return new Div({
       children: [
         new Display({ value: this.state.value }),
+        new Display({ value: 100 }),
         new Button({
           children: new Text(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
