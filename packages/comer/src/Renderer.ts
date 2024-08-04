@@ -24,7 +24,7 @@ export class Renderer<
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -179,7 +179,6 @@ export class Renderer<
         // props is observable object，Can trigger updates
         // key that does not exist on newProps,
         // needs to be cleared on Old by setting null
-        // if (key === "children") return;
         oldProps[key] = newProps[key] ?? null;
       });
     }
