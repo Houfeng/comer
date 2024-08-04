@@ -5,11 +5,12 @@
   "author": "Houfeng",
   "license": "MIT",
   "scripts": {
-    "postinstall": "dn run clean",
-    "clean": "dn run clean",
-    "start": "dn dev",
-    "test": "dn test",
-    "build": "dn build"
+    "clean": "task clean",
+    "lint": "task lint",
+    "test": "task test",
+    "build": "task build",
+    "start": "task dev",
+    "dev": "task dev"
   },
   "workspaces": [
     "./packages/comer",
@@ -45,7 +46,7 @@
     "rollup-plugin-typescript2": "0.31.2",
     "rollup-plugin-uglify": "6.0.4",
     "source-map-loader": "5.0.0",
-    "taskd": "0.1.7",
+    "taskd": "0.1.8",
     "ts-loader": "9.5.0",
     "ts-node": "10.9.2",
     "tsx": "4.7.0",

@@ -58,6 +58,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
 
   constructor(...params: ComponentParameters<P, R>) {
     this[PROPS] = { ...params[0] } as ComponentProps<P, R>;
+    this[CHILDREN] = [];
   }
 
   get props(): Readonly<ComponentProps<P, R>> {

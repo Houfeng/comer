@@ -102,13 +102,15 @@ export class Renderer<
 
   private findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
-    return this.findHostComponents(element).map((it) => it.hostElement);
+    return this.findHostComponents(element)
+      .map((it) => it.hostElement)
+      .filter((it) => !!it);
   }
 
   private compose(element: Component, parent?: Component, deep = false): void {
     if (!this.isComponent(element)) return;
     element[PARENT] = parent;
-    if (this.isHostComponent(element)) {
+    if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
     this.update(element);
@@ -120,7 +122,7 @@ export class Renderer<
     }
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
-      if (parentHostElement) {
+      if (parentHostElement && element.hostElement) {
         this.adapter.appendElement(element.hostElement, parentHostElement);
       }
     }
@@ -136,6 +138,7 @@ export class Renderer<
   private updateHostElement(element: Component) {
     if (!this.isHostComponent(element)) return;
     const { hostElement, [PROPS]: props, [EVENTS]: oldEvents } = element;
+    if (!hostElement) return;
     const { events, others } = takeHostEvents(props);
     this.adapter.updateProps(hostElement, others);
     if (oldEvents) {
