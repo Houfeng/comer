@@ -7,6 +7,7 @@ import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS, EVENTS, REACTIVER } from "./Symbols";
 import { takeHostEvents } from "./PropsUtil";
+import { Delegate } from "./Delegate";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: true });
@@ -29,6 +30,18 @@ export class Renderer<
     return !!value && value instanceof Component;
   }
 
+  private isHostComponent(value: unknown): value is HostComponent {
+    return !!value && value instanceof HostComponent;
+  }
+
+  private isFragment(value: unknown): value is Fragment {
+    return !!value && value instanceof Fragment;
+  }
+
+  private isDelegate(value: unknown) {
+    return !!value && value instanceof Delegate;
+  }
+
   private isSomeComponentType(el1: unknown, el2: unknown): boolean {
     return (
       this.isComponent(el1) &&
@@ -37,12 +50,10 @@ export class Renderer<
     );
   }
 
-  private isHostComponent(value: unknown): value is HostComponent {
-    return this.isComponent(value) && value instanceof HostComponent;
-  }
-
-  private isFragment(value: unknown): value is Fragment {
-    return this.isComponent(value) && value instanceof Fragment;
+  private isSomeDelegateTarget(el1: unknown, el2: unknown): boolean {
+    return (
+      this.isDelegate(el1) && this.isDelegate(el2) && el1.Target === el2.Target
+    );
   }
 
   private dispatch<
@@ -185,11 +196,14 @@ export class Renderer<
     this.dispatch(newElement, "mount");
   }
 
-  private canUpdate(oldElement: Component, newElement: Component) {
-    return (
-      this.isSomeComponentType(oldElement, newElement) &&
-      oldElement.props.key === newElement.props.key
-    );
+  private canUpdate(oldElement: Component, newElement: Component): boolean {
+    const isSameKey = oldElement.props.key === newElement.props.key;
+    if (!isSameKey) return false;
+    if (this.isDelegate(oldElement) && this.isDelegate(newElement)) {
+      return this.isSomeDelegateTarget(oldElement, newElement);
+    } else {
+      return this.isSomeComponentType(oldElement, newElement);
+    }
   }
 
   /** @internal */
@@ -198,7 +212,6 @@ export class Renderer<
     const oldChildren = element[CHILDREN] || [];
     const newChildren = this.build(element) || [];
     element[CHILDREN] = [];
-    let childrenChanged = false;
     newChildren.forEach((newChild, index) => {
       const oldChild = oldChildren[index];
       if (this.canUpdate(oldChild, newChild)) {
@@ -212,13 +225,10 @@ export class Renderer<
         this.replace(oldChild, newChild);
         element[CHILDREN]?.push(newChild);
         console.log("replace", { oldChild, newChild });
-        childrenChanged = true;
       }
       // TODO: remove useless elements
+      // TODO: append new elements
     });
-    if (childrenChanged) {
-      // TODO: update children prop
-    }
   }
 
   render<T extends Component>(element: T, container: HE): T {

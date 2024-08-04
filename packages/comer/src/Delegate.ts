@@ -2,21 +2,24 @@ import { Component, type ComponentType } from "./Component";
 import { PROPS } from "./Symbols";
 
 /** @internal */
-class Delegate extends Component<any> {
+export class Delegate extends Component<any> {
   constructor(
     props: any,
-    private Target: ComponentType<any, any>,
+    public Target: ComponentType<any, any>,
   ) {
     super(props);
   }
-  private instance?: InstanceType<ComponentType<any, any>>;
+  target?: InstanceType<ComponentType<any, any>>;
   build(): Component {
-    if (!this.instance) {
-      this.instance = new this.Target(this.props);
+    if (!this.target) {
+      if (this.Target instanceof Delegate) {
+        throw new Error("Delegate cannot point to other Delegates");
+      }
+      this.target = new this.Target(this.props);
     } else {
-      Object.assign(this.instance[PROPS], this[PROPS]);
+      Object.assign(this.target[PROPS], this[PROPS]);
     }
-    return this.instance;
+    return this.target;
   }
 }
 
