@@ -16,4 +16,6 @@ export interface HostAdapter<E extends HostElement> {
   updateProps(element: E, props: HostElementProps): void;
   attachEvents(element: E, events: HostElementEvents): void;
   removeEvents(element: E, events: HostElementEvents): void;
+  idleCallback(handler: () => void): void;
+  flushCallback(handler: () => void): void;
 }

@@ -68,4 +68,20 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
       element.removeEventListener(normalizedName, listener, false);
     });
   }
+
+  flushCallback(handler: () => void): void {
+    if (typeof requestAnimationFrame === "undefined") return handler();
+    requestAnimationFrame(handler);
+  }
+
+  idleCallback(handler: () => void): void {
+    if (typeof requestIdleCallback === "undefined") {
+      setTimeout(handler, 0);
+    } else {
+      requestIdleCallback((deadline) => {
+        if (deadline.timeRemaining() > 0) return handler();
+        this.idleCallback(handler);
+      });
+    }
+  }
 }

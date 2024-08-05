@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, PARENT, PROPS, REACTIVER } from "./Symbols";
+import { CHILDREN, DEFERRABLE, PARENT, PROPS, REACTIVER } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 import { Flag } from "./Flag";
@@ -57,6 +57,13 @@ export class Renderer<
     );
   }
 
+  private isDeferrable(element: Component): boolean {
+    const Type = this.isDelegate(element)
+      ? element.Target
+      : element.constructor;
+    return !!Object.getOwnPropertyDescriptor(Type, DEFERRABLE)?.value;
+  }
+
   private dispatch<
     M extends keyof Component,
     A extends Component[M] extends AnyFunction ? Component[M] : () => void,
@@ -92,7 +99,11 @@ export class Renderer<
       const update = () => this.requestUpdate(element);
       element[REACTIVER] = createReactiver(
         () => element.build(),
-        () => (this.syncFlag.current() ? update() : nextTick(update)),
+        () => {
+          if (this.syncFlag.current()) return update();
+          if (!this.isDeferrable(element)) return nextTick(update);
+          this.adapter.idleCallback(update);
+        },
       );
     }
     // execute the build wrapper
@@ -166,9 +177,13 @@ export class Renderer<
     willRemoveEvents: Record<string, any>,
   ) {
     if (!hostElement) return;
-    this.adapter.updateProps(hostElement, willUpdateProps);
-    this.adapter.removeEvents(hostElement, willRemoveEvents);
-    this.adapter.attachEvents(hostElement, willAttachEvents);
+    const flushHandler = () => {
+      this.adapter.updateProps(hostElement, willUpdateProps);
+      this.adapter.removeEvents(hostElement, willRemoveEvents);
+      this.adapter.attachEvents(hostElement, willAttachEvents);
+    };
+    if (this.syncFlag.current()) return flushHandler();
+    this.adapter.flushCallback(flushHandler);
   }
 
   private update(
