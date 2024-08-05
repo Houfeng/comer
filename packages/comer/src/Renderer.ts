@@ -2,15 +2,16 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { observable, reactivable } from "ober";
+import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { CHILDREN, PARENT, PROPS, REACTIVER } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
+import { Flag } from "./Flag";
 
 function createReactiver(build: () => Component, update: () => void) {
-  return reactivable(build, { update, batch: true });
+  return reactivable(build, { update, batch: false });
 }
 
 /**
@@ -73,14 +74,25 @@ export class Renderer<
     });
   }
 
+  private syncFlag = Flag(false);
+
+  /**
+   * Synchronize triggering component updates,
+   * please use with caution as it may cause lag.
+   */
+  flushSync<H extends () => any>(handler: H): ReturnType<H> {
+    return this.syncFlag.run(true, handler);
+  }
+
   private build(element: Component): Component[] {
     if (!element[REACTIVER]) {
       // Make the props of the instance observable
       element[PROPS] = observable(element[PROPS]);
       // Create a reactiver
+      const update = () => this.requestUpdate(element);
       element[REACTIVER] = createReactiver(
         () => element.build(),
-        () => this.requestUpdate(element),
+        () => (this.syncFlag.current() ? update() : nextTick(update)),
       );
     }
     // execute the build wrapper
