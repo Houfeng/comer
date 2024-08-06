@@ -82,13 +82,17 @@ export class Renderer<
   }
 
   private syncFlag = Flag(false);
+  private syncBuffer = new Set<() => void>();
 
   /**
    * Synchronize triggering component updates,
    * please use with caution as it may cause lag.
    */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
-    return this.syncFlag.run(true, handler);
+    this.syncBuffer.clear();
+    const result = this.syncFlag.run(true, handler);
+    this.syncBuffer.forEach((callback) => callback());
+    return result;
   }
 
   private build(element: Component): Component[] {
@@ -96,14 +100,17 @@ export class Renderer<
       // Make the props of the instance observable
       element[PROPS] = observable(element[PROPS]);
       // Create a reactiver
-      const update = () => this.requestUpdate(element);
+      const updateHandler = () => this.requestUpdate(element);
+      const tickHandler = () =>
+        this.isDeferrable(element)
+          ? this.adapter.idleCallback(updateHandler)
+          : updateHandler();
       element[REACTIVER] = createReactiver(
         () => element.build(),
-        () => {
-          if (this.syncFlag.current()) return update();
-          if (!this.isDeferrable(element)) return nextTick(update);
-          this.adapter.idleCallback(update);
-        },
+        () =>
+          this.syncFlag.current()
+            ? this.syncBuffer.add(updateHandler)
+            : nextTick(tickHandler),
       );
     }
     // execute the build wrapper
