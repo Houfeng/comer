@@ -2,11 +2,16 @@ import { Component } from "./Component";
 import { Fragment } from "./Fragment";
 import { IDENTIFY } from "./Symbols";
 
-type ProviderProps<T> = {
+export type ProviderProps<T> = {
   value?: T;
   children: Component[] | Component;
 };
 
+/**
+ * Component used to provide context values
+ * @abstract
+ * @class
+ */
 export abstract class Provider<T> extends Component<ProviderProps<T>> {
   static readonly [IDENTIFY] = "Provider";
 

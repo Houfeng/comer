@@ -32,6 +32,8 @@ export type ComponentType<P extends object, R extends object> = {
 
 /**
  * Component abstract class, the base class for all components
+ * @abstract
+ * @class
  */
 export abstract class Component<P extends object = {}, R extends object = {}> {
   /** @internal */
@@ -50,13 +52,24 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
     this[PROPS] = (params[0] || {}) as ComponentProps<P, R>;
   }
 
+  /**
+   * Component properties are read-only objects.
+   * When the properties change, the component will re execute the build
+   * and render according to the situation
+   * @readonly
+   */
   get props(): Readonly<ComponentProps<P, R>> {
     return this[PROPS];
   }
 
+  /**
+   * Retrieve the rendering context value of the specified type
+   * @param providerClass Provider class that provides context value
+   * @returns context value (readonly)
+   */
   use<T extends ProviderType<any>>(
     providerClass: T,
-  ): InstanceType<T>["value"] | void {
+  ): Readonly<InstanceType<T>["value"]> | void {
     if (providerClass[IDENTIFY] !== "Provider") return;
     let target = this[PARENT];
     while (target) {
@@ -65,11 +78,37 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
     }
   }
 
+  /**
+   * Generate component rendering content, do not include time-consuming logic,
+   * cannot be asynchronous, and must return component elements
+   * @returns Component element (subtree root)
+   * @virtual
+   */
   build(): Component {
     throw new Error("Unimplemented build method");
   }
 
+  /**
+   * Component lifecycle hook method
+   * Triggered when a component is updated
+   * @callback
+   * @method
+   */
   update?: () => void;
+
+  /**
+   * Component lifecycle hook method
+   * Triggered when component creation is completed and available
+   * @callback
+   * @method
+   */
   mount?: () => void;
+
+  /**
+   * Component lifecycle hook method
+   * Triggered during component destruction
+   * @callback
+   * @method
+   */
   unmount?: () => void;
 }
