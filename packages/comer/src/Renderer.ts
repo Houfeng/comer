@@ -71,8 +71,8 @@ export class Renderer<
     A extends Component[M] extends AnyFunction ? Component[M] : () => void,
   >(element: Component, method: M, ...args: Parameters<A>) {
     if (!element) return;
-    // if unmount，dispose reactiver
-    if (method === "unmount") element[REACTIVER]?.unsubscribe();
+    // if destroy，dispose reactiver
+    if (method === "onDestroy") element[REACTIVER]?.unsubscribe();
     // invoke the method
     const fn = element[method];
     if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
@@ -259,8 +259,7 @@ export class Renderer<
     }
   }
 
-  /** @internal */
-  requestUpdate(element: Component): void {
+  private requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
     const oldChildren = element[CHILDREN] || [];
     const newChildren = this.build(element) || [];
@@ -302,7 +301,7 @@ export class Renderer<
       throw new Error("Invalid host element");
     }
     hostElements.forEach((it) => this.adapter.insertElement(container, it));
-    this.dispatch(element, "mount");
+    this.dispatch(element, "onCreated");
     return element;
   }
 
@@ -312,6 +311,6 @@ export class Renderer<
       throw new Error("Invalid host element");
     }
     hostElements.forEach((it) => this.adapter.removeElement(it));
-    this.dispatch(element, "unmount");
+    this.dispatch(element, "onDestroy");
   }
 }

@@ -31,6 +31,12 @@ export type ProviderType<T = unknown> = {
   readonly [IDENTIFY]: "Provider";
 };
 
+/**
+ * Create a context class of a specified value type
+ * @param defaultValue The default value
+ * @returns The provider class
+ * @function
+ */
 export function createProvider<T>(defaultValue?: T): ProviderType<T> {
   return class extends Provider<T> {
     constructor(props: ProviderProps<T>) {

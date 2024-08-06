@@ -57,6 +57,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * When the properties change, the component will re execute the build
    * and render according to the situation
    * @readonly
+   * @property
    */
   get props(): Readonly<ComponentProps<P, R>> {
     return this[PROPS];
@@ -66,6 +67,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * Retrieve the rendering context value of the specified type
    * @param providerClass Provider class that provides context value
    * @returns context value (readonly)
+   * @method
    */
   use<T extends ProviderType<any>>(
     providerClass: T,
@@ -83,6 +85,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * cannot be asynchronous, and must return component elements
    * @returns Component element (subtree root)
    * @virtual
+   * @method
    */
   build(): Component {
     throw new Error("Unimplemented build method");
@@ -94,7 +97,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @callback
    * @method
    */
-  update?: () => void;
+  onUpdated?: () => void;
 
   /**
    * Component lifecycle hook method
@@ -102,7 +105,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @callback
    * @method
    */
-  mount?: () => void;
+  onCreated?: () => void;
 
   /**
    * Component lifecycle hook method
@@ -110,5 +113,5 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @callback
    * @method
    */
-  unmount?: () => void;
+  onDestroy?: () => void;
 }

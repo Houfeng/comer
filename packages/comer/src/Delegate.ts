@@ -32,6 +32,7 @@ export class Delegate extends Component<any> {
  *
  * @param Target Target component
  * @returns Delegate component
+ * @function
  */
 export function delegate<T extends ComponentType<any, any>>(Target: T): T {
   const Super = Target as ComponentType<any, any>;
