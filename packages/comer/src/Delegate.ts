@@ -1,5 +1,5 @@
 import { Component, type ComponentType } from "./Component";
-import { PROPS } from "./Symbols";
+import { $Props } from "./Symbols";
 
 /** @internal */
 export class Delegate extends Component<any> {
@@ -17,7 +17,7 @@ export class Delegate extends Component<any> {
       }
       this.target = new this.Target(this.props);
     } else {
-      Object.assign(this.target[PROPS], this[PROPS]);
+      Object.assign(this.target[$Props], this[$Props]);
     }
     return this.target;
   }

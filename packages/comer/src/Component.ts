@@ -1,6 +1,6 @@
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { PROPS, CHILDREN, PARENT, IDENTIFY, REACTIVER } from "./Symbols";
+import { $Props, $Children, $Parent, $Identify, $Reactiver } from "./Symbols";
 import { type ProviderType } from "./Provider";
 import { ReactiveFunction } from "ober";
 
@@ -37,19 +37,19 @@ export type ComponentType<P extends object, R extends object> = {
  */
 export abstract class Component<P extends object = {}, R extends object = {}> {
   /** @internal */
-  [PROPS]: ComponentProps<P, R>;
+  [$Props]: ComponentProps<P, R>;
 
   /** @internal */
-  [CHILDREN]?: Component[];
+  [$Children]?: Component[];
 
   /** @internal */
-  [PARENT]?: Component;
+  [$Parent]?: Component;
 
   /** @internal */
-  [REACTIVER]?: ReactiveFunction;
+  [$Reactiver]?: ReactiveFunction;
 
   constructor(...params: ComponentParameters<P, R>) {
-    this[PROPS] = (params[0] || {}) as ComponentProps<P, R>;
+    this[$Props] = (params[0] || {}) as ComponentProps<P, R>;
   }
 
   /**
@@ -60,7 +60,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @property
    */
   get props(): Readonly<ComponentProps<P, R>> {
-    return this[PROPS];
+    return this[$Props];
   }
 
   /**
@@ -72,11 +72,11 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
   use<T extends ProviderType<any>>(
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
-    if (providerClass[IDENTIFY] !== "Provider") return;
-    let target = this[PARENT];
+    if (providerClass[$Identify] !== "Provider") return;
+    let target = this[$Parent];
     while (target) {
       if (target instanceof providerClass) return target.value;
-      target = target[PARENT];
+      target = target[$Parent];
     }
   }
 

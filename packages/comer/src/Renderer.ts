@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, FLUSH_ID, PARENT, PROPS, REACTIVER } from "./Symbols";
+import { $Children, $FlushId, $Parent, $Props, $Reactiver } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 import { Flag } from "./Flag";
@@ -72,13 +72,13 @@ export class Renderer<
   >(element: Component, method: M, ...args: Parameters<A>) {
     if (!element) return;
     // if destroy，dispose reactiver
-    if (method === "onDestroy") element[REACTIVER]?.unsubscribe();
+    if (method === "onDestroy") element[$Reactiver]?.unsubscribe();
     // invoke the method
     const fn = element[method];
     if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
     // broadcast to children
-    if (!element[CHILDREN]) return;
-    element[CHILDREN].forEach((child) => {
+    if (!element[$Children]) return;
+    element[$Children].forEach((child) => {
       if (element !== child) this.dispatch(child, method, ...args);
     });
   }
@@ -98,12 +98,12 @@ export class Renderer<
   }
 
   private build(element: Component): Component[] {
-    if (!element[REACTIVER]) {
+    if (!element[$Reactiver]) {
       // Make the props of the instance observable
-      element[PROPS] = observable(element[PROPS]);
+      element[$Props] = observable(element[$Props]);
       // Create a reactiver
       const update = () => this.requestUpdate(element);
-      element[REACTIVER] = createReactiver(
+      element[$Reactiver] = createReactiver(
         () => element.build(),
         () =>
           this.syncFlag.current()
@@ -112,18 +112,18 @@ export class Renderer<
       );
     }
     // execute the build wrapper
-    const result = element[REACTIVER]();
+    const result = element[$Reactiver]();
     // normalize the children
-    const children = this.isFragment(element) ? element[CHILDREN] : [result];
+    const children = this.isFragment(element) ? element[$Children] : [result];
     return (children || []).flat(1);
   }
 
   private findParentHostComponent(element?: Component): HostComponent | void {
-    if (!element || !element[PARENT]) return;
-    if (this.isHostComponent(element[PARENT])) {
-      return element[PARENT];
+    if (!element || !element[$Parent]) return;
+    if (this.isHostComponent(element[$Parent])) {
+      return element[$Parent];
     }
-    return this.findParentHostComponent(element[PARENT]);
+    return this.findParentHostComponent(element[$Parent]);
   }
 
   private findParentHostElement(element?: Component): HostElement | void {
@@ -133,11 +133,11 @@ export class Renderer<
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
-    if (!element || !element[CHILDREN]) return [];
+    if (!element || !element[$Children]) return [];
     if (this.isHostComponent(element)) return [element];
-    return element[CHILDREN].map((child) =>
-      this.findHostComponents(child),
-    ).flat(1);
+    return element[$Children]
+      .map((child) => this.findHostComponents(child))
+      .flat(1);
   }
 
   private findHostElements(element: Component): HostElement[] {
@@ -149,13 +149,13 @@ export class Renderer<
 
   private compose(element: Component, parent?: Component, deep = false): void {
     if (!this.isComponent(element)) return;
-    element[PARENT] = parent;
+    element[$Parent] = parent;
     if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
     if (deep) {
-      element[CHILDREN] = this.build(element);
-      element[CHILDREN].forEach((child) => {
+      element[$Children] = this.build(element);
+      element[$Children].forEach((child) => {
         this.compose(child, element, deep);
       });
     }
@@ -171,7 +171,7 @@ export class Renderer<
 
   private bindRef(element: Component): void {
     if (!this.isComponent(element)) return;
-    const { ref } = element[PROPS];
+    const { ref } = element[$Props];
     if (ref) ref.current = element;
   }
 
@@ -186,13 +186,13 @@ export class Renderer<
       this.adapter.updateProps(hostElement, willUpdateProps);
       this.adapter.removeEvents(hostElement, willRemoveEvents);
       this.adapter.attachEvents(hostElement, willAttachEvents);
-      hostElement[FLUSH_ID] = void 0;
+      hostElement[$FlushId] = void 0;
     };
     if (this.syncFlag.current()) return flushHandler();
-    if (hostElement[FLUSH_ID]) {
-      this.adapter.cancelHostCallback(hostElement[FLUSH_ID]);
+    if (hostElement[$FlushId]) {
+      this.adapter.cancelHostCallback(hostElement[$FlushId]);
     }
-    hostElement[FLUSH_ID] = this.adapter.requestHostCallback(flushHandler);
+    hostElement[$FlushId] = this.adapter.requestHostCallback(flushHandler);
   }
 
   private update(
@@ -202,8 +202,8 @@ export class Renderer<
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
-    const oldProps: Record<string, any> = oldElement[PROPS];
-    const newProps: Record<string, any> = newElement[PROPS];
+    const oldProps: Record<string, any> = oldElement[$Props];
+    const newProps: Record<string, any> = newElement[$Props];
     const willUpdateHostProps: Record<string, any> = {};
     const willAttachHostEvents: Record<string, any> = {};
     const willRemoveHostEvents: Record<string, any> = {};
@@ -261,7 +261,7 @@ export class Renderer<
 
   private requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
-    const oldChildren = element[CHILDREN] || [];
+    const oldChildren = element[$Children] || [];
     const newChildren = this.build(element) || [];
     const items: Component[] = [];
     const length = Math.max(oldChildren.length, newChildren.length);
@@ -288,7 +288,7 @@ export class Renderer<
         throw new Error("Request update error");
       }
     }
-    element[CHILDREN] = items;
+    element[$Children] = items;
   }
 
   render<T extends Component>(element: T, container: HE): T {

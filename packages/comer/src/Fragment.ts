@@ -1,5 +1,5 @@
 import { Component } from "./Component";
-import { CHILDREN } from "./Symbols";
+import { $Children } from "./Symbols";
 
 /**
  * Component element fragment
@@ -11,7 +11,7 @@ export class Fragment extends Component<{ children: Component[] }> {
     super({ children });
   }
   build(): Component {
-    this[CHILDREN] = this.props.children || [];
+    this[$Children] = this.props.children || [];
     return this;
   }
 }

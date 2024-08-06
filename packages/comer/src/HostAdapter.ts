@@ -1,11 +1,11 @@
-import { FLUSH_ID } from "./Symbols";
+import { $FlushId } from "./Symbols";
 
 /**
  * @interface
  */
 export type HostElement = object & {
   /** @internal */
-  [FLUSH_ID]?: unknown;
+  [$FlushId]?: unknown;
 };
 
 export type HostEvent = object;
