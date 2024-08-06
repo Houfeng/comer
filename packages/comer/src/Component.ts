@@ -54,7 +54,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
     return this[PROPS];
   }
 
-  protected use<T extends ProviderType<any>>(
+  use<T extends ProviderType<any>>(
     providerClass: T,
   ): InstanceType<T>["value"] | void {
     if (providerClass[IDENTIFY] !== "Provider") return;

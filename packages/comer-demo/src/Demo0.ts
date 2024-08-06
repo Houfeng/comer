@@ -21,12 +21,7 @@ export class Demo extends Component {
           },
         }),
         value % 2 === 0 ? new Text(`#${value}`) : new Text(`@${value}`),
-        ...new Array(value).fill("1").map(
-          (it) =>
-            new Div({
-              children: new Text(String(it)),
-            }),
-        ),
+        ...new Array(value).fill("1").map((it) => new Text(String(it))),
         new Button({
           children: new Text(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
