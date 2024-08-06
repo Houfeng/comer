@@ -69,19 +69,15 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  flushCallback(handler: () => void): void {
-    if (typeof requestAnimationFrame === "undefined") return handler();
-    requestAnimationFrame(handler);
+  requestPaintFrame(handler: (time: number) => void): unknown {
+    if (typeof requestAnimationFrame === "undefined") {
+      return handler(Date.now());
+    }
+    return requestAnimationFrame(handler);
   }
 
-  idleCallback(handler: () => void): void {
-    if (typeof requestIdleCallback === "undefined") {
-      setTimeout(handler, 0);
-    } else {
-      requestIdleCallback((deadline) => {
-        if (deadline.timeRemaining() > 0) return handler();
-        this.idleCallback(handler);
-      });
-    }
+  cancelPaintFrame(id: unknown): void {
+    if (typeof cancelAnimationFrame === "undefined") return;
+    if (id) cancelAnimationFrame(id as number);
   }
 }

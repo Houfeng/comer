@@ -17,5 +17,4 @@ export * from "./HostAdapter";
 export * from "./HostComponent";
 
 export * from "./Delegate";
-export * from "./Deferrable";
 export * from "./Factory";

@@ -5,7 +5,7 @@ import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { CHILDREN, DEFERRABLE, PARENT, PROPS, REACTIVER } from "./Symbols";
+import { CHILDREN, FLUSH_ID, PARENT, PROPS, REACTIVER } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 import { Flag } from "./Flag";
@@ -57,13 +57,6 @@ export class Renderer<
     );
   }
 
-  private isDeferrable(element: Component): boolean {
-    const Type = this.isDelegate(element)
-      ? element.Target
-      : element.constructor;
-    return !!Object.getOwnPropertyDescriptor(Type, DEFERRABLE)?.value;
-  }
-
   private dispatch<
     M extends keyof Component,
     A extends Component[M] extends AnyFunction ? Component[M] : () => void,
@@ -100,17 +93,13 @@ export class Renderer<
       // Make the props of the instance observable
       element[PROPS] = observable(element[PROPS]);
       // Create a reactiver
-      const updateHandler = () => this.requestUpdate(element);
-      const tickHandler = () =>
-        this.isDeferrable(element)
-          ? this.adapter.idleCallback(updateHandler)
-          : updateHandler();
+      const update = () => this.requestUpdate(element);
       element[REACTIVER] = createReactiver(
         () => element.build(),
         () =>
           this.syncFlag.current()
-            ? this.syncBuffer.add(updateHandler)
-            : nextTick(tickHandler),
+            ? this.syncBuffer.add(update)
+            : nextTick(update),
       );
     }
     // execute the build wrapper
@@ -188,9 +177,13 @@ export class Renderer<
       this.adapter.updateProps(hostElement, willUpdateProps);
       this.adapter.removeEvents(hostElement, willRemoveEvents);
       this.adapter.attachEvents(hostElement, willAttachEvents);
+      hostElement[FLUSH_ID] = void 0;
     };
     if (this.syncFlag.current()) return flushHandler();
-    this.adapter.flushCallback(flushHandler);
+    if (hostElement[FLUSH_ID]) {
+      this.adapter.cancelPaintFrame(hostElement[FLUSH_ID]);
+    }
+    hostElement[FLUSH_ID] = this.adapter.requestPaintFrame(flushHandler);
   }
 
   private update(

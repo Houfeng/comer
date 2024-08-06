@@ -3,5 +3,6 @@ export const CHILDREN = Symbol("Children");
 export const PARENT = Symbol("Parent");
 export const REACTIVER = Symbol("Reactiver");
 export const DEFERRABLE = Symbol("Deferrable");
+export const FLUSH_ID = Symbol("FlushId");
 
 export const IDENTIFY = Symbol("Identify");

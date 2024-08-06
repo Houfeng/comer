@@ -1,4 +1,10 @@
-export type HostElement = object;
+import { FLUSH_ID } from "./Symbols";
+
+export type HostElement = object & {
+  /** @internal */
+  [FLUSH_ID]?: unknown;
+};
+
 export type HostEvent = object;
 export type HostEventListener = (event: HostEvent) => void;
 export type HostElementProps = Record<string, unknown>;
@@ -16,6 +22,6 @@ export interface HostAdapter<E extends HostElement> {
   updateProps(element: E, props: HostElementProps): void;
   attachEvents(element: E, events: HostElementEvents): void;
   removeEvents(element: E, events: HostElementEvents): void;
-  idleCallback(handler: () => void): void;
-  flushCallback(handler: () => void): void;
+  requestPaintFrame(handler: (time: number) => void): unknown;
+  cancelPaintFrame(id: unknown): void;
 }
