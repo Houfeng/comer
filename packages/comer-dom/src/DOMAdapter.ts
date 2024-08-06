@@ -1,5 +1,6 @@
 import { HostAdapter, HostElementProps, HostElementEvents } from "comer";
 import { DOMElement } from "./DOMTypes";
+import { isString } from "ntils";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
   isHostElement(value: unknown): value is DOMElement {
@@ -23,19 +24,22 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     element.parentElement.removeChild(element);
   }
 
-  appendElement(element: DOMElement, parent: DOMElement): void {
+  insertElement(
+    parent: DOMElement,
+    element: DOMElement,
+    anchor: DOMElement | string,
+  ): void {
     if (!this.isHostElement(parent)) return;
     if (!this.isHostElement(element)) return;
-    parent.appendChild(element);
-  }
-
-  insertElement(element: DOMElement, anchor: DOMElement): void {
-    if (!this.isHostElement(element)) return;
-    if (!this.isHostElement(anchor)) return;
-    const { parentElement } = element;
-    if (!parentElement) return;
-    parentElement.insertBefore(anchor, element);
-    parentElement.removeChild(element);
+    if (this.isHostElement(anchor) && anchor.nextSibling) {
+      // insert after
+      parent.insertBefore(anchor.nextSibling, element);
+    } else if (isString(anchor)) {
+      // At present, there is no need to handle it
+    } else {
+      // append
+      parent.appendChild(element);
+    }
   }
 
   updateProps(element: DOMElement, props: HostElementProps): void {
