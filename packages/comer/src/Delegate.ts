@@ -30,20 +30,20 @@ export class Delegate extends Component<any> {
  * and methods of the target component.
  * But when creating an instance through new, it is an instance of Delegate
  *
- * @param Target Target component
+ * @param target Target component
  * @returns Delegate component
  * @function
  */
-export function delegate<T extends ComponentType<any, any>>(Target: T): T {
-  const Super = Target as ComponentType<any, any>;
+export function delegate<T extends ComponentType<any, any>>(target: T): T {
+  const Super = target as ComponentType<any, any>;
   class Wrapper extends Super {
     constructor(props: ConstructorParameters<T>[0]) {
       if (!new.target || new.target === Wrapper) {
-        return new Delegate(props, Target);
+        return new Delegate(props, target);
       }
       super(props);
     }
   }
-  Object.defineProperty(Wrapper, "name", { value: Target.name });
+  Object.defineProperty(Wrapper, "name", { value: target.name });
   return Wrapper as T;
 }
