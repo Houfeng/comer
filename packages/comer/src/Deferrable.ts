@@ -1,3 +1,6 @@
 import { createProvider } from "./Provider";
 
-export const DeferrableProvider = createProvider(true);
+/**
+ * Declare component subtree as deferrable
+ */
+export const Deferrable = createProvider(true);

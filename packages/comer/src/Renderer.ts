@@ -9,7 +9,7 @@ import { CHILDREN, FLUSH_ID, PARENT, PROPS, REACTIVER } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 import { Flag } from "./Flag";
-import { DeferrableProvider } from "./Deferrable";
+import { Deferrable } from "./Deferrable";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
@@ -61,7 +61,9 @@ export class Renderer<
   // TODO: To be used
   //@ts-ignore
   private canDefer(element: Component): boolean {
-    return !!element && !!element.use(DeferrableProvider);
+    return (
+      !!element && (element instanceof Deferrable || !!element.use(Deferrable))
+    );
   }
 
   private dispatch<
