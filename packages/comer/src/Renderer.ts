@@ -181,9 +181,9 @@ export class Renderer<
     };
     if (this.syncFlag.current()) return flushHandler();
     if (hostElement[FLUSH_ID]) {
-      this.adapter.cancelPaintFrame(hostElement[FLUSH_ID]);
+      this.adapter.cancelHostCallback(hostElement[FLUSH_ID]);
     }
-    hostElement[FLUSH_ID] = this.adapter.requestPaintFrame(flushHandler);
+    hostElement[FLUSH_ID] = this.adapter.requestHostCallback(flushHandler);
   }
 
   private update(

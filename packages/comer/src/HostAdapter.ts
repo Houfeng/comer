@@ -22,6 +22,6 @@ export interface HostAdapter<E extends HostElement> {
   updateProps(element: E, props: HostElementProps): void;
   attachEvents(element: E, events: HostElementEvents): void;
   removeEvents(element: E, events: HostElementEvents): void;
-  requestPaintFrame(handler: (time: number) => void): unknown;
-  cancelPaintFrame(id: unknown): void;
+  requestHostCallback(handler: (time: number) => void): unknown;
+  cancelHostCallback(id: unknown): void;
 }

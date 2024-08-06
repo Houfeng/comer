@@ -69,14 +69,14 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  requestPaintFrame(handler: (time: number) => void): unknown {
+  requestHostCallback(handler: (time: number) => void): unknown {
     if (typeof requestAnimationFrame === "undefined") {
       return handler(Date.now());
     }
     return requestAnimationFrame(handler);
   }
 
-  cancelPaintFrame(id: unknown): void {
+  cancelHostCallback(id: unknown): void {
     if (typeof cancelAnimationFrame === "undefined") return;
     if (id) cancelAnimationFrame(id as number);
   }
