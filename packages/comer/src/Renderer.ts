@@ -1,6 +1,6 @@
 import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
-import { Component } from "./Component";
+import { Component, useContext } from "./Component";
 import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
@@ -62,7 +62,8 @@ export class Renderer<
   //@ts-ignore
   private canDefer(element: Component): boolean {
     return (
-      !!element && (element instanceof Deferrable || !!element.use(Deferrable))
+      !!element &&
+      (element instanceof Deferrable || !!useContext(element, Deferrable))
     );
   }
 
@@ -250,7 +251,7 @@ export class Renderer<
 
   private canUpdate(oldElement: Component, newElement: Component): boolean {
     if (!oldElement || !newElement) return false;
-    const isSameKey = oldElement.props.key === newElement.props.key;
+    const isSameKey = oldElement[$Props].key === newElement[$Props].key;
     if (!isSameKey) return false;
     if (this.isDelegate(oldElement) && this.isDelegate(newElement)) {
       return this.isSomeDelegateTarget(oldElement, newElement);

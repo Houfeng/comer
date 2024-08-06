@@ -31,6 +31,22 @@ export type ComponentType<P extends object, R extends object> = {
 };
 
 /**
+ * @internal
+ */
+export function useContext<T extends ProviderType<any>>(
+  component: Component,
+  providerClass: T,
+): Readonly<InstanceType<T>["value"]> | void {
+  if (!component || !providerClass) return;
+  if (providerClass[$Identify] !== "Provider") return;
+  let target = component[$Parent];
+  while (target) {
+    if (target instanceof providerClass) return target.value;
+    target = target[$Parent];
+  }
+}
+
+/**
  * Component abstract class, the base class for all components
  * @abstract
  * @class
@@ -59,7 +75,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @readonly
    * @property
    */
-  get props(): Readonly<ComponentProps<P, R>> {
+  protected get props(): Readonly<ComponentProps<P, R>> {
     return this[$Props];
   }
 
@@ -69,15 +85,10 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @returns context value (readonly)
    * @method
    */
-  use<T extends ProviderType<any>>(
+  protected use<T extends ProviderType<any>>(
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
-    if (providerClass[$Identify] !== "Provider") return;
-    let target = this[$Parent];
-    while (target) {
-      if (target instanceof providerClass) return target.value;
-      target = target[$Parent];
-    }
+    return useContext(this, providerClass);
   }
 
   /**
@@ -93,19 +104,19 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
 
   /**
    * Component lifecycle hook method
-   * Triggered when a component is updated
-   * @callback
-   * @method
-   */
-  onUpdated?: () => void;
-
-  /**
-   * Component lifecycle hook method
    * Triggered when component creation is completed and available
    * @callback
    * @method
    */
   onCreated?: () => void;
+
+  /**
+   * Component lifecycle hook method
+   * Triggered when a component is updated
+   * @callback
+   * @method
+   */
+  onUpdated?: () => void;
 
   /**
    * Component lifecycle hook method
