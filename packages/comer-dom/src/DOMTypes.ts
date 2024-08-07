@@ -1,5 +1,6 @@
 import { StringKeyOf, ValueOf, WritablePart } from "comer";
 
+export const DOMText = Text;
 export type DOMText = Text;
 export type DOMElement = HTMLElement | SVGElement | Text;
 

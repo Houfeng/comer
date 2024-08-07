@@ -1,4 +1,4 @@
-import { Component, ComponentType } from "./Component";
+import { type Component, type ComponentType } from "./Component";
 
 /**
  * Create a factory function that can generate component instances

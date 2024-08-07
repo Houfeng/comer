@@ -1,8 +1,14 @@
 import { HostAdapter, HostElementProps, HostElementEvents } from "comer";
-import { DOMElement } from "./DOMTypes";
+import { DOMElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
+  bindRoot(root: DOMElement): void {
+    if (!this.isHostElement(root)) return;
+    if (root instanceof DOMText) throw new Error("Invalid host root");
+    if (root.children.length > 0) throw new Error("Root is not empty");
+  }
+
   isHostElement(value: unknown): value is DOMElement {
     return (
       !!value &&

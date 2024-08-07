@@ -1,6 +1,6 @@
 import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
-import { Component, useContext } from "./Component";
+import { Component, useProvider } from "./Component";
 import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
@@ -18,10 +18,7 @@ function createReactiver(build: () => Component, update: () => void) {
 /**
  * Comer renderer, rendering elements to the host surface
  */
-export class Renderer<
-  T extends HostAdapter<HostElement>,
-  HE = ReturnType<T["createElement"]>,
-> {
+export class Renderer<T extends HostAdapter<HostElement>> {
   /**
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
@@ -63,7 +60,7 @@ export class Renderer<
   private canDefer(element: Component): boolean {
     return (
       !!element &&
-      (element instanceof Deferrable || !!useContext(element, Deferrable))
+      (element instanceof Deferrable || !!useProvider(element, Deferrable))
     );
   }
 
@@ -168,6 +165,7 @@ export class Renderer<
     }
     this.update(element);
     this.bindRef(element);
+    this.dispatch(element, "onCreated");
   }
 
   private bindRef(element: Component): void {
@@ -292,17 +290,20 @@ export class Renderer<
     element[$Children] = items;
   }
 
-  render<T extends Component>(element: T, container: HE): T {
-    if (!this.adapter.isHostElement(container)) {
-      throw new Error("Invalid host container");
+  render<E extends Component>(
+    element: E,
+    root: Parameters<T["bindRoot"]>[0],
+  ): E {
+    if (!this.adapter.isHostElement(root)) {
+      throw new Error("Invalid host root");
     }
+    this.adapter.bindRoot(root);
     this.compose(element, void 0, true);
     const hostElements = this.findHostElements(element);
     if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
       throw new Error("Invalid host element");
     }
-    hostElements.forEach((it) => this.adapter.insertElement(container, it));
-    this.dispatch(element, "onCreated");
+    hostElements.forEach((it) => this.adapter.insertElement(root, it));
     return element;
   }
 

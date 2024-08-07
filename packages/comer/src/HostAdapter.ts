@@ -17,7 +17,13 @@ export type HostElementEvents = Record<string, HostEventListener>;
  * Adapt to host platform elements or components
  * @interface
  */
-export interface HostAdapter<E extends HostElement> {
+export interface HostAdapter<E extends HostElement, R extends E = E> {
+  /**
+   * Bind application root
+   * @param root App root
+   */
+  bindRoot(root: R): void;
+
   /**
    * Check if it is a host element
    * @param value
