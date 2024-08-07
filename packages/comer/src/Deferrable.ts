@@ -1,7 +1,7 @@
-import { Provider } from "./Provider";
+import { createProvider } from "./Provider";
 
 /**
  * Declare component subtree as deferrable
  * @class
  */
-export class Deferrable extends Provider<boolean> {}
+export const Deferrable = createProvider(true);
