@@ -1,6 +1,6 @@
 import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
-import { Component, useProvider } from "./Component";
+import { Component, useContext } from "./Component";
 import { AnyFunction } from "./TypeUtil";
 import { nextTick, observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
@@ -60,7 +60,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private canDefer(element: Component): boolean {
     return (
       !!element &&
-      (element instanceof Deferrable || !!useProvider(element, Deferrable))
+      (element instanceof Deferrable || !!useContext(element, Deferrable))
     );
   }
 

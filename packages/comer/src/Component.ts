@@ -33,7 +33,7 @@ export type ComponentType<P extends object, R extends object> = {
 /**
  * @internal
  */
-export function useProvider<T extends ProviderType<any>>(
+export function useContext<T extends ProviderType<any>>(
   component: Component,
   providerClass: T,
 ): Readonly<InstanceType<T>["value"]> | void {
@@ -88,7 +88,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
   protected use<T extends ProviderType<any>>(
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
-    return useProvider(this, providerClass);
+    return useContext(this, providerClass);
   }
 
   /**
