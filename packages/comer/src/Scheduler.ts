@@ -10,12 +10,11 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   // ---------------------------- immed -----------------------------
 
-  private immedFlag = Flag(true);
   private immedRunning = false;
   private immedTasks = new Set<TaskHandler>();
 
   private runImmedTasks = () => {
-    this.immedFlag.run(false, () => this.immedTasks.forEach((task) => task()));
+    this.immedTasks.forEach((task) => task());
     this.immedTasks.clear();
     this.immedRunning = false;
     this.requestRunDeferTasks();
@@ -29,17 +28,14 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   // ---------------------------- defer -----------------------------
 
-  private deferFlag = Flag(true);
   private deferTasks = new Set<TaskHandler>();
 
   private runDeferTasks = (deadline: HostIdleDeadline) => {
-    this.deferFlag.run(false, () => {
-      for (const task of this.deferTasks) {
-        if (task) task();
-        this.deferTasks.delete(task);
-        if (deadline.timeRemaining() < 1) break;
-      }
-    });
+    for (const task of this.deferTasks) {
+      if (task) task();
+      this.deferTasks.delete(task);
+      if (deadline.timeRemaining() < 1) break;
+    }
     if (this.deferTasks.size > 0) this.requestRunDeferTasks();
   };
 
@@ -62,7 +58,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
     this.syncTasks.clear();
     const result = this.syncFlag.run(true, handler);
-    this.syncFlag.run(false, () => this.syncTasks.forEach((task) => task()));
+    this.syncTasks.forEach((task) => task());
     this.syncTasks.clear();
     return result;
   }
@@ -74,10 +70,10 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     const { deferrable } = options;
     if (this.syncFlag.current()) {
       this.syncTasks.add(task);
-    } else if (this.deferFlag.current() && deferrable) {
+    } else if (deferrable) {
       this.deferTasks.add(task);
       this.requestRunDeferTasks();
-    } else if (this.immedFlag.current()) {
+    } else {
       this.immedTasks.add(task);
       this.requestRunImmedTasks();
     }

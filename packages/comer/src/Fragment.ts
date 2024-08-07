@@ -2,7 +2,7 @@ import { Component } from "./Component";
 import { $Children } from "./Symbols";
 
 /**
- * Component element fragment
+ * Component elements fragment
  * @class
  */
 export class Fragment extends Component<{ children: Component[] }> {
