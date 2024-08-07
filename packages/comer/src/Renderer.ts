@@ -2,14 +2,14 @@ import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, useContext } from "./Component";
 import { AnyFunction } from "./TypeUtil";
-import { nextTick, observable, reactivable } from "ober";
+import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { $Children, $FlushId, $Parent, $Props, $Reactiver } from "./Symbols";
 import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
-import { Flag } from "./Flag";
 import { Deferrable } from "./Deferrable";
+import { Scheduler } from "./Scheduler";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
@@ -24,6 +24,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * @param adapter Host adapter (eg. DOMAdapter)
    */
   constructor(protected adapter: T) {}
+
+  private scheduler = new Scheduler(this.adapter);
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -81,18 +83,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     });
   }
 
-  private syncFlag = Flag(false);
-  private syncBuffer = new Set<() => void>();
-
   /**
    * Synchronize triggering component updates,
    * please use with caution as it may cause lag.
    */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
-    this.syncBuffer.clear();
-    const result = this.syncFlag.run(true, handler);
-    this.syncBuffer.forEach((callback) => callback());
-    return result;
+    return this.scheduler.flushSync(handler);
   }
 
   private build(element: Component): Component[] {
@@ -104,9 +100,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       element[$Reactiver] = createReactiver(
         () => element.build(),
         () =>
-          this.syncFlag.current()
-            ? this.syncBuffer.add(update)
-            : nextTick(update),
+          this.scheduler.perform(update, {
+            deferrable: this.canDefer(element),
+          }),
       );
     }
     // execute the build wrapper
@@ -188,7 +184,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       this.adapter.attachEvents(hostElement, willAttachEvents);
       hostElement[$FlushId] = void 0;
     };
-    if (this.syncFlag.current()) return flushHandler();
+    if (this.scheduler.syncing) return flushHandler();
     if (hostElement[$FlushId]) {
       this.adapter.cancelPaintCallback(hostElement[$FlushId]);
     }

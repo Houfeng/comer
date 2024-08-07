@@ -6,10 +6,6 @@ export type TaskHandler = () => void;
 export type TaskOptions = { deferrable: boolean };
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
-  /**
-   * Create a comer scheduler instance using the specified adapter
-   * @param adapter Host adapter (eg. DOMAdapter)
-   */
   constructor(protected adapter: T) {}
 
   // ---------------------------- immed -----------------------------
@@ -63,10 +59,6 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     return this.syncFlag.current();
   }
 
-  /**
-   * Synchronize triggering component updates,
-   * please use with caution as it may cause lag.
-   */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
     this.syncTasks.clear();
     const result = this.syncFlag.run(true, handler);

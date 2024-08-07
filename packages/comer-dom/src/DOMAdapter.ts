@@ -1,6 +1,12 @@
-import { HostAdapter, HostElementProps, HostElementEvents } from "comer";
+import {
+  HostAdapter,
+  HostElementProps,
+  HostElementEvents,
+  HostIdleDeadline,
+} from "comer";
 import { DOMElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
+import { cancelIdleCallback, requestIdleCallback } from "./Polyfill";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
   bindRoot(root: DOMElement): void {
@@ -79,15 +85,23 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  requestHostCallback(handler: (time: number) => void): unknown {
+  requestPaintCallback(handler: (time: number) => void): unknown {
     if (typeof requestAnimationFrame === "undefined") {
       return handler(Date.now());
     }
     return requestAnimationFrame(handler);
   }
 
-  cancelHostCallback(id: unknown): void {
+  cancelPaintCallback(id: unknown): void {
     if (typeof cancelAnimationFrame === "undefined") return;
     if (id) cancelAnimationFrame(id as number);
+  }
+
+  requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown {
+    return requestIdleCallback(handler);
+  }
+
+  cancelIdleCallback(id: unknown): void {
+    return cancelIdleCallback(id as number);
   }
 }
