@@ -240,10 +240,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private canDefer(element: Component): boolean {
-    return (
-      !!element &&
-      (element instanceof Deferrable || !!useContext(element, Deferrable))
-    );
+    if (!element) return false;
+    if (element instanceof Deferrable) return !!element.value;
+    return !!useContext(element, Deferrable);
   }
 
   private requestUpdate(element: Component): void {

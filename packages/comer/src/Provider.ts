@@ -37,7 +37,7 @@ export type ProviderType<T = unknown> = {
  * @function
  */
 export function createProvider<T>(defaultValue?: T): ProviderType<T> {
-  return class extends Provider<T> {
+  return class TProvider extends Provider<T> {
     constructor(props: ProviderProps<T>) {
       props.value = props.value ?? defaultValue;
       super(props);
