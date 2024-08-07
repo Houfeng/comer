@@ -260,11 +260,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // append
-        this.create(newChild, element);
+        this.create(newChild, element, true);
         items.push(newChild);
       } else if (oldChild && newChild) {
         // replace
-        this.create(newChild, element);
+        this.create(newChild, element, true);
         this.unmount(oldChild);
         items.push(newChild);
       } else {
@@ -298,16 +298,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!element) return;
     element[$Reactiver]?.unsubscribe();
     element.onDestroy?.();
-    this.scheduler.perform(
-      () => {
-        if (this.isHostComponent(element) && element.hostElement) {
-          this.adapter.removeElement(element.hostElement);
-        }
-      },
-      { deferrable: true },
-    );
+    if (this.isHostComponent(element) && element.hostElement) {
+      this.adapter.removeElement(element.hostElement);
+    }
     // broadcast to children
     if (!element[$Children]) return;
-    element[$Children].forEach((child) => this.unmount(child));
+    element[$Children].forEach((child) =>
+      this.scheduler.perform(() => this.unmount(child), { deferrable: true }),
+    );
   }
 }
