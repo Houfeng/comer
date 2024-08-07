@@ -1,7 +1,5 @@
-import { isFunction } from "ntils";
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, useContext } from "./Component";
-import { AnyFunction } from "./TypeUtil";
 import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
@@ -60,32 +58,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     );
   }
 
-  // TODO: To be used
-  //@ts-ignore
-  private canDefer(element: Component): boolean {
-    return (
-      !!element &&
-      (element instanceof Deferrable || !!useContext(element, Deferrable))
-    );
-  }
-
-  private dispatch<
-    M extends keyof Component,
-    A extends Component[M] extends AnyFunction ? Component[M] : () => void,
-  >(element: Component, method: M, ...args: Parameters<A>) {
-    if (!element) return;
-    // if destroy，dispose reactiver
-    if (method === "onDestroy") element[$Reactiver]?.unsubscribe();
-    // invoke the method
-    const fn = element[method];
-    if (isFunction(fn)) fn.call(element, ...Array.from(args || []));
-    // broadcast to children
-    if (!element[$Children]) return;
-    element[$Children].forEach((child) => {
-      if (element !== child) this.dispatch(child, method, ...args);
-    });
-  }
-
   /**
    * Synchronize triggering component updates,
    * please use with caution as it may cause lag.
@@ -102,10 +74,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       const update = () => this.requestUpdate(element);
       element[$Reactiver] = createReactiver(
         () => element.build(),
-        () =>
-          this.scheduler.perform(update, {
-            deferrable: this.canDefer(element),
-          }),
+        () => {
+          const deferrable = this.canDefer(element);
+          this.scheduler.perform(update, { deferrable });
+        },
       );
     }
     // execute the build wrapper
@@ -127,7 +99,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findParentHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findParentHostComponent(element);
     if (!hostComponent) return this.root;
-    return hostComponent.hostElement;
+    return hostComponent.hostElement || this.root;
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
@@ -145,27 +117,32 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       .filter((it) => !!it);
   }
 
-  private compose(element: Component, parent?: Component, deep = false): void {
+  private create(
+    element: Component,
+    parent: Component | undefined,
+    deep = false,
+  ): void {
     if (!this.isComponent(element)) return;
     element[$Parent] = parent;
     if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
+    // handler children before append document
     if (deep) {
       element[$Children] = this.build(element);
-      element[$Children].forEach((child) => {
-        this.compose(child, element, deep);
-      });
+      element[$Children].forEach((child) => this.create(child, element, deep));
     }
+    // append to parent host element
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement && element.hostElement) {
         this.adapter.insertElement(parentHostElement, element.hostElement);
       }
     }
+    // ---------------------------------------
     this.update(element);
     this.bindRef(element);
-    this.dispatch(element, "onCreated");
+    element.onCreated?.();
   }
 
   private bindRef(element: Component): void {
@@ -258,6 +235,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
+  private canDefer(element: Component): boolean {
+    return (
+      !!element &&
+      (element instanceof Deferrable || !!useContext(element, Deferrable))
+    );
+  }
+
   private requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
     const oldChildren = element[$Children] || [];
@@ -276,11 +260,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // append
-        this.compose(newChild, element, true);
+        this.create(newChild, element);
         items.push(newChild);
       } else if (oldChild && newChild) {
         // replace
-        this.compose(newChild, element, true);
+        this.create(newChild, element);
         this.unmount(oldChild);
         items.push(newChild);
       } else {
@@ -301,7 +285,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.compose(element, void 0, true);
+    this.create(element, void 0, true);
     const hostElements = this.findHostElements(element);
     if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
       throw new Error("Invalid host element");
@@ -311,11 +295,19 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   unmount(element: Component): void {
-    const hostElements = this.findHostElements(element);
-    if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
-      throw new Error("Invalid host element");
-    }
-    hostElements.forEach((it) => this.adapter.removeElement(it));
-    this.dispatch(element, "onDestroy");
+    if (!element) return;
+    element[$Reactiver]?.unsubscribe();
+    element.onDestroy?.();
+    this.scheduler.perform(
+      () => {
+        if (this.isHostComponent(element) && element.hostElement) {
+          this.adapter.removeElement(element.hostElement);
+        }
+      },
+      { deferrable: true },
+    );
+    // broadcast to children
+    if (!element[$Children]) return;
+    element[$Children].forEach((child) => this.unmount(child));
   }
 }
