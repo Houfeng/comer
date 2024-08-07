@@ -190,9 +190,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     };
     if (this.syncFlag.current()) return flushHandler();
     if (hostElement[$FlushId]) {
-      this.adapter.cancelHostCallback(hostElement[$FlushId]);
+      this.adapter.cancelPaintCallback(hostElement[$FlushId]);
     }
-    hostElement[$FlushId] = this.adapter.requestHostCallback(flushHandler);
+    hostElement[$FlushId] = this.adapter.requestPaintCallback(flushHandler);
   }
 
   private update(

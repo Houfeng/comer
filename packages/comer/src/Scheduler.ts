@@ -1,5 +1,5 @@
 import { nextTick } from "ober";
-import { HostAdapter, HostElement } from "./HostAdapter";
+import { HostAdapter, HostElement, HostIdleDeadline } from "./HostAdapter";
 import { Flag } from "./Flag";
 
 export type TaskHandler = () => void;
@@ -12,51 +12,56 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
    */
   constructor(protected adapter: T) {}
 
+  // ---------------------------- immed -----------------------------
+
+  private immedFlag = Flag(true);
+  private immedRunning = false;
   private immedTasks = new Set<TaskHandler>();
-  private deferTasks = new Set<TaskHandler>();
 
-  private immedTasksRunning = false;
-  private runImmedTasks() {
-    if (this.immedTasksRunning) return;
-    this.immedTasksRunning = true;
-    nextTick(() => {
-      const tasks = new Set(this.immedTasks);
-      tasks.forEach((task) => task());
-      this.immedTasks.clear();
-      this.immedTasksRunning = false;
-      this.runDeferTasks();
-    });
-  }
-
-  private deferTasksRunning = false;
-  private runDeferTasks = () => {
-    if (this.immedTasksRunning) return;
-    if (this.deferTasksRunning) return;
-    this.deferTasksRunning = true;
-    this.adapter.requestHostCallback(() => {
-      const tasks = new Set(this.deferTasks);
-      tasks.forEach((task) => task());
-      this.deferTasks.clear();
-      this.deferTasksRunning = false;
-    });
+  private runImmedTasks = () => {
+    this.immedFlag.run(false, () => this.immedTasks.forEach((task) => task()));
+    this.immedTasks.clear();
+    this.immedRunning = false;
+    this.requestRunDeferTasks();
   };
 
-  perform(task: TaskHandler, options: TaskOptions): void {
-    if (!task) return;
-    const { deferrable } = options;
-    if (this.syncFlag.current()) {
-      this.syncTasks.add(task);
-    } else if (deferrable) {
-      this.deferTasks.add(task);
-      this.runDeferTasks();
-    } else {
-      this.immedTasks.add(task);
-      this.runImmedTasks();
-    }
+  private requestRunImmedTasks() {
+    if (this.immedRunning) return;
+    this.immedRunning = true;
+    nextTick(this.runImmedTasks);
   }
+
+  // ---------------------------- defer -----------------------------
+
+  private deferFlag = Flag(true);
+  private deferTasks = new Set<TaskHandler>();
+
+  private runDeferTasks = (deadline: HostIdleDeadline) => {
+    this.deferFlag.run(false, () => {
+      for (const task of this.deferTasks) {
+        if (task) task();
+        this.deferTasks.delete(task);
+        if (deadline.timeRemaining() < 1) break;
+      }
+    });
+    if (this.deferTasks.size > 0) this.requestRunDeferTasks();
+  };
+
+  private deferRunId: unknown;
+  private requestRunDeferTasks() {
+    if (this.immedRunning) return;
+    if (this.deferRunId) this.adapter.cancelIdleCallback(this.deferRunId);
+    this.deferRunId = this.adapter.requestIdleCallback(this.runDeferTasks);
+  }
+
+  // ---------------------------- sync -----------------------------
 
   private syncFlag = Flag(false);
   private syncTasks = new Set<TaskHandler>();
+
+  get syncing() {
+    return this.syncFlag.current();
+  }
 
   /**
    * Synchronize triggering component updates,
@@ -65,8 +70,24 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
     this.syncTasks.clear();
     const result = this.syncFlag.run(true, handler);
-    const tasks = new Set(this.syncTasks);
-    tasks.forEach((task) => task());
+    this.syncFlag.run(false, () => this.syncTasks.forEach((task) => task()));
+    this.syncTasks.clear();
     return result;
+  }
+
+  // =---------------------------- perform -----------------------------
+
+  perform(task: TaskHandler, options: TaskOptions): void {
+    if (!task) return;
+    const { deferrable } = options;
+    if (this.syncFlag.current()) {
+      this.syncTasks.add(task);
+    } else if (this.deferFlag.current() && deferrable) {
+      this.deferTasks.add(task);
+      this.requestRunDeferTasks();
+    } else if (this.immedFlag.current()) {
+      this.immedTasks.add(task);
+      this.requestRunImmedTasks();
+    }
   }
 }

@@ -13,6 +13,10 @@ export type HostEventListener = (event: HostEvent) => void;
 export type HostElementProps = Record<string, unknown>;
 export type HostElementEvents = Record<string, HostEventListener>;
 
+export type HostIdleDeadline = {
+  timeRemaining(): number;
+};
+
 /**
  * Adapt to host platform elements or components
  * @interface
@@ -92,11 +96,23 @@ export interface HostAdapter<E extends HostElement, R extends E = E> {
    * Add a change and rendering task to the host's main loop
    * @param handler
    */
-  requestHostCallback(handler: (time: number) => void): unknown;
+  requestPaintCallback(handler: (time: number) => void): unknown;
 
   /**
    * Cancel a change and rendering task from the host's event loop
    * @param id Task id
    */
-  cancelHostCallback(id: unknown): void;
+  cancelPaintCallback(id: unknown): void;
+
+  /**
+   * Add a change and rendering task to the host's main loop
+   * @param handler
+   */
+  requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown;
+
+  /**
+   * Cancel a change and rendering task from the host's event loop
+   * @param id Task id
+   */
+  cancelIdleCallback(id: unknown): void;
 }
