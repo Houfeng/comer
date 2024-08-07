@@ -66,22 +66,26 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return this.scheduler.flushSync(handler);
   }
 
+  private bindReactiver(element: Component) {
+    if (element[$Reactiver]) return;
+    // Make the props of the instance observable
+    element[$Props] = observable(element[$Props]);
+    // Create a reactiver
+    const update = () => this.requestUpdate(element);
+    element[$Reactiver] = createReactiver(
+      () => element.build(),
+      () => {
+        const deferrable = this.canDefer(element);
+        this.scheduler.perform(update, { deferrable });
+      },
+    );
+  }
+
   private build(element: Component): Component[] {
-    if (!element[$Reactiver]) {
-      // Make the props of the instance observable
-      element[$Props] = observable(element[$Props]);
-      // Create a reactiver
-      const update = () => this.requestUpdate(element);
-      element[$Reactiver] = createReactiver(
-        () => element.build(),
-        () => {
-          const deferrable = this.canDefer(element);
-          this.scheduler.perform(update, { deferrable });
-        },
-      );
-    }
+    if (!element[$Reactiver]) this.bindReactiver(element);
     // execute the build wrapper
-    const result = element[$Reactiver]();
+    const result = element[$Reactiver]?.();
+    if (!result) return [];
     // normalize the children
     const children = this.isFragment(element) ? element[$Children] : [result];
     return (children || []).flat(1);
@@ -127,6 +131,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
+    this.update(element);
     // handler children before append document
     if (deep) {
       element[$Children] = this.build(element);
@@ -140,7 +145,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
     }
     // ---------------------------------------
-    this.update(element);
     this.bindRef(element);
     element.onCreated?.();
   }
@@ -260,11 +264,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // append
-        this.create(newChild, element, true);
+        this.create(newChild, element);
         items.push(newChild);
       } else if (oldChild && newChild) {
         // replace
-        this.create(newChild, element, true);
+        this.create(newChild, element);
         this.unmount(oldChild);
         items.push(newChild);
       } else {
