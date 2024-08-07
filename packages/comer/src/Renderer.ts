@@ -117,16 +117,17 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private findParentHostComponent(element?: Component): HostComponent | void {
-    if (!element || !element[$Parent]) return;
-    if (this.isHostComponent(element[$Parent])) {
-      return element[$Parent];
+    if (!element) return;
+    let parent = element[$Parent];
+    while (parent) {
+      if (this.isHostComponent(parent)) return parent;
+      parent = parent[$Parent];
     }
-    return this.findParentHostComponent(element[$Parent]);
   }
 
   private findParentHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findParentHostComponent(element);
-    if (!hostComponent) return;
+    if (!hostComponent) return this.root;
     return hostComponent.hostElement;
   }
 
@@ -290,6 +291,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element[$Children] = items;
   }
 
+  private root?: Parameters<T["bindRoot"]>[0];
+
   render<E extends Component>(
     element: E,
     root: Parameters<T["bindRoot"]>[0],
@@ -297,6 +300,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.adapter.isHostElement(root)) {
       throw new Error("Invalid host root");
     }
+    this.root = root;
     this.adapter.bindRoot(root);
     this.compose(element, void 0, true);
     const hostElements = this.findHostElements(element);
