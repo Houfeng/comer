@@ -24,7 +24,6 @@ export abstract class Provider<T> extends Component<ProviderProps<T>> {
   }
 }
 
-/** @internal */
 export type ProviderType<T = unknown> = {
   new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
 } & {

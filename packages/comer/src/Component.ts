@@ -1,13 +1,13 @@
+import { ReactiveFunction } from "ober";
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
 import { $Props, $Children, $Parent, $Identify, $Reactiver } from "./Symbols";
 import { type ProviderType } from "./Provider";
-import { ReactiveFunction } from "ober";
 
 /**
  * ComponentProps type utils
  */
-type ComponentProps<P extends object, R extends object> = {
+export type ComponentProps<P extends object, R extends object> = {
   ref?: Ref<R>;
   key?: unknown;
 } & P;
@@ -15,7 +15,7 @@ type ComponentProps<P extends object, R extends object> = {
 /**
  * ComponentParameters type utils
  */
-type ComponentParameters<P extends object, R extends object> =
+export type ComponentParameters<P extends object, R extends object> =
   RequiredKeyOf<P> extends never
     ? OptionalKeyOf<P> extends never
       ? Parameters<() => void>
@@ -29,22 +29,6 @@ type ComponentParameters<P extends object, R extends object> =
 export type ComponentType<P extends object, R extends object> = {
   new (...params: ComponentParameters<P, R>): Component<P, R>;
 };
-
-/**
- * @internal
- */
-export function useContext<T extends ProviderType<any>>(
-  component: Component,
-  providerClass: T,
-): Readonly<InstanceType<T>["value"]> | void {
-  if (!component || !providerClass) return;
-  if (providerClass[$Identify] !== "Provider") return;
-  let target = component[$Parent];
-  while (target) {
-    if (target instanceof providerClass) return target.value;
-    target = target[$Parent];
-  }
-}
 
 /**
  * Component abstract class, the base class for all components
@@ -125,4 +109,20 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @method
    */
   onDestroy?: () => void;
+}
+
+/**
+ * @internal
+ */
+export function useContext<T extends ProviderType<any>>(
+  component: Component,
+  providerClass: T,
+): Readonly<InstanceType<T>["value"]> | void {
+  if (!component || !providerClass) return;
+  if (providerClass[$Identify] !== "Provider") return;
+  let target = component[$Parent];
+  while (target) {
+    if (target instanceof providerClass) return target.value;
+    target = target[$Parent];
+  }
 }

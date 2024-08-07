@@ -6,13 +6,16 @@ import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import { $Children, $FlushId, $Parent, $Props, $Reactiver } from "./Symbols";
-import { isEventName } from "./PropsUtil";
 import { Delegate } from "./Delegate";
 import { Deferrable } from "./Deferrable";
 import { Scheduler } from "./Scheduler";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
+}
+
+function isEventName(name: string) {
+  return !!name && /^on/.test(name);
 }
 
 /**

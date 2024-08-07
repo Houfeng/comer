@@ -29,17 +29,9 @@ export type NullableKeyToOptional<T> = Modify<
   Partial<{ [K in NullableKeyOf<T>]-?: T[K] | undefined }>
 >;
 
-// https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650
 export type IfEquals<X, Y, A, B> =
   (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
 
-// Alternatively:
-/*
-type IfEquals<X, Y, A, B> =
-    [2] & [0, 1, X] extends [2] & [0, 1, Y] & [0, infer W, unknown]
-    ? W extends 1 ? B : A
-    : B;
-*/
 export type WritableKeysOf<T> = {
   [P in keyof T]: IfEquals<
     { [Q in P]: T[P] },
