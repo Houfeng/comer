@@ -14,6 +14,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private immedTasks = new Set<TaskHandler>();
 
   private runImmedTasks = () => {
+    if (this.immedRunning) return;
     this.immedTasks.forEach((task) => task());
     this.immedTasks.clear();
     this.immedRunning = false;
@@ -31,6 +32,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private deferTasks = new Set<TaskHandler>();
 
   private runDeferTasks = (deadline: HostIdleDeadline) => {
+    if (this.immedRunning) return;
     for (const task of this.deferTasks) {
       if (task) task();
       this.deferTasks.delete(task);
