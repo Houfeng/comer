@@ -8,8 +8,8 @@ export type DOMComponentProps<
 
 export class DOMComponent<
   E extends DOMElement = DOMElement,
-  P extends object = {},
   R extends object = {},
+  P extends object = {},
 > extends HostComponent<DOMComponentProps<E, P>, R, E> {
   build(): Component {
     return new Fragment(this.props.children);
@@ -18,8 +18,8 @@ export class DOMComponent<
 
 export class TextNode extends DOMComponent<
   DOMText,
-  { textContent: string },
-  TextNode
+  TextNode,
+  { textContent: string }
 > {
   type = "text_node";
   constructor(textContent: string) {

@@ -53,9 +53,9 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   createElement(type: string): DOMElement {
     if (!type) throw new Error("Invalid host element type");
     if (type === "text_node") return document.createTextNode("");
-    const [tagName, ns] = type.split(":");
-    if (ns) {
-      return document.createElementNS(NSMap[ns] || ns, tagName) as DOMElement;
+    if (type.includes(':')) {
+      const [ns, tag] = type.split(":");
+      return document.createElementNS(NSMap[ns] || ns, tag) as DOMElement;
     } else {
       return document.createElement(type);
     }

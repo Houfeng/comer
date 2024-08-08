@@ -9,9 +9,9 @@ function generateCode(define) {
   const [ns, map, takeName] = define;
   const lines = Object.entries(map).map(([tagInfo, element]) => {
     const [tag, alias] = tagInfo.split(':');
-    const name = alias || takeName(tag,element) || toCamelCase(tag, 1);
-    const type = ns ? `${tag}:${ns}` : tag;
-    return `export class ${name} extends DOMComponent<${element}, {}, ${name}> { type="${type}" }`;
+    const name = alias || takeName(tag, element) || toCamelCase(tag, 1);
+    const type = ns ? `${ns}:${tag}` : tag;
+    return `export class ${name} extends DOMComponent<${element}, ${name}> { type = "${type}" }`;
   });
   lines.unshift(`import { DOMComponent } from "../DOMComponent";${EOL}`);
   return lines.join(`${EOL}`);
