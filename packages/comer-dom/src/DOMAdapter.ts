@@ -7,7 +7,23 @@ import {
 } from "comer";
 import { DOMElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
-import { cancelIdleCallback, requestIdleCallback } from "./Polyfill";
+
+const requestIdleCallback =
+  window.requestIdleCallback ||
+  ((handler: (deadline: IdleDeadline) => void): number => {
+    const startTime = Date.now();
+    return window.setTimeout(
+      () =>
+        handler({
+          didTimeout: false,
+          timeRemaining: () => Math.max(0, 50.0 - (Date.now() - startTime)),
+        }),
+      1,
+    );
+  });
+
+const cancelIdleCallback =
+  window.cancelIdleCallback || ((id) => window.clearTimeout(id));
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
   get logger(): HostLogger {

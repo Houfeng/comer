@@ -1,4 +1,5 @@
 import { DOMComponent } from "../DOMComponent";
+import { DOMEventProps } from "../DOMTypes";
 
 export class Div extends DOMComponent<HTMLDivElement, {}, Div> {
   type = "div";
@@ -74,4 +75,20 @@ export class Section extends DOMComponent<HTMLElement, {}, Section> {
 
 export class Summary extends DOMComponent<HTMLElement, {}, Summary> {
   type = "section";
+}
+
+export class Video extends DOMComponent<
+  HTMLVideoElement,
+  Partial<DOMEventProps<HTMLVideoElementEventMap>>,
+  Video
+> {
+  type = "video";
+}
+
+export class Audio extends DOMComponent<
+  HTMLAudioElement,
+  Partial<DOMEventProps<HTMLVideoElementEventMap>>,
+  Audio
+> {
+  type = "audio";
 }
