@@ -2,7 +2,6 @@
   "name": "comer",
   "version": "0.1.0",
   "description": "",
-  "type": "module",
   "module": "./lib/index.js",
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
