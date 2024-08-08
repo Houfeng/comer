@@ -17,11 +17,23 @@ export type HostIdleDeadline = {
   timeRemaining(): number;
 };
 
+export type HostLogger = {
+  error(...args: any): void;
+  warn(...args: any): void;
+  info(...args: any): void;
+  log(...args: any): void;
+};
+
 /**
  * Adapt to host platform elements or components
  * @interface
  */
 export interface HostAdapter<E extends HostElement, R extends E = E> {
+  /**
+   * Used for printing logs
+   */
+  logger: HostLogger;
+
   /**
    * Bind application root
    * @param root App root
@@ -94,6 +106,11 @@ export interface HostAdapter<E extends HostElement, R extends E = E> {
 
   /**
    * Add a change and rendering task to the host's main loop
+   *
+   * Tips: For browser environments, rAF can be called,
+   *       while for other environments,
+   *       the handler can also be executed directly
+   *
    * @param handler
    */
   requestPaintCallback(handler: (time: number) => void): unknown;
@@ -105,13 +122,17 @@ export interface HostAdapter<E extends HostElement, R extends E = E> {
   cancelPaintCallback(id: unknown): void;
 
   /**
-   * Add a change and rendering task to the host's main loop
+   *  Add a deferrable task
+   *
+   * Tips: For browser environments, rIC can be called,
+   *       while for other environments, setTimeout can be used to simulate it
+   *
    * @param handler
    */
   requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown;
 
   /**
-   * Cancel a change and rendering task from the host's event loop
+   * Remove a deferrable task
    * @param id Task id
    */
   cancelIdleCallback(id: unknown): void;

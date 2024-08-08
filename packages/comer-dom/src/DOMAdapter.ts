@@ -3,12 +3,17 @@ import {
   HostElementProps,
   HostElementEvents,
   HostIdleDeadline,
+  HostLogger,
 } from "comer";
 import { DOMElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
 import { cancelIdleCallback, requestIdleCallback } from "./Polyfill";
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
+  get logger(): HostLogger {
+    return console;
+  }
+
   bindRoot(root: DOMElement): void {
     if (!this.isHostElement(root)) return;
     if (root instanceof DOMText) throw new Error("Invalid host root");

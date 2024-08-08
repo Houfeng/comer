@@ -75,12 +75,17 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private buildElement(element: Component): Component[] {
     if (!element[$Reactiver]) this.bindReactiver(element);
-    // execute the build wrapper
-    const result = element[$Reactiver]?.();
-    if (!result) return [];
-    // normalize the children
-    const children = this.isFragment(element) ? element[$Children] : [result];
-    return (children || []).flat(1);
+    try {
+      // execute the build wrapper
+      const result = element[$Reactiver]?.();
+      if (!result) return [];
+      // normalize the children
+      const children = this.isFragment(element) ? element[$Children] : [result];
+      return (children || []).flat(1);
+    } catch (err) {
+      this.adapter.logger.error(err);
+      return [];
+    }
   }
 
   private findParentHostComponent(element?: Component): HostComponent | void {
