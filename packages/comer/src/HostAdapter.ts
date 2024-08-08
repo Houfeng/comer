@@ -26,6 +26,7 @@ export type HostLogger = {
 
 /**
  * Adapt to host platform elements or components
+ *
  * @interface
  */
 export interface HostAdapter<E extends HostElement, R extends E = E> {
@@ -36,6 +37,11 @@ export interface HostAdapter<E extends HostElement, R extends E = E> {
 
   /**
    * Bind application root
+   *
+   * Tips: It can be HostElement or not (By second General parameter),
+   *       and some pre binding or initialization behavior
+   *       can be performed in this method.
+   *
    * @param root App root
    */
   bindRoot(root: R): void;
