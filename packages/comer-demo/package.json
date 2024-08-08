@@ -9,7 +9,10 @@
   "scripts": {
     "dev": "NODE_ENV=development webpack serve"
   },
-  "author": "Houfeng",
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net"
+  },
   "license": "MIT",
   "dependencies": {
     "comer": "workspace:*",

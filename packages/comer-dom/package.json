@@ -2,6 +2,7 @@
   "name": "comer-dom",
   "version": "0.1.0",
   "description": "",
+  "type": "module",
   "module": "./lib/index.js",
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
@@ -12,7 +13,10 @@
     "registry": "https://registry.npmjs.org"
   },
   "directories": {},
-  "author": "Houfeng",
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net"
+  },
   "license": "MIT",
   "dependencies": {
     "ntils": "5.2.4",
