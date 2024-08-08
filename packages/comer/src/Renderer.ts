@@ -71,17 +71,17 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Make the props of the instance observable
     element[$Props] = observable(element[$Props]);
     // Create a reactiver
-    const update = () => this.requestUpdate(element);
+    const trigger = () => this.requestUpdate(element);
     element[$Reactiver] = createReactiver(
       () => element.build(),
       () => {
         const deferrable = this.canDefer(element);
-        this.scheduler.perform(update, { deferrable });
+        this.scheduler.perform(trigger, { deferrable });
       },
     );
   }
 
-  private build(element: Component): Component[] {
+  private buildElement(element: Component): Component[] {
     if (!element[$Reactiver]) this.bindReactiver(element);
     // execute the build wrapper
     const result = element[$Reactiver]?.();
@@ -121,7 +121,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       .filter((it) => !!it);
   }
 
-  private create(
+  private createAndApplyProps(
     element: Component,
     parent: Component | undefined,
     deep = false,
@@ -131,11 +131,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isHostComponent(element) && element.type) {
       element.hostElement = this.adapter.createElement(element.type);
     }
-    this.update(element);
+    this.applyNewProps(element);
     // handler children before append document
     if (deep) {
-      element[$Children] = this.build(element);
-      element[$Children].forEach((child) => this.create(child, element, deep));
+      element[$Children] = this.buildElement(element);
+      element[$Children].forEach((child) =>
+        this.createAndApplyProps(child, element, deep),
+      );
     }
     // append to parent host element
     if (this.isHostComponent(element)) {
@@ -175,7 +177,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     hostElement[$FlushId] = this.adapter.requestPaintCallback(flushHandler);
   }
 
-  private update(
+  private applyNewProps(
     oldElement: Component,
     newElement: Component = oldElement,
   ): void {
@@ -248,26 +250,22 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
     const oldChildren = element[$Children] || [];
-    const newChildren = this.build(element) || [];
+    const newChildren = this.buildElement(element) || [];
     const items: Component[] = [];
     const length = Math.max(oldChildren.length, newChildren.length);
     for (let i = 0; i < length; i++) {
       const oldChild = oldChildren[i];
       const newChild = newChildren[i];
       if (this.canUpdate(oldChild, newChild)) {
-        // update
-        this.update(oldChild, newChild);
+        this.applyNewProps(oldChild, newChild);
         items.push(oldChild);
       } else if (oldChild && !newChild) {
-        // remove
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
-        // append
-        this.create(newChild, element);
+        this.createAndApplyProps(newChild, element);
         items.push(newChild);
       } else if (oldChild && newChild) {
-        // replace
-        this.create(newChild, element);
+        this.createAndApplyProps(newChild, element);
         this.unmount(oldChild);
         items.push(newChild);
       } else {
@@ -275,6 +273,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
     }
     element[$Children] = items;
+    element.onUpdated?.();
   }
 
   private root?: Parameters<T["bindRoot"]>[0];
@@ -288,7 +287,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.create(element, void 0, true);
+    this.createAndApplyProps(element, void 0, true);
     const hostElements = this.findHostElements(element);
     if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
       throw new Error("Invalid host element");
