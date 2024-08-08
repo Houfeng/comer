@@ -2,7 +2,7 @@ import { StringKeyOf, ValueOf, WritablePart } from "comer";
 
 export const DOMText = Text;
 export type DOMText = Text;
-export type DOMElement = HTMLElement | SVGElement | Text;
+export type DOMElement = HTMLElement | SVGElement | MathMLElement | Text;
 
 export type DOMEventMap = HTMLElementEventMap & SVGElementEventMap;
 

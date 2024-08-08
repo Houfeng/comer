@@ -26,8 +26,8 @@ const cancelIdleCallback =
   window.cancelIdleCallback || ((id) => window.clearTimeout(id));
 
 const NSMap: Record<string, string> = {
-  SVG: "http://www.w3.org/2000/svg",
-  MathML: "http://www.w3.org/1998/Math/MathML",
+  svg: "http://www.w3.org/2000/svg",
+  math: "http://www.w3.org/1998/Math/MathML",
 };
 
 export class DOMAdapter implements HostAdapter<DOMElement> {

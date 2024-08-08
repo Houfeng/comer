@@ -5,6 +5,9 @@
   "module": "./lib/index.js",
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
+  "scripts": {
+    "generate": "node ./scripts/generate.mjs"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

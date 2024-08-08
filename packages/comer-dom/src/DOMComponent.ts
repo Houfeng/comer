@@ -32,3 +32,27 @@ export class TextNode extends DOMComponent<
 
 export const Text = TextNode;
 export const TextContent = TextNode;
+
+// export class Video extends DOMComponent<
+//   HTMLVideoElement,
+//   Partial<DOMEventProps<HTMLVideoElementEventMap>>,
+//   Video
+// > {
+//   type = "video";
+// }
+
+// export class Audio extends DOMComponent<
+//   HTMLAudioElement,
+//   Partial<DOMEventProps<HTMLVideoElementEventMap>>,
+//   Audio
+// > {
+//   type = "audio";
+// }
+
+// export class Svg extends DOMComponent<
+//   SVGElement,
+//   Partial<DOMEventProps<SVGElementEventMap>>,
+//   Svg
+// > {
+//   type = "svg";
+// }
