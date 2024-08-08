@@ -58,14 +58,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     );
   }
 
-  /**
-   * Synchronize triggering component updates,
-   * please use with caution as it may cause lag.
-   */
-  flushSync<H extends () => any>(handler: H): ReturnType<H> {
-    return this.scheduler.flushSync(handler);
-  }
-
   private bindReactiver(element: Component) {
     if (element[$Reactiver]) return;
     // Make the props of the instance observable
@@ -278,6 +270,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private root?: Parameters<T["bindRoot"]>[0];
 
+  /**
+   * Render and mount the component tree of the application to the root
+   * @param element Element
+   * @param root Mount root（HostElement or other supported Host object）
+   * @returns
+   */
   render<E extends Component>(
     element: E,
     root: Parameters<T["bindRoot"]>[0],
@@ -296,6 +294,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return element;
   }
 
+  /**
+   * Unmount and destroy component subtree
+   * @param element Element (Subtree root)
+   * @returns
+   */
   unmount(element: Component): void {
     if (!element) return;
     element[$Reactiver]?.unsubscribe();
@@ -308,5 +311,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element[$Children].forEach((child) =>
       this.scheduler.perform(() => this.unmount(child), { deferrable: true }),
     );
+  }
+
+  /**
+   * Synchronize triggering component updates,
+   * please use with caution as it may cause lag.
+   */
+  flushSync<H extends () => any>(handler: H): ReturnType<H> {
+    return this.scheduler.flushSync(handler);
   }
 }
