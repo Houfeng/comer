@@ -26,8 +26,8 @@ const cancelIdleCallback =
   window.cancelIdleCallback || ((id) => window.clearTimeout(id));
 
 const NSMap: Record<string, string> = {
-  svg: "http://www.w3.org/2000/svg",
-  math: "http://www.w3.org/1998/Math/MathML",
+  SVG: "http://www.w3.org/2000/svg",
+  MathML: "http://www.w3.org/1998/Math/MathML",
 };
 
 export class DOMAdapter implements HostAdapter<DOMElement> {
@@ -53,7 +53,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   createElement(type: string): DOMElement {
     if (!type) throw new Error("Invalid host element type");
     if (type === "text_node") return document.createTextNode("");
-    if (type.includes(':')) {
+    if (type.includes(":")) {
       const [ns, tag] = type.split(":");
       return document.createElementNS(NSMap[ns] || ns, tag) as DOMElement;
     } else {

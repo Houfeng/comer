@@ -1,4 +1,4 @@
-export const SVGElementTagNameMap = ["svg", {
+export const SVGElementTagNameMap = ["SVG", {
   "a:SVGAnchor": "SVGAElement",
   "animate": "SVGAnimateElement",
   "animateMotion": "SVGAnimateMotionElement",

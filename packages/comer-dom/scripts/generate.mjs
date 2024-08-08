@@ -11,10 +11,18 @@ function generateCode(define) {
     const [tag, alias] = tagInfo.split(':');
     const name = alias || takeName(tag, element) || toCamelCase(tag, 1);
     const type = ns ? `${ns}:${tag}` : tag;
-    return `export class ${name} extends DOMComponent<${element}, ${name}> { type = "${type}" }`;
+    return [
+      `/**`,
+      ` * ${ns || 'HTML'} Tag: ${tag}`,
+      ` * @see https://developer.mozilla.org/docs/Web/HTML/Element/${tag}`,
+      ` * @see https://developer.mozilla.org/docs/Web/API/${element}`,
+      ` */`,
+      `export class ${name} extends DOMComponent<${element}, ${name}> { type = "${type}" }`,
+      ''
+    ];
   });
   lines.unshift(`import { DOMComponent } from "../DOMComponent";${EOL}`);
-  return lines.join(`${EOL}`);
+  return lines.flat(2).join(`${EOL}`);
 }
 
 // HTML
