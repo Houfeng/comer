@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "ntils": "5.2.4",
-    "ober": "^8.0.0",
+    "ober": "8.3.3",
     "tslib": "*"
   }
 }
