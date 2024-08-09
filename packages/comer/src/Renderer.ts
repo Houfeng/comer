@@ -100,7 +100,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findParentHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findParentHostComponent(element);
     if (!hostComponent) return this.root;
-    return hostComponent.hostElement || this.root;
+    return hostComponent.host || this.root;
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
@@ -114,7 +114,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
     return this.findHostComponents(element)
-      .map((it) => it.hostElement)
+      .map((it) => it.host)
       .filter((it) => !!it);
   }
 
@@ -126,7 +126,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isComponent(element)) return;
     element[$Parent] = parent;
     if (this.isHostComponent(element) && element.type) {
-      element.hostElement = this.adapter.createElement(element.type);
+      element.host = this.adapter.createElement(element.type);
     }
     this.applyNewProps(element);
     // handler children before append document
@@ -139,8 +139,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // append to parent host element
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
-      if (parentHostElement && element.hostElement) {
-        this.adapter.insertElement(parentHostElement, element.hostElement);
+      if (parentHostElement && element.host) {
+        this.adapter.insertElement(parentHostElement, element.host);
       }
     }
     // ---------------------------------------
@@ -217,9 +217,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       });
     }
     // flush to host element
-    if (this.isHostComponent(oldElement) && oldElement.hostElement) {
+    if (this.isHostComponent(oldElement) && oldElement.host) {
       this.flushToHostElement(
-        oldElement.hostElement,
+        oldElement.host,
         willUpdateHostProps,
         willAttachHostEvents,
         willRemoveHostEvents,
@@ -308,8 +308,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!element) return;
     element[$Reactiver]?.unsubscribe();
     element.onDestroy?.();
-    if (this.isHostComponent(element) && element.hostElement) {
-      this.adapter.removeElement(element.hostElement);
+    if (this.isHostComponent(element) && element.host) {
+      this.adapter.removeElement(element.host);
     }
     // broadcast to children
     if (!element[$Children]) return;

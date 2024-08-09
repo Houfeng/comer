@@ -13,5 +13,5 @@ export abstract class HostComponent<
   E extends HostElement = HostElement,
 > extends Component<P, R> {
   type?: string;
-  hostElement?: E;
+  host?: E;
 }

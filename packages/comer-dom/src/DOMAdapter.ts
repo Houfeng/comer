@@ -1,9 +1,9 @@
 import {
   HostAdapter,
-  HostElementProps,
-  HostElementEvents,
+  HostEventMap,
   HostIdleDeadline,
   HostLogger,
+  HostProps,
 } from "comer";
 import { DOMElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
@@ -46,6 +46,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
       !!value &&
       (value instanceof HTMLElement ||
         value instanceof SVGAElement ||
+        value instanceof MathMLElement ||
         value instanceof Text)
     );
   }
@@ -86,7 +87,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     }
   }
 
-  updateProps(element: DOMElement, props: HostElementProps): void {
+  updateProps(element: DOMElement, props: HostProps): void {
     if (!this.isHostElement(element)) return;
     const target = element as any;
     Object.entries(props).forEach(([name, value]) => {
@@ -101,7 +102,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  attachEvents(element: DOMElement, events: HostElementEvents): void {
+  attachEvents(element: DOMElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       const normalizedName = name.slice(2).toLowerCase();
@@ -109,7 +110,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  removeEvents(element: DOMElement, events: HostElementEvents): void {
+  removeEvents(element: DOMElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       const normalizedName = name.slice(2).toLowerCase();

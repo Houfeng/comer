@@ -14,7 +14,7 @@ function generateCode(define) {
     return [
       `/**`,
       ` * ${ns || 'HTML'} Tag: ${tag}`,
-      ` * @see https://developer.mozilla.org/docs/Web/HTML/Element/${tag}`,
+      ` * @see https://developer.mozilla.org/docs/Web/${ns || 'HTML'}/Element/${tag}`,
       ` * @see https://developer.mozilla.org/docs/Web/API/${element}`,
       ` */`,
       `export class ${name} extends DOMComponent<${element}, ${name}> { type = "${type}" }`,

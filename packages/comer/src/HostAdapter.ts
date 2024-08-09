@@ -8,10 +8,11 @@ export type HostElement = object & {
   [$FlushId]?: unknown;
 };
 
+export type HostProps = Record<string, unknown>;
+
 export type HostEvent = object;
 export type HostEventListener = (event: HostEvent) => void;
-export type HostElementProps = Record<string, unknown>;
-export type HostElementEvents = Record<string, HostEventListener>;
+export type HostEventMap = Record<string, HostEventListener>;
 
 export type HostIdleDeadline = {
   timeRemaining(): number;
@@ -29,7 +30,7 @@ export type HostLogger = {
  *
  * @interface
  */
-export interface HostAdapter<E extends HostElement, R extends E = E> {
+export interface HostAdapter<E extends HostElement, R = E> {
   /**
    * Used for printing logs
    */
@@ -94,21 +95,21 @@ export interface HostAdapter<E extends HostElement, R extends E = E> {
    * @param element Target element
    * @param props Props key/value record
    */
-  updateProps(element: E, props: HostElementProps): void;
+  updateProps(element: E, props: HostProps): void;
 
   /**
    * Bind multiple event handling functions
    * @param element Target element
    * @param events Events key/value record
    */
-  attachEvents(element: E, events: HostElementEvents): void;
+  attachEvents(element: E, events: HostEventMap): void;
 
   /**
    * Unbind multiple event handling functions
    * @param element Target element
    * @param events Events key/value record
    */
-  removeEvents(element: E, events: HostElementEvents): void;
+  removeEvents(element: E, events: HostEventMap): void;
 
   /**
    * Add a change and rendering task to the host's main loop
