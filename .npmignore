@@ -28,3 +28,4 @@ docs/
 webpack.config.js
 design/
 markdowns/
+obj/

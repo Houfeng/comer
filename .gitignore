@@ -11,3 +11,5 @@ build/
 types/
 logs/
 lib/
+obj/
+bin/
