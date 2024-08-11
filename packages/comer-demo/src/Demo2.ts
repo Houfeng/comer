@@ -1,5 +1,5 @@
 import { Component, observable } from "comer";
-import { Button, Div, Text } from "comer-dom";
+import { Button, Div, TextContent } from "comer-dom";
 
 export class Demo extends Component {
   state = observable({ value1: 0, value2: 0 });
@@ -12,10 +12,10 @@ export class Demo extends Component {
     return new Div({
       children: [
         new Div({
-          children: new Text(`value: ${value1}, value2: ${value2}`),
+          children: new TextContent(`value: ${value1}, value2: ${value2}`),
         }),
         new Button({
-          children: new Text("Click me"),
+          children: new TextContent("Click me"),
           onClick: this.onButtonClick,
         }),
       ],

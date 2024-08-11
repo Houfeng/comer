@@ -1,30 +1,51 @@
-import { Component, Fragment, HostComponent } from "comer";
-import { ElementAttributes, DOMText, DOMElement } from "./DOMTypes";
+import {
+  Component,
+  ConvertToEvents,
+  Fragment,
+  HostComponent,
+  PickAsProps,
+} from "comer";
 
-// Element -------------------------------------------------------------------
+// Host elements --------------------------------------------------------------
 
-export type ElementComponentProps<
-  TElement extends DOMElement = DOMElement,
-  TEvents extends ElementEventMap = ElementEventMap,
-> = ElementAttributes<TElement, TEvents> & {
-  children?: Component | Component[];
+export type DOMText = Text;
+export type DOMElement = HTMLElement | SVGElement | MathMLElement;
+export type DOMCustomAttributes = {
+  [K in `x-${string}` | `data-${string}`]: string | number;
 };
+
+export type DOMHostElement = DOMElement | DOMText;
+
+// Element wrapper ------------------------------------------------------------
+
+export type ElementProps<
+  TElement extends DOMElement,
+  TEvents extends ElementEventMap,
+> = Partial<
+  PickAsProps<TElement> &
+    ConvertToEvents<TEvents, { target: TElement }> &
+    ARIAMixin &
+    DOMCustomAttributes & {
+      style: string;
+      children: Component | Component[];
+    }
+>;
 
 export class ElementComponent<
   TElement extends DOMElement = DOMElement,
   TEvents extends ElementEventMap = ElementEventMap,
-> extends HostComponent<ElementComponentProps<TElement, TEvents>, TElement> {
+> extends HostComponent<ElementProps<TElement, TEvents>, TElement> {
   build(): Component {
     return new Fragment(this.props.children);
   }
 }
 
-// Text ----------------------------------------------------------------------
+// Text wrapper ---------------------------------------------------------------
 
-export type TextComponentProps = { textContent?: string };
+export type TextProps = { textContent?: string };
 
-export class TextComponent extends HostComponent<TextComponentProps, DOMText> {
-  static readonly type = "text_node";
+export class TextComponent extends HostComponent<TextProps, DOMText> {
+  static readonly type = "text";
   constructor(textContent: string) {
     super({ textContent });
   }
@@ -33,5 +54,4 @@ export class TextComponent extends HostComponent<TextComponentProps, DOMText> {
   }
 }
 
-export const Text = TextComponent;
 export const TextContent = TextComponent;

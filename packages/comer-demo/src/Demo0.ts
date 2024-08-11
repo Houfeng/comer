@@ -1,5 +1,5 @@
 import { Component, observable, delegate, Deferrable } from "comer";
-import { Button, Div, Input, Text } from "comer-dom";
+import { Button, Div, Input, TextContent } from "comer-dom";
 
 @delegate
 export class Demo extends Component {
@@ -11,7 +11,7 @@ export class Demo extends Component {
     const { value } = this.state;
     return new Div({
       children: [
-        new Text(`~${value}`),
+        new TextContent(`~${value}`),
         new Input({
           value: String(value),
           onInput: (event) => {
@@ -22,12 +22,12 @@ export class Demo extends Component {
           children: new Deferrable({
             children: new Array(value)
               .fill("1")
-              .map((it) => new Text(String(it))),
+              .map((it) => new TextContent(String(it))),
           }),
         }),
         new Button({
-          style: 'color:red',
-          children: new Text(`Click: ${this.state.value}`),
+          style: "color:red",
+          children: new TextContent(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
         }),
       ],

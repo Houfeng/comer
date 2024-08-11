@@ -5,7 +5,7 @@ import {
   HostLogger,
   HostProps,
 } from "comer";
-import { DOMHostElement, DOMText } from "./DOMTypes";
+import { DOMHostElement } from "./DOMComponent";
 import { isString } from "ntils";
 
 const requestIdleCallback =
@@ -37,7 +37,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement> {
 
   bindRoot(root: DOMHostElement): void {
     if (!this.isHostElement(root)) return;
-    if (root instanceof DOMText) throw new Error("Invalid host root");
+    if (root instanceof Text) throw new Error("Invalid host root");
     if (root.children.length > 0) throw new Error("Root is not empty");
   }
 
@@ -53,7 +53,6 @@ export class DOMAdapter implements HostAdapter<DOMHostElement> {
 
   createElement(type: string): DOMHostElement {
     if (!type) throw new Error("Invalid host element type");
-    if (type === "text_node") return document.createTextNode("");
     if (type.includes(":")) {
       const [ns, tag] = type.split(":");
       return document.createElementNS(NSMap[ns] || ns, tag) as DOMHostElement;

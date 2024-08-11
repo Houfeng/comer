@@ -1,11 +1,11 @@
 import { Component, observable, delegate } from "comer";
-import { Button, Div, Text } from "comer-dom";
+import { Button, Div, TextContent } from "comer-dom";
 
 @delegate
 export class Display extends Component<{ value: number }> {
   build(): Component {
     const { value } = this.props;
-    return new Text(String(value > 1 ? 1 : value));
+    return new TextContent(String(value > 1 ? 1 : value));
   }
 }
 
@@ -19,7 +19,7 @@ export class Demo extends Component {
     return new Div({
       children: [
         new Button({
-          children: new Text(`Click: ${this.state.value}`),
+          children: new TextContent(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
         }),
         new Div({
