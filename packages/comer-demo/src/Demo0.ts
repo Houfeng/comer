@@ -15,9 +15,7 @@ export class Demo extends Component {
         new Input({
           value: String(value),
           onInput: (event) => {
-            this.state.value = Number(
-              (event?.target as HTMLInputElement).value,
-            );
+            this.state.value = Number(event?.target.value);
           },
         }),
         new Div({
