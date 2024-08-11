@@ -5,7 +5,7 @@ import {
   HostLogger,
   HostProps,
 } from "comer";
-import { DOMElement, DOMText } from "./DOMTypes";
+import { DOMHostElement, DOMText } from "./DOMTypes";
 import { isString } from "ntils";
 
 const requestIdleCallback =
@@ -30,18 +30,18 @@ const NSMap: Record<string, string> = {
   MathML: "http://www.w3.org/1998/Math/MathML",
 };
 
-export class DOMAdapter implements HostAdapter<DOMElement> {
+export class DOMAdapter implements HostAdapter<DOMHostElement> {
   get logger(): HostLogger {
     return console;
   }
 
-  bindRoot(root: DOMElement): void {
+  bindRoot(root: DOMHostElement): void {
     if (!this.isHostElement(root)) return;
     if (root instanceof DOMText) throw new Error("Invalid host root");
     if (root.children.length > 0) throw new Error("Root is not empty");
   }
 
-  isHostElement(value: unknown): value is DOMElement {
+  isHostElement(value: unknown): value is DOMHostElement {
     return (
       !!value &&
       (value instanceof HTMLElement ||
@@ -51,18 +51,18 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     );
   }
 
-  createElement(type: string): DOMElement {
+  createElement(type: string): DOMHostElement {
     if (!type) throw new Error("Invalid host element type");
     if (type === "text_node") return document.createTextNode("");
     if (type.includes(":")) {
       const [ns, tag] = type.split(":");
-      return document.createElementNS(NSMap[ns] || ns, tag) as DOMElement;
+      return document.createElementNS(NSMap[ns] || ns, tag) as DOMHostElement;
     } else {
       return document.createElement(type);
     }
   }
 
-  removeElement(element: DOMElement): void {
+  removeElement(element: DOMHostElement): void {
     if (!this.isHostElement(element)) return;
     if (element.remove) return element.remove();
     if (!element.parentElement) return;
@@ -70,9 +70,9 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
   }
 
   insertElement(
-    parent: DOMElement,
-    element: DOMElement,
-    anchor: DOMElement | string,
+    parent: DOMHostElement,
+    element: DOMHostElement,
+    anchor: DOMHostElement | string,
   ): void {
     if (!this.isHostElement(parent)) return;
     if (!this.isHostElement(element)) return;
@@ -87,7 +87,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     }
   }
 
-  updateProps(element: DOMElement, props: HostProps): void {
+  updateProps(element: DOMHostElement, props: HostProps): void {
     if (!this.isHostElement(element)) return;
     const target = element as any;
     Object.entries(props).forEach(([name, value]) => {
@@ -102,7 +102,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  attachEvents(element: DOMElement, events: HostEventMap): void {
+  attachEvents(element: DOMHostElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       const normalizedName = name.slice(2).toLowerCase();
@@ -110,7 +110,7 @@ export class DOMAdapter implements HostAdapter<DOMElement> {
     });
   }
 
-  removeEvents(element: DOMElement, events: HostEventMap): void {
+  removeEvents(element: DOMHostElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       const normalizedName = name.slice(2).toLowerCase();

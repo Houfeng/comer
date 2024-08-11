@@ -1,6 +1,10 @@
 import { toCamelCase } from "ntils";
 
-export const MathMLElementTagNameMap = ["MathML", {
+export const MathMLElementTagNameMap = [{
+  ns: "MathML",
+  takeName: (t, e) => "M" + toCamelCase(t.slice(1), 1),
+  defaultEvents: 'MathMLElementEventMap',
+}, {
   // "annotation:MAnnotation": "MathMLElement",
   // "annotation-xml": "MathMLElement",
   "maction": "MathMLElement",
@@ -31,4 +35,4 @@ export const MathMLElementTagNameMap = ["MathML", {
   "munder": "MathMLElement",
   "munderover": "MathMLElement",
   "semantics": "MathMLElement",
-}, (t, e) => "M" + toCamelCase(t.slice(1), 1)];
+}];

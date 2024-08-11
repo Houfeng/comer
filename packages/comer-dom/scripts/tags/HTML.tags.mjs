@@ -1,11 +1,15 @@
-export const HTMLElementTagNameMap = ["", {
+export const HTMLElementTagNameMap = [{
+  ns: '',
+  takeName: (tag, element) => '',
+  defaultEvents: 'HTMLElementEventMap',
+}, {
   "a": "HTMLAnchorElement",
   "abbr": "HTMLElement",
   "address": "HTMLElement",
   "area": "HTMLAreaElement",
   "article": "HTMLElement",
   "aside": "HTMLElement",
-  "audio": "HTMLAudioElement",
+  "audio": "HTMLAudioElement,HTMLVideoElementEventMap",
   "b": "HTMLElement",
   "base": "HTMLBaseElement",
   "bdi": "HTMLElement",
@@ -109,11 +113,14 @@ export const HTMLElementTagNameMap = ["", {
   "u": "HTMLElement",
   "ul": "HTMLUListElement",
   "var": "HTMLElement",
-  "video": "HTMLVideoElement",
+  "video": "HTMLVideoElement,HTMLVideoElementEventMap",
   "wbr": "HTMLElement",
-}, (t, e) => '']
+}]
 
-export const HTMLElementDeprecatedTagNameMap = ["", {
+export const HTMLElementDeprecatedTagNameMap = [{
+  ns: '',
+  takeName: (tag, element) => '',
+}, {
   "acronym": "HTMLElement",
   "applet": "HTMLUnknownElement",
   "basefont": "HTMLElement",
@@ -143,4 +150,4 @@ export const HTMLElementDeprecatedTagNameMap = ["", {
   "strike": "HTMLElement",
   "tt": "HTMLElement",
   "xmp": "HTMLPreElement",
-}, (t, e) => '']
+}]

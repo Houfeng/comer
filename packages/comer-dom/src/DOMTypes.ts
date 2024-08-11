@@ -1,24 +1,32 @@
-import { StringKeyOf, ValueOf, WritablePart } from "comer";
+import { ConvertToEvents, PickAsProps } from "comer";
+
+// Elements -------------------------------------------------------------------
 
 export const DOMText = Text;
 export type DOMText = Text;
-export type DOMElement = HTMLElement | SVGElement | MathMLElement | Text;
+export type DOMElement = HTMLElement | SVGElement | MathMLElement;
 
-export type DOMEventMap = HTMLElementEventMap & SVGElementEventMap;
+export type DOMHostElement = DOMElement | DOMText;
 
-export type DOMEventProps<
-  M extends DOMEventMap = DOMEventMap,
-  K extends StringKeyOf<M> = StringKeyOf<M>,
-> = Record<`on${Capitalize<K>}`, (event?: M[K]) => void>;
+// Utils ----------------------------------------------------------------------
 
-export type DOMPropKeyOf<T extends DOMElement> = {
-  [K in keyof T]-?: ValueOf<T, K> extends string | number ? K : never;
-}[keyof T];
-
-export type DOMCustomAttributes = {
+type CustomMixin = {
   [K in `x-${string}` | `data-${string}`]: string | number;
 };
 
-export type DOMElementProps<T extends DOMElement> = Partial<
-  WritablePart<Pick<T, DOMPropKeyOf<T>>> & DOMEventProps & DOMCustomAttributes
+type StyleMixin = {
+  style: string;
+};
+
+// Attributes -----------------------------------------------------------------
+
+export type ElementAttributes<
+  TElement extends DOMElement,
+  TEvents extends ElementEventMap,
+> = Partial<
+  PickAsProps<TElement> &
+    ConvertToEvents<TEvents, { target: TElement }> &
+    StyleMixin &
+    ARIAMixin &
+    CustomMixin
 >;

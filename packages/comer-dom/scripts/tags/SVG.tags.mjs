@@ -1,4 +1,8 @@
-export const SVGElementTagNameMap = ["SVG", {
+export const SVGElementTagNameMap = [{
+  ns: "SVG",
+  takeName: (t, e) => e.slice(3, -7),
+  defaultEvents: 'SVGElementEventMap',
+}, {
   "a:SVGAnchor": "SVGAElement",
   "animate": "SVGAnimateElement",
   "animateMotion": "SVGAnimateMotionElement",
@@ -62,4 +66,4 @@ export const SVGElementTagNameMap = ["SVG", {
   "tspan": "SVGTSpanElement",
   "use": "SVGUseElement",
   "view": "SVGViewElement",
-}, (t, e) => e.slice(3, -7)]
+}]

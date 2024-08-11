@@ -7,27 +7,27 @@ import { type ProviderType } from "./Provider";
 /**
  * ComponentProps type utils
  */
-export type ComponentProps<P extends object, R extends object> = {
-  ref?: Ref<R>;
+export type ComponentProps<TProps extends object, TRef extends object> = {
+  ref?: Ref<TRef>;
   key?: unknown;
-} & P;
+} & TProps;
 
 /**
  * ComponentParameters type utils
  */
-export type ComponentParameters<P extends object, R extends object> =
-  RequiredKeyOf<P> extends never
-    ? OptionalKeyOf<P> extends never
+export type ComponentParameters<TProps extends object, TRef extends object> =
+  RequiredKeyOf<TProps> extends never
+    ? OptionalKeyOf<TProps> extends never
       ? Parameters<() => void>
-      : Parameters<(props?: ComponentProps<P, R>) => void>
-    : Parameters<(props: ComponentProps<P, R>) => void>;
+      : Parameters<(props?: ComponentProps<TProps, TRef>) => void>
+    : Parameters<(props: ComponentProps<TProps, TRef>) => void>;
 
 /**
  * Component class type
  * @internal
  */
-export type ComponentType<P extends object, R extends object> = {
-  new (...params: ComponentParameters<P, R>): Component<P, R>;
+export type ComponentType<TProps extends object, TRef extends object> = {
+  new (...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;
 };
 
 /**
@@ -35,9 +35,12 @@ export type ComponentType<P extends object, R extends object> = {
  * @abstract
  * @class
  */
-export abstract class Component<P extends object = {}, R extends object = {}> {
+export abstract class Component<
+  TProps extends object = {},
+  TRef extends object = {},
+> {
   /** @internal */
-  [$Props]: ComponentProps<P, R>;
+  [$Props]: ComponentProps<TProps, TRef>;
 
   /** @internal */
   [$Children]?: Component[];
@@ -48,8 +51,8 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
   /** @internal */
   [$Reactiver]?: ReactiveFunction;
 
-  constructor(...params: ComponentParameters<P, R>) {
-    this[$Props] = (params[0] || {}) as ComponentProps<P, R>;
+  constructor(...params: ComponentParameters<TProps, TRef>) {
+    this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;
   }
 
   /**
@@ -59,7 +62,7 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
    * @readonly
    * @property
    */
-  protected get props(): Readonly<ComponentProps<P, R>> {
+  protected get props(): Readonly<ComponentProps<TProps, TRef>> {
     return this[$Props];
   }
 
@@ -114,10 +117,10 @@ export abstract class Component<P extends object = {}, R extends object = {}> {
 /**
  * @internal
  */
-export function useContext<T extends ProviderType<any>>(
+export function useContext<TProvider extends ProviderType<any>>(
   component: Component,
-  providerClass: T,
-): Readonly<InstanceType<T>["value"]> | void {
+  providerClass: TProvider,
+): Readonly<InstanceType<TProvider>["value"]> | void {
   if (!component || !providerClass) return;
   if (providerClass[$Identify] !== "Provider") return;
   let target = component[$Parent];

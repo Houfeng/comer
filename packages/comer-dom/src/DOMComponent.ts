@@ -1,26 +1,29 @@
 import { Component, Fragment, HostComponent } from "comer";
-import { DOMElement, DOMElementProps, DOMText } from "./DOMTypes";
+import { ElementAttributes, DOMText, DOMElement } from "./DOMTypes";
 
-export type DOMComponentProps<
-  E extends DOMElement = DOMElement,
-  P extends object = {},
-> = DOMElementProps<E> & { children?: Component[] | Component } & P;
+// Element -------------------------------------------------------------------
 
-export class DOMComponent<
-  E extends DOMElement = DOMElement,
-  R extends object = {},
-  P extends object = {},
-> extends HostComponent<DOMComponentProps<E, P>, R, E> {
+export type ElementComponentProps<
+  TElement extends DOMElement = DOMElement,
+  TEvents extends ElementEventMap = ElementEventMap,
+> = ElementAttributes<TElement, TEvents> & {
+  children?: Component | Component[];
+};
+
+export class ElementComponent<
+  TElement extends DOMElement = DOMElement,
+  TEvents extends ElementEventMap = ElementEventMap,
+> extends HostComponent<ElementComponentProps<TElement, TEvents>, TElement> {
   build(): Component {
     return new Fragment(this.props.children);
   }
 }
 
-export class TextNode extends DOMComponent<
-  DOMText,
-  TextNode,
-  { textContent: string }
-> {
+// Text ----------------------------------------------------------------------
+
+export type TextComponentProps = { textContent?: string };
+
+export class TextComponent extends HostComponent<TextComponentProps, DOMText> {
   type = "text_node";
   constructor(textContent: string) {
     super({ textContent });
@@ -30,29 +33,5 @@ export class TextNode extends DOMComponent<
   }
 }
 
-export const Text = TextNode;
-export const TextContent = TextNode;
-
-// export class Video extends DOMComponent<
-//   HTMLVideoElement,
-//   Partial<DOMEventProps<HTMLVideoElementEventMap>>,
-//   Video
-// > {
-//   type = "video";
-// }
-
-// export class Audio extends DOMComponent<
-//   HTMLAudioElement,
-//   Partial<DOMEventProps<HTMLVideoElementEventMap>>,
-//   Audio
-// > {
-//   type = "audio";
-// }
-
-// export class Svg extends DOMComponent<
-//   SVGElement,
-//   Partial<DOMEventProps<SVGElementEventMap>>,
-//   Svg
-// > {
-//   type = "svg";
-// }
+export const Text = TextComponent;
+export const TextContent = TextComponent;

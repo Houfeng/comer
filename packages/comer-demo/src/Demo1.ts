@@ -13,7 +13,7 @@ class ThemeButton extends Component {
 }
 
 export class Demo extends Component {
-  ref = new Ref<Button>();
+  ref = new Ref<HTMLButtonElement>();
   state = observable({ value: 0 });
   onButtonClick = () => {
     this.state.value++;

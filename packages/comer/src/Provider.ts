@@ -2,8 +2,8 @@ import { Component } from "./Component";
 import { Fragment } from "./Fragment";
 import { $Identify } from "./Symbols";
 
-export type ProviderProps<T> = {
-  value?: T;
+export type ProviderProps<TValue> = {
+  value?: TValue;
   children: Component[] | Component;
 };
 
@@ -12,7 +12,9 @@ export type ProviderProps<T> = {
  * @abstract
  * @class
  */
-export abstract class Provider<T> extends Component<ProviderProps<T>> {
+export abstract class Provider<TValue> extends Component<
+  ProviderProps<TValue>
+> {
   static readonly [$Identify] = "Provider";
 
   build(): Component {
@@ -24,8 +26,10 @@ export abstract class Provider<T> extends Component<ProviderProps<T>> {
   }
 }
 
-export type ProviderType<T = unknown> = {
-  new (...args: ConstructorParameters<typeof Provider<T>>): Provider<T>;
+export type ProviderType<TValue = unknown> = {
+  new (
+    ...args: ConstructorParameters<typeof Provider<TValue>>
+  ): Provider<TValue>;
 } & {
   readonly [$Identify]: "Provider";
 };
@@ -36,9 +40,11 @@ export type ProviderType<T = unknown> = {
  * @returns The provider class
  * @function
  */
-export function createProvider<T>(defaultValue?: T): ProviderType<T> {
-  return class TProvider extends Provider<T> {
-    constructor(props: ProviderProps<T>) {
+export function createProvider<TValue>(
+  defaultValue?: TValue,
+): ProviderType<TValue> {
+  return class TypedProvider extends Provider<TValue> {
+    constructor(props: ProviderProps<TValue>) {
       props.value = props.value ?? defaultValue;
       super(props);
     }

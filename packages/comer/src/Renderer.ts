@@ -3,7 +3,15 @@ import { Component, useContext } from "./Component";
 import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
-import { $Children, $FlushId, $Parent, $Props, $Reactiver } from "./Symbols";
+import {
+  $Children,
+  $FlushId,
+  $Parent,
+  $Props,
+  $Reactiver,
+  $Value,
+  $Host,
+} from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferrable } from "./Deferrable";
 import { Scheduler } from "./Scheduler";
@@ -100,7 +108,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findParentHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findParentHostComponent(element);
     if (!hostComponent) return this.root;
-    return hostComponent.host || this.root;
+    return hostComponent[$Host] || this.root;
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
@@ -114,7 +122,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
     return this.findHostComponents(element)
-      .map((it) => it.host)
+      .map((it) => it[$Host])
       .filter((it) => !!it);
   }
 
@@ -126,7 +134,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isComponent(element)) return;
     element[$Parent] = parent;
     if (this.isHostComponent(element) && element.type) {
-      element.host = this.adapter.createElement(element.type);
+      element[$Host] = this.adapter.createElement(element.type);
     }
     this.applyNewProps(element);
     // handler children before append document
@@ -139,8 +147,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // append to parent host element
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
-      if (parentHostElement && element.host) {
-        this.adapter.insertElement(parentHostElement, element.host);
+      if (parentHostElement && element[$Host]) {
+        this.adapter.insertElement(parentHostElement, element[$Host]);
       }
     }
     // ---------------------------------------
@@ -151,7 +159,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private bindRef(element: Component): void {
     if (!this.isComponent(element)) return;
     const { ref } = element[$Props];
-    if (ref) ref.current = element;
+    if (!ref) return;
+    ref[$Value] = this.isHostComponent(element) ? element[$Host] : element;
   }
 
   private flushToHostElement(
@@ -217,9 +226,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       });
     }
     // flush to host element
-    if (this.isHostComponent(oldElement) && oldElement.host) {
+    if (this.isHostComponent(oldElement) && oldElement[$Host]) {
       this.flushToHostElement(
-        oldElement.host,
+        oldElement[$Host],
         willUpdateHostProps,
         willAttachHostEvents,
         willRemoveHostEvents,
@@ -308,8 +317,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!element) return;
     element[$Reactiver]?.unsubscribe();
     element.onDestroy?.();
-    if (this.isHostComponent(element) && element.host) {
-      this.adapter.removeElement(element.host);
+    if (this.isHostComponent(element) && element[$Host]) {
+      this.adapter.removeElement(element[$Host]);
     }
     // broadcast to children
     if (!element[$Children]) return;

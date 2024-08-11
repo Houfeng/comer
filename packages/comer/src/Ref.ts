@@ -1,12 +1,20 @@
+import { $Value } from "./Symbols";
+
 /**
  * Ref class,
  * which can be used to create a ref instance of a specified type
  * @class
  */
 export class Ref<T> {
-  current?: T;
+  /** @internal */
+  [$Value]?: T;
+
   constructor(initialValue?: T) {
-    this.current = initialValue;
+    this[$Value] = initialValue;
+  }
+
+  get current(): T | undefined {
+    return this[$Value];
   }
 }
 

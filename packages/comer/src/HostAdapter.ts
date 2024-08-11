@@ -30,7 +30,7 @@ export type HostLogger = {
  *
  * @interface
  */
-export interface HostAdapter<E extends HostElement, R = E> {
+export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
   /**
    * Used for printing logs
    */
@@ -45,28 +45,28 @@ export interface HostAdapter<E extends HostElement, R = E> {
    *
    * @param root App root
    */
-  bindRoot(root: R): void;
+  bindRoot(root: TRoot): void;
 
   /**
    * Check if it is a host element
    * @param value
    * @returns {boolean}
    */
-  isHostElement(value: unknown): value is E;
+  isHostElement(value: unknown): value is TElement;
 
   /**
    * Create a host element
    * @param type
    * @returns {HostElement}
    */
-  createElement(type: string): E;
+  createElement(type: string): TElement;
 
   /**
    * Remove a host element
    * @param element The element to be removed
    * @returns {void}
    */
-  removeElement(element: E): void;
+  removeElement(element: TElement): void;
 
   /**
    * Insert a host element
@@ -87,7 +87,11 @@ export interface HostAdapter<E extends HostElement, R = E> {
    * @param anchor Anchor position for insertion
    * @returns {void}
    */
-  insertElement(parent: E, element: E, anchor?: E | string): void;
+  insertElement(
+    parent: TElement,
+    element: TElement,
+    anchor?: TElement | string,
+  ): void;
 
   /**
    * Update a set of properties of the host element,
@@ -95,21 +99,21 @@ export interface HostAdapter<E extends HostElement, R = E> {
    * @param element Target element
    * @param props Props key/value record
    */
-  updateProps(element: E, props: HostProps): void;
+  updateProps(element: TElement, props: HostProps): void;
 
   /**
    * Bind multiple event handling functions
    * @param element Target element
    * @param events Events key/value record
    */
-  attachEvents(element: E, events: HostEventMap): void;
+  attachEvents(element: TElement, events: HostEventMap): void;
 
   /**
    * Unbind multiple event handling functions
    * @param element Target element
    * @param events Events key/value record
    */
-  removeEvents(element: E, events: HostEventMap): void;
+  removeEvents(element: TElement, events: HostEventMap): void;
 
   /**
    * Add a change and rendering task to the host's main loop

@@ -1,5 +1,6 @@
 import { Component } from "./Component";
 import { HostElement } from "./HostAdapter";
+import { $Host } from "./Symbols";
 
 /**
  * Host platform component abstract class,
@@ -8,10 +9,10 @@ import { HostElement } from "./HostAdapter";
  * @class
  */
 export abstract class HostComponent<
-  P extends object = {},
-  R extends object = {},
-  E extends HostElement = HostElement,
-> extends Component<P, R> {
-  type?: string;
-  host?: E;
+  TProps extends object = {},
+  TElement extends HostElement = HostElement,
+> extends Component<TProps, TElement> {
+  readonly type?: string;
+  /** @internal */
+  [$Host]?: TElement;
 }
