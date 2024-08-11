@@ -126,6 +126,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       .filter((it) => !!it);
   }
 
+  private getHostElementType(element: Component) {
+    const ctor = element.constructor;
+    return String("type" in ctor ? ctor.type : void 0);
+  }
+
   private createAndApplyProps(
     element: Component,
     parent: Component | undefined,
@@ -133,8 +138,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   ): void {
     if (!this.isComponent(element)) return;
     element[$Parent] = parent;
-    if (this.isHostComponent(element) && element.type) {
-      element[$Host] = this.adapter.createElement(element.type);
+    // handle host instance
+    if (this.isHostComponent(element)) {
+      const hostType = this.isHostComponent(element)
+        ? this.getHostElementType(element)
+        : void 0;
+      if (hostType) element[$Host] = this.adapter.createElement(hostType);
     }
     this.applyNewProps(element);
     // handler children before append document

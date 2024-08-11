@@ -6,7 +6,7 @@ import { ElementComponent as EC } from "../DOMComponent";
  * @see https://developer.mozilla.org/docs/Web/API/SVGAElement
  */
 export class SVGAnchor extends EC<SVGAElement, SVGElementEventMap> {
-  readonly type = "SVG:a"
+  static readonly type = "SVG:a"
 }
 
 /**
@@ -15,7 +15,7 @@ export class SVGAnchor extends EC<SVGAElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGAnimateElement
  */
 export class Animate extends EC<SVGAnimateElement, SVGElementEventMap> {
-  readonly type = "SVG:animate"
+  static readonly type = "SVG:animate"
 }
 
 /**
@@ -24,7 +24,7 @@ export class Animate extends EC<SVGAnimateElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGAnimateMotionElement
  */
 export class AnimateMotion extends EC<SVGAnimateMotionElement, SVGElementEventMap> {
-  readonly type = "SVG:animateMotion"
+  static readonly type = "SVG:animateMotion"
 }
 
 /**
@@ -33,7 +33,7 @@ export class AnimateMotion extends EC<SVGAnimateMotionElement, SVGElementEventMa
  * @see https://developer.mozilla.org/docs/Web/API/SVGAnimateTransformElement
  */
 export class AnimateTransform extends EC<SVGAnimateTransformElement, SVGElementEventMap> {
-  readonly type = "SVG:animateTransform"
+  static readonly type = "SVG:animateTransform"
 }
 
 /**
@@ -42,7 +42,7 @@ export class AnimateTransform extends EC<SVGAnimateTransformElement, SVGElementE
  * @see https://developer.mozilla.org/docs/Web/API/SVGCircleElement
  */
 export class Circle extends EC<SVGCircleElement, SVGElementEventMap> {
-  readonly type = "SVG:circle"
+  static readonly type = "SVG:circle"
 }
 
 /**
@@ -51,7 +51,7 @@ export class Circle extends EC<SVGCircleElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGClipPathElement
  */
 export class ClipPath extends EC<SVGClipPathElement, SVGElementEventMap> {
-  readonly type = "SVG:clipPath"
+  static readonly type = "SVG:clipPath"
 }
 
 /**
@@ -60,7 +60,7 @@ export class ClipPath extends EC<SVGClipPathElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGDefsElement
  */
 export class Defs extends EC<SVGDefsElement, SVGElementEventMap> {
-  readonly type = "SVG:defs"
+  static readonly type = "SVG:defs"
 }
 
 /**
@@ -69,7 +69,7 @@ export class Defs extends EC<SVGDefsElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGDescElement
  */
 export class Desc extends EC<SVGDescElement, SVGElementEventMap> {
-  readonly type = "SVG:desc"
+  static readonly type = "SVG:desc"
 }
 
 /**
@@ -78,7 +78,7 @@ export class Desc extends EC<SVGDescElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGEllipseElement
  */
 export class Ellipse extends EC<SVGEllipseElement, SVGElementEventMap> {
-  readonly type = "SVG:ellipse"
+  static readonly type = "SVG:ellipse"
 }
 
 /**
@@ -87,7 +87,7 @@ export class Ellipse extends EC<SVGEllipseElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEBlendElement
  */
 export class FEBlend extends EC<SVGFEBlendElement, SVGElementEventMap> {
-  readonly type = "SVG:feBlend"
+  static readonly type = "SVG:feBlend"
 }
 
 /**
@@ -96,7 +96,7 @@ export class FEBlend extends EC<SVGFEBlendElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement
  */
 export class FEColorMatrix extends EC<SVGFEColorMatrixElement, SVGElementEventMap> {
-  readonly type = "SVG:feColorMatrix"
+  static readonly type = "SVG:feColorMatrix"
 }
 
 /**
@@ -105,7 +105,7 @@ export class FEColorMatrix extends EC<SVGFEColorMatrixElement, SVGElementEventMa
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEComponentTransferElement
  */
 export class FEComponentTransfer extends EC<SVGFEComponentTransferElement, SVGElementEventMap> {
-  readonly type = "SVG:feComponentTransfer"
+  static readonly type = "SVG:feComponentTransfer"
 }
 
 /**
@@ -114,7 +114,7 @@ export class FEComponentTransfer extends EC<SVGFEComponentTransferElement, SVGEl
  * @see https://developer.mozilla.org/docs/Web/API/SVGFECompositeElement
  */
 export class FEComposite extends EC<SVGFECompositeElement, SVGElementEventMap> {
-  readonly type = "SVG:feComposite"
+  static readonly type = "SVG:feComposite"
 }
 
 /**
@@ -123,7 +123,7 @@ export class FEComposite extends EC<SVGFECompositeElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEConvolveMatrixElement
  */
 export class FEConvolveMatrix extends EC<SVGFEConvolveMatrixElement, SVGElementEventMap> {
-  readonly type = "SVG:feConvolveMatrix"
+  static readonly type = "SVG:feConvolveMatrix"
 }
 
 /**
@@ -132,7 +132,7 @@ export class FEConvolveMatrix extends EC<SVGFEConvolveMatrixElement, SVGElementE
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEDiffuseLightingElement
  */
 export class FEDiffuseLighting extends EC<SVGFEDiffuseLightingElement, SVGElementEventMap> {
-  readonly type = "SVG:feDiffuseLighting"
+  static readonly type = "SVG:feDiffuseLighting"
 }
 
 /**
@@ -141,7 +141,7 @@ export class FEDiffuseLighting extends EC<SVGFEDiffuseLightingElement, SVGElemen
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEDisplacementMapElement
  */
 export class FEDisplacementMap extends EC<SVGFEDisplacementMapElement, SVGElementEventMap> {
-  readonly type = "SVG:feDisplacementMap"
+  static readonly type = "SVG:feDisplacementMap"
 }
 
 /**
@@ -150,7 +150,7 @@ export class FEDisplacementMap extends EC<SVGFEDisplacementMapElement, SVGElemen
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEDistantLightElement
  */
 export class FEDistantLight extends EC<SVGFEDistantLightElement, SVGElementEventMap> {
-  readonly type = "SVG:feDistantLight"
+  static readonly type = "SVG:feDistantLight"
 }
 
 /**
@@ -159,7 +159,7 @@ export class FEDistantLight extends EC<SVGFEDistantLightElement, SVGElementEvent
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEDropShadowElement
  */
 export class FEDropShadow extends EC<SVGFEDropShadowElement, SVGElementEventMap> {
-  readonly type = "SVG:feDropShadow"
+  static readonly type = "SVG:feDropShadow"
 }
 
 /**
@@ -168,7 +168,7 @@ export class FEDropShadow extends EC<SVGFEDropShadowElement, SVGElementEventMap>
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEFloodElement
  */
 export class FEFlood extends EC<SVGFEFloodElement, SVGElementEventMap> {
-  readonly type = "SVG:feFlood"
+  static readonly type = "SVG:feFlood"
 }
 
 /**
@@ -177,7 +177,7 @@ export class FEFlood extends EC<SVGFEFloodElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEFuncAElement
  */
 export class FEFuncA extends EC<SVGFEFuncAElement, SVGElementEventMap> {
-  readonly type = "SVG:feFuncA"
+  static readonly type = "SVG:feFuncA"
 }
 
 /**
@@ -186,7 +186,7 @@ export class FEFuncA extends EC<SVGFEFuncAElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEFuncBElement
  */
 export class FEFuncB extends EC<SVGFEFuncBElement, SVGElementEventMap> {
-  readonly type = "SVG:feFuncB"
+  static readonly type = "SVG:feFuncB"
 }
 
 /**
@@ -195,7 +195,7 @@ export class FEFuncB extends EC<SVGFEFuncBElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEFuncGElement
  */
 export class FEFuncG extends EC<SVGFEFuncGElement, SVGElementEventMap> {
-  readonly type = "SVG:feFuncG"
+  static readonly type = "SVG:feFuncG"
 }
 
 /**
@@ -204,7 +204,7 @@ export class FEFuncG extends EC<SVGFEFuncGElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEFuncRElement
  */
 export class FEFuncR extends EC<SVGFEFuncRElement, SVGElementEventMap> {
-  readonly type = "SVG:feFuncR"
+  static readonly type = "SVG:feFuncR"
 }
 
 /**
@@ -213,7 +213,7 @@ export class FEFuncR extends EC<SVGFEFuncRElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEGaussianBlurElement
  */
 export class FEGaussianBlur extends EC<SVGFEGaussianBlurElement, SVGElementEventMap> {
-  readonly type = "SVG:feGaussianBlur"
+  static readonly type = "SVG:feGaussianBlur"
 }
 
 /**
@@ -222,7 +222,7 @@ export class FEGaussianBlur extends EC<SVGFEGaussianBlurElement, SVGElementEvent
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEImageElement
  */
 export class FEImage extends EC<SVGFEImageElement, SVGElementEventMap> {
-  readonly type = "SVG:feImage"
+  static readonly type = "SVG:feImage"
 }
 
 /**
@@ -231,7 +231,7 @@ export class FEImage extends EC<SVGFEImageElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEMergeElement
  */
 export class FEMerge extends EC<SVGFEMergeElement, SVGElementEventMap> {
-  readonly type = "SVG:feMerge"
+  static readonly type = "SVG:feMerge"
 }
 
 /**
@@ -240,7 +240,7 @@ export class FEMerge extends EC<SVGFEMergeElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEMergeNodeElement
  */
 export class FEMergeNode extends EC<SVGFEMergeNodeElement, SVGElementEventMap> {
-  readonly type = "SVG:feMergeNode"
+  static readonly type = "SVG:feMergeNode"
 }
 
 /**
@@ -249,7 +249,7 @@ export class FEMergeNode extends EC<SVGFEMergeNodeElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEMorphologyElement
  */
 export class FEMorphology extends EC<SVGFEMorphologyElement, SVGElementEventMap> {
-  readonly type = "SVG:feMorphology"
+  static readonly type = "SVG:feMorphology"
 }
 
 /**
@@ -258,7 +258,7 @@ export class FEMorphology extends EC<SVGFEMorphologyElement, SVGElementEventMap>
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEOffsetElement
  */
 export class FEOffset extends EC<SVGFEOffsetElement, SVGElementEventMap> {
-  readonly type = "SVG:feOffset"
+  static readonly type = "SVG:feOffset"
 }
 
 /**
@@ -267,7 +267,7 @@ export class FEOffset extends EC<SVGFEOffsetElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFEPointLightElement
  */
 export class FEPointLight extends EC<SVGFEPointLightElement, SVGElementEventMap> {
-  readonly type = "SVG:fePointLight"
+  static readonly type = "SVG:fePointLight"
 }
 
 /**
@@ -276,7 +276,7 @@ export class FEPointLight extends EC<SVGFEPointLightElement, SVGElementEventMap>
  * @see https://developer.mozilla.org/docs/Web/API/SVGFESpecularLightingElement
  */
 export class FESpecularLighting extends EC<SVGFESpecularLightingElement, SVGElementEventMap> {
-  readonly type = "SVG:feSpecularLighting"
+  static readonly type = "SVG:feSpecularLighting"
 }
 
 /**
@@ -285,7 +285,7 @@ export class FESpecularLighting extends EC<SVGFESpecularLightingElement, SVGElem
  * @see https://developer.mozilla.org/docs/Web/API/SVGFESpotLightElement
  */
 export class FESpotLight extends EC<SVGFESpotLightElement, SVGElementEventMap> {
-  readonly type = "SVG:feSpotLight"
+  static readonly type = "SVG:feSpotLight"
 }
 
 /**
@@ -294,7 +294,7 @@ export class FESpotLight extends EC<SVGFESpotLightElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFETileElement
  */
 export class FETile extends EC<SVGFETileElement, SVGElementEventMap> {
-  readonly type = "SVG:feTile"
+  static readonly type = "SVG:feTile"
 }
 
 /**
@@ -303,7 +303,7 @@ export class FETile extends EC<SVGFETileElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGFETurbulenceElement
  */
 export class FETurbulence extends EC<SVGFETurbulenceElement, SVGElementEventMap> {
-  readonly type = "SVG:feTurbulence"
+  static readonly type = "SVG:feTurbulence"
 }
 
 /**
@@ -312,7 +312,7 @@ export class FETurbulence extends EC<SVGFETurbulenceElement, SVGElementEventMap>
  * @see https://developer.mozilla.org/docs/Web/API/SVGFilterElement
  */
 export class Filter extends EC<SVGFilterElement, SVGElementEventMap> {
-  readonly type = "SVG:filter"
+  static readonly type = "SVG:filter"
 }
 
 /**
@@ -321,7 +321,7 @@ export class Filter extends EC<SVGFilterElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGForeignObjectElement
  */
 export class ForeignObject extends EC<SVGForeignObjectElement, SVGElementEventMap> {
-  readonly type = "SVG:foreignObject"
+  static readonly type = "SVG:foreignObject"
 }
 
 /**
@@ -330,7 +330,7 @@ export class ForeignObject extends EC<SVGForeignObjectElement, SVGElementEventMa
  * @see https://developer.mozilla.org/docs/Web/API/SVGGElement
  */
 export class G extends EC<SVGGElement, SVGElementEventMap> {
-  readonly type = "SVG:g"
+  static readonly type = "SVG:g"
 }
 
 /**
@@ -339,7 +339,7 @@ export class G extends EC<SVGGElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGImageElement
  */
 export class Image extends EC<SVGImageElement, SVGElementEventMap> {
-  readonly type = "SVG:image"
+  static readonly type = "SVG:image"
 }
 
 /**
@@ -348,7 +348,7 @@ export class Image extends EC<SVGImageElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGLineElement
  */
 export class Line extends EC<SVGLineElement, SVGElementEventMap> {
-  readonly type = "SVG:line"
+  static readonly type = "SVG:line"
 }
 
 /**
@@ -357,7 +357,7 @@ export class Line extends EC<SVGLineElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGLinearGradientElement
  */
 export class LinearGradient extends EC<SVGLinearGradientElement, SVGElementEventMap> {
-  readonly type = "SVG:linearGradient"
+  static readonly type = "SVG:linearGradient"
 }
 
 /**
@@ -366,7 +366,7 @@ export class LinearGradient extends EC<SVGLinearGradientElement, SVGElementEvent
  * @see https://developer.mozilla.org/docs/Web/API/SVGMarkerElement
  */
 export class Marker extends EC<SVGMarkerElement, SVGElementEventMap> {
-  readonly type = "SVG:marker"
+  static readonly type = "SVG:marker"
 }
 
 /**
@@ -375,7 +375,7 @@ export class Marker extends EC<SVGMarkerElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGMaskElement
  */
 export class Mask extends EC<SVGMaskElement, SVGElementEventMap> {
-  readonly type = "SVG:mask"
+  static readonly type = "SVG:mask"
 }
 
 /**
@@ -384,7 +384,7 @@ export class Mask extends EC<SVGMaskElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGMetadataElement
  */
 export class Metadata extends EC<SVGMetadataElement, SVGElementEventMap> {
-  readonly type = "SVG:metadata"
+  static readonly type = "SVG:metadata"
 }
 
 /**
@@ -393,7 +393,7 @@ export class Metadata extends EC<SVGMetadataElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGMPathElement
  */
 export class MPath extends EC<SVGMPathElement, SVGElementEventMap> {
-  readonly type = "SVG:mpath"
+  static readonly type = "SVG:mpath"
 }
 
 /**
@@ -402,7 +402,7 @@ export class MPath extends EC<SVGMPathElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGPathElement
  */
 export class Path extends EC<SVGPathElement, SVGElementEventMap> {
-  readonly type = "SVG:path"
+  static readonly type = "SVG:path"
 }
 
 /**
@@ -411,7 +411,7 @@ export class Path extends EC<SVGPathElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGPatternElement
  */
 export class Pattern extends EC<SVGPatternElement, SVGElementEventMap> {
-  readonly type = "SVG:pattern"
+  static readonly type = "SVG:pattern"
 }
 
 /**
@@ -420,7 +420,7 @@ export class Pattern extends EC<SVGPatternElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGPolygonElement
  */
 export class Polygon extends EC<SVGPolygonElement, SVGElementEventMap> {
-  readonly type = "SVG:polygon"
+  static readonly type = "SVG:polygon"
 }
 
 /**
@@ -429,7 +429,7 @@ export class Polygon extends EC<SVGPolygonElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGPolylineElement
  */
 export class Polyline extends EC<SVGPolylineElement, SVGElementEventMap> {
-  readonly type = "SVG:polyline"
+  static readonly type = "SVG:polyline"
 }
 
 /**
@@ -438,7 +438,7 @@ export class Polyline extends EC<SVGPolylineElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGRadialGradientElement
  */
 export class RadialGradient extends EC<SVGRadialGradientElement, SVGElementEventMap> {
-  readonly type = "SVG:radialGradient"
+  static readonly type = "SVG:radialGradient"
 }
 
 /**
@@ -447,7 +447,7 @@ export class RadialGradient extends EC<SVGRadialGradientElement, SVGElementEvent
  * @see https://developer.mozilla.org/docs/Web/API/SVGRectElement
  */
 export class Rect extends EC<SVGRectElement, SVGElementEventMap> {
-  readonly type = "SVG:rect"
+  static readonly type = "SVG:rect"
 }
 
 /**
@@ -456,7 +456,7 @@ export class Rect extends EC<SVGRectElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGScriptElement
  */
 export class SVGScript extends EC<SVGScriptElement, SVGElementEventMap> {
-  readonly type = "SVG:script"
+  static readonly type = "SVG:script"
 }
 
 /**
@@ -465,7 +465,7 @@ export class SVGScript extends EC<SVGScriptElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGSetElement
  */
 export class Set extends EC<SVGSetElement, SVGElementEventMap> {
-  readonly type = "SVG:set"
+  static readonly type = "SVG:set"
 }
 
 /**
@@ -474,7 +474,7 @@ export class Set extends EC<SVGSetElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGStopElement
  */
 export class Stop extends EC<SVGStopElement, SVGElementEventMap> {
-  readonly type = "SVG:stop"
+  static readonly type = "SVG:stop"
 }
 
 /**
@@ -483,7 +483,7 @@ export class Stop extends EC<SVGStopElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGStyleElement
  */
 export class SVGStyle extends EC<SVGStyleElement, SVGElementEventMap> {
-  readonly type = "SVG:style"
+  static readonly type = "SVG:style"
 }
 
 /**
@@ -492,7 +492,7 @@ export class SVGStyle extends EC<SVGStyleElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGSVGElement
  */
 export class SVG extends EC<SVGSVGElement, SVGElementEventMap> {
-  readonly type = "SVG:svg"
+  static readonly type = "SVG:svg"
 }
 
 /**
@@ -501,7 +501,7 @@ export class SVG extends EC<SVGSVGElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGSwitchElement
  */
 export class Switch extends EC<SVGSwitchElement, SVGElementEventMap> {
-  readonly type = "SVG:switch"
+  static readonly type = "SVG:switch"
 }
 
 /**
@@ -510,7 +510,7 @@ export class Switch extends EC<SVGSwitchElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGSymbolElement
  */
 export class Symbol extends EC<SVGSymbolElement, SVGElementEventMap> {
-  readonly type = "SVG:symbol"
+  static readonly type = "SVG:symbol"
 }
 
 /**
@@ -519,7 +519,7 @@ export class Symbol extends EC<SVGSymbolElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGTextElement
  */
 export class SVGText extends EC<SVGTextElement, SVGElementEventMap> {
-  readonly type = "SVG:text"
+  static readonly type = "SVG:text"
 }
 
 /**
@@ -528,7 +528,7 @@ export class SVGText extends EC<SVGTextElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGTextPathElement
  */
 export class TextPath extends EC<SVGTextPathElement, SVGElementEventMap> {
-  readonly type = "SVG:textPath"
+  static readonly type = "SVG:textPath"
 }
 
 /**
@@ -537,7 +537,7 @@ export class TextPath extends EC<SVGTextPathElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGTitleElement
  */
 export class SVGTitle extends EC<SVGTitleElement, SVGElementEventMap> {
-  readonly type = "SVG:title"
+  static readonly type = "SVG:title"
 }
 
 /**
@@ -546,7 +546,7 @@ export class SVGTitle extends EC<SVGTitleElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGTSpanElement
  */
 export class TSpan extends EC<SVGTSpanElement, SVGElementEventMap> {
-  readonly type = "SVG:tspan"
+  static readonly type = "SVG:tspan"
 }
 
 /**
@@ -555,7 +555,7 @@ export class TSpan extends EC<SVGTSpanElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGUseElement
  */
 export class Use extends EC<SVGUseElement, SVGElementEventMap> {
-  readonly type = "SVG:use"
+  static readonly type = "SVG:use"
 }
 
 /**
@@ -564,5 +564,5 @@ export class Use extends EC<SVGUseElement, SVGElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/SVGViewElement
  */
 export class View extends EC<SVGViewElement, SVGElementEventMap> {
-  readonly type = "SVG:view"
+  static readonly type = "SVG:view"
 }

@@ -24,7 +24,7 @@ export class ElementComponent<
 export type TextComponentProps = { textContent?: string };
 
 export class TextComponent extends HostComponent<TextComponentProps, DOMText> {
-  type = "text_node";
+  static readonly type = "text_node";
   constructor(textContent: string) {
     super({ textContent });
   }

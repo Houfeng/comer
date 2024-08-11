@@ -12,7 +12,7 @@ export abstract class HostComponent<
   TProps extends object = {},
   TElement extends HostElement = HostElement,
 > extends Component<TProps, TElement> {
-  readonly type?: string;
+  static readonly type?: string;
   /** @internal */
   [$Host]?: TElement;
 }
