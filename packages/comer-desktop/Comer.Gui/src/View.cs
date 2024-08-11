@@ -6,15 +6,12 @@ namespace Comer.Gui;
 [JSExport]
 public class View
 {
-  private Gtk.Widget Raw;
+  private Gtk.Widget Raw { get; set; }
 
   [JSExport(false)]
-  public Gtk.Widget Widget
+  internal virtual object GetRaw()
   {
-    get
-    {
-      return this.Raw;
-    }
+    return this.Raw;
   }
 
   public View()

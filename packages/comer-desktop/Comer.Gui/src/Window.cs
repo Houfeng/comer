@@ -5,9 +5,12 @@ namespace Comer.Gui;
 [JSExport]
 public class Window : View
 {
-
-  private Gtk.Window Raw;
-
+  [JSExport(false)]
+  internal override object GetRaw()
+  {
+    return this.Raw;
+  }
+  private Gtk.Window Raw { get; set; }
   public Window()
   {
     this.Raw = new Gtk.Window(Gtk.WindowType.Toplevel);
@@ -72,7 +75,7 @@ public class Window : View
 
   public void addChild(View view)
   {
-    this.Raw.Add(view.Widget);
+    this.Raw.Add(view.GetRaw() as Gtk.Widget);
   }
 
 }

@@ -5,12 +5,17 @@ namespace Comer.Gui;
 [JSExport]
 public class Button : View
 {
-  private Gtk.Button Raw;
+  [JSExport(false)]
+  internal override object GetRaw()
+  {
+    return this.Raw;
+  }
+
+  private Gtk.Button Raw { get; set; }
 
   public Button()
   {
     this.Raw = new Gtk.Button();
-    this.Raw.Label = "Button";
   }
 
   public string Label
