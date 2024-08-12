@@ -90,7 +90,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
 
   updateProps(element: DOMHostElement, props: HostProps): void {
     if (!this.isHostElement(element)) return;
-    const target = element as any;
+    const target = element as Record<string, any>;
     Object.entries(props).forEach(([name, value]) => {
       if (name === "children") return;
       if (/^(x|data)-/.test(name)) {
@@ -111,6 +111,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   attachEvents(element: DOMHostElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
+      if (!name || !listener) return;
       const normalizedName = name.slice(2).toLowerCase();
       element.addEventListener(normalizedName, listener, false);
     });
@@ -119,12 +120,14 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   removeEvents(element: DOMHostElement, events: HostEventMap): void {
     if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
+      if (!name || !listener) return;
       const normalizedName = name.slice(2).toLowerCase();
       element.removeEventListener(normalizedName, listener, false);
     });
   }
 
   requestPaintCallback(handler: (time: number) => void): unknown {
+    if (!handler) return;
     if (typeof requestAnimationFrame === "undefined") {
       return handler(Date.now());
     }
@@ -132,15 +135,18 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   cancelPaintCallback(id: unknown): void {
+    if (!id) return;
     if (typeof cancelAnimationFrame === "undefined") return;
     if (id) cancelAnimationFrame(id as number);
   }
 
   requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown {
+    if (!handler) return;
     return requestIdleCallback(handler);
   }
 
   cancelIdleCallback(id: unknown): void {
+    if (!id) return;
     return cancelIdleCallback(id as number);
   }
 }

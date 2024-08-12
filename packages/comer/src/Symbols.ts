@@ -6,3 +6,4 @@ export const $FlushId = Symbol("FlushId");
 export const $Identify = Symbol("Identify");
 export const $Value = Symbol("Value");
 export const $Host = Symbol("Host");
+export const $Update = Symbol("Update");

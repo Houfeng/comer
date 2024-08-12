@@ -1,7 +1,14 @@
 import { ReactiveFunction } from "ober";
 import { OptionalKeyOf, RequiredKeyOf } from "./TypeUtil";
 import { Ref } from "./Ref";
-import { $Props, $Children, $Parent, $Identify, $Reactiver } from "./Symbols";
+import {
+  $Props,
+  $Children,
+  $Parent,
+  $Identify,
+  $Reactiver,
+  $Update,
+} from "./Symbols";
 import { type ProviderType } from "./Provider";
 
 /**
@@ -50,6 +57,9 @@ export abstract class Component<
 
   /** @internal */
   protected [$Reactiver]?: ReactiveFunction;
+
+  /** @internal */
+  protected [$Update]?: () => void;
 
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;

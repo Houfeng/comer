@@ -11,6 +11,7 @@ import {
   $Reactiver,
   $Value,
   $Host,
+  $Update,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferrable } from "./Deferrable";
@@ -20,8 +21,12 @@ function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
 }
 
-function isEventName(name: string) {
+function isEventKey(name: string) {
   return !!name && /^on/.test(name);
+}
+
+function isReservedKey(name: string) {
+  return name === "key" || name === "ref";
 }
 
 /**
@@ -71,29 +76,15 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Make the props of the instance observable
     element[$Props] = observable(element[$Props]);
     // Create a reactiver
-    const trigger = () => this.requestUpdate(element);
+    const requestUpdate = () => this.requestUpdate(element);
+    element[$Update] = () => {
+      const deferrable = this.canDefer(element);
+      this.scheduler.perform(requestUpdate, { deferrable });
+    };
     element[$Reactiver] = createReactiver(
       () => element["build"](),
-      () => {
-        const deferrable = this.canDefer(element);
-        this.scheduler.perform(trigger, { deferrable });
-      },
+      element[$Update],
     );
-  }
-
-  private buildElement(element: Component): Component[] {
-    if (!element[$Reactiver]) this.bindReactiver(element);
-    try {
-      // execute the build wrapper
-      const result = element[$Reactiver]?.();
-      if (!result) return [];
-      // normalize the children
-      const children = this.isFragment(element) ? element[$Children] : [result];
-      return (children || []).flat(1);
-    } catch (err) {
-      this.adapter.logger.error(err);
-      return [];
-    }
   }
 
   private findParentHostComponent(element?: Component): HostComponent | void {
@@ -119,22 +110,22 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       .flat(1);
   }
 
-  private findHostElements(element: Component): HostElement[] {
+  //TODO: Temporarily public
+  findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
     return this.findHostComponents(element)
       .map((it) => it[$Host])
       .filter((it) => !!it);
   }
 
-  private getHostElementType(element: Component) {
+  private getHostElementType(element: Component): string {
     const ctor = element.constructor;
     return String("type" in ctor ? ctor.type : void 0);
   }
 
-  private createAndApplyProps(
+  private createAndBindElement(
     element: Component,
     parent: Component | undefined,
-    deep = false,
   ): void {
     if (!this.isComponent(element)) return;
     element[$Parent] = parent;
@@ -145,14 +136,18 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         : void 0;
       if (hostType) element[$Host] = this.adapter.createElement(hostType);
     }
-    this.applyNewProps(element);
+    // Apply for the first time,
+    // First apply before binding, so no response is triggered
+    this.applyLatestProps(element);
+    //----------------------------------------------------------------------
     // handler children before append document
-    if (deep) {
-      element[$Children] = this.buildElement(element);
-      element[$Children].forEach((child) =>
-        this.createAndApplyProps(child, element, deep),
-      );
-    }
+    // if (deep) {
+    //   element[$Children] = this.buildElement(element);
+    //   element[$Children].forEach((child) =>
+    //     this.createAndApplyProps(child, element, deep),
+    //   );
+    // }
+    //----------------------------------------------------------------------
     // append to parent host element
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
@@ -164,6 +159,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     // ---------------------------------------
     this.bindRef(element);
+    this.bindReactiver(element);
     element["onCreated"]?.();
   }
 
@@ -194,7 +190,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     hostElement[$FlushId] = this.adapter.requestPaintCallback(flushHandler);
   }
 
-  private applyNewProps(
+  private applyLatestProps(
     oldElement: Component,
     newElement: Component = oldElement,
   ): void {
@@ -206,8 +202,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const willUpdateHostProps: Record<string, any> = {};
     const willAttachHostEvents: Record<string, any> = {};
     const willRemoveHostEvents: Record<string, any> = {};
-    // update props : new -> old
     if (oldElement !== newElement) {
+      // update new props
       const allKeys = new Set([
         ...Object.keys(oldProps),
         ...Object.keys(newProps),
@@ -216,8 +212,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         // props is observable object，Can trigger updates
         // key that does not exist on newProps,
         // needs to be cleared on Old by setting null
-        if (oldProps[key] === newProps[key] || key === "ref") return;
-        if (isEventName(key)) {
+        if (oldProps[key] === newProps[key] || isReservedKey(key)) return;
+        if (isEventKey(key)) {
           willAttachHostEvents[key] = newProps[key];
           willRemoveHostEvents[key] = oldProps[key];
           oldProps[key] = newProps[key] ?? null;
@@ -225,11 +221,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
           oldProps[key] = newProps[key] ?? null;
           willUpdateHostProps[key] = oldProps[key];
         }
+        // TODO: When LowProxy mode
+        // The new field needs to be set to be responsive
       });
     } else {
+      // force flush old props
       Object.entries(oldProps).forEach(([key, value]) => {
-        if (key === "ref") return;
-        if (isEventName(key)) {
+        if (isReservedKey(key)) return;
+        if (isEventKey(key)) {
           willAttachHostEvents[key] = value;
         } else {
           willUpdateHostProps[key] = value;
@@ -264,6 +263,27 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!useContext(element, Deferrable);
   }
 
+  /**
+   * Execute its own build method and return child elements
+   */
+  private buildElement(element: Component): Component[] {
+    try {
+      // execute the build wrapper
+      const result = element[$Reactiver]?.();
+      if (!result) return [];
+      // normalize the children
+      const children = this.isFragment(element) ? element[$Children] : [result];
+      return (children || []).flat(1);
+    } catch (err) {
+      this.adapter.logger.error(err);
+      return [];
+    }
+  }
+
+  /**
+   * Call buildElement to retrieve child elements
+   * and perform 'update or replace or append or delete'
+   */
   private requestUpdate(element: Component): void {
     if (!this.isComponent(element)) return;
     const oldChildren = element[$Children] || [];
@@ -274,15 +294,21 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       const oldChild = oldChildren[i];
       const newChild = newChildren[i];
       if (this.canUpdate(oldChild, newChild)) {
-        this.applyNewProps(oldChild, newChild);
+        // update
+        this.applyLatestProps(oldChild, newChild);
         items.push(oldChild);
       } else if (oldChild && !newChild) {
+        // remove
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
-        this.createAndApplyProps(newChild, element);
+        // append or insert
+        this.createAndBindElement(newChild, element);
+        newChild[$Update]?.();
         items.push(newChild);
       } else if (oldChild && newChild) {
-        this.createAndApplyProps(newChild, element);
+        // replace
+        this.createAndBindElement(newChild, element);
+        newChild[$Update]?.();
         this.unmount(oldChild);
         items.push(newChild);
       } else {
@@ -310,12 +336,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.createAndApplyProps(element, void 0, true);
-    const hostElements = this.findHostElements(element);
-    if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
-      throw new Error("Invalid host element");
-    }
-    hostElements.forEach((it) => this.adapter.insertElement(root, it));
+    this.createAndBindElement(element, void 0);
+    element[$Update]?.();
+    // const hostElements = this.findHostElements(element);
+    // if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
+    //   throw new Error("Invalid host element");
+    // }
+    // hostElements.forEach((it) => this.adapter.insertElement(root, it));
     return element;
   }
 
