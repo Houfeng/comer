@@ -2,12 +2,12 @@ import { Component, observable } from "comer";
 import { Button, Div, TextContent } from "comer-dom";
 
 export class Demo extends Component {
-  state = observable({ value1: 0, value2: 0 });
-  onButtonClick = () => {
+  private state = observable({ value1: 0, value2: 0 });
+  private onButtonClick = () => {
     this.state.value1 = 1;
     this.state.value2 = 2;
   };
-  build() {
+  protected build() {
     const { value1, value2 } = this.state;
     return new Div({
       children: [

@@ -3,11 +3,11 @@ import { Button, Div, Input, TextContent } from "comer-dom";
 
 @delegate
 export class Demo extends Component {
-  state = observable({ value: 0 });
-  onButtonClick = () => {
+  private state = observable({ value: 0 });
+  private onButtonClick = () => {
     this.state.value++;
   };
-  build() {
+  protected build() {
     const { value } = this.state;
     return new Div({
       children: [
