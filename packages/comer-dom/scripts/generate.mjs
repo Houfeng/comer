@@ -20,7 +20,7 @@ function generateCode(define) {
       ` * @see https://developer.mozilla.org/docs/Web/API/${element}`,
       ` */`,
       `export class ${name} extends EC<${element}, ${events}> {`,
-      `  static readonly type = "${type}"`,
+      `  static readonly type = "${type}";`,
       `}`,
       ''
     ];

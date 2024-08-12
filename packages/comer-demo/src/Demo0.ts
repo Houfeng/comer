@@ -1,4 +1,4 @@
-import { Component, observable, delegate, Deferrable } from "comer";
+import { Component, observable, delegate } from "comer";
 import { Button, Div, Input, TextContent } from "comer-dom";
 
 @delegate
@@ -18,13 +18,7 @@ export class Demo extends Component {
             this.state.value = Number(event.target.value);
           },
         }),
-        new Div({
-          children: new Deferrable({
-            children: new Array(value)
-              .fill("1")
-              .map((it) => new TextContent(String(it))),
-          }),
-        }),
+        ...new Array(value).fill("1").map(() => new TextContent(` ${value} `)),
         new Button({
           style: { color: "red" },
           children: new TextContent(`Click: ${this.state.value}`),

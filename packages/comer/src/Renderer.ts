@@ -158,6 +158,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement && element[$Host]) {
         this.adapter.insertElement(parentHostElement, element[$Host]);
+      } else {
+        this.adapter.logger.error("Invalid host component");
       }
     }
     // ---------------------------------------

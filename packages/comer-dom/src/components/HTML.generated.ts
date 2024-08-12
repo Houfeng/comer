@@ -6,7 +6,7 @@ import { ElementComponent as EC } from "../DOMComponent";
  * @see https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement
  */
 export class A extends EC<HTMLAnchorElement, HTMLElementEventMap> {
-  static readonly type = "a"
+  static readonly type = "a";
 }
 
 /**
@@ -15,7 +15,7 @@ export class A extends EC<HTMLAnchorElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Abbr extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "abbr"
+  static readonly type = "abbr";
 }
 
 /**
@@ -24,7 +24,7 @@ export class Abbr extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Address extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "address"
+  static readonly type = "address";
 }
 
 /**
@@ -33,7 +33,7 @@ export class Address extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLAreaElement
  */
 export class Area extends EC<HTMLAreaElement, HTMLElementEventMap> {
-  static readonly type = "area"
+  static readonly type = "area";
 }
 
 /**
@@ -42,7 +42,7 @@ export class Area extends EC<HTMLAreaElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Article extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "article"
+  static readonly type = "article";
 }
 
 /**
@@ -51,7 +51,7 @@ export class Article extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Aside extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "aside"
+  static readonly type = "aside";
 }
 
 /**
@@ -60,7 +60,7 @@ export class Aside extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLAudioElement
  */
 export class Audio extends EC<HTMLAudioElement, HTMLVideoElementEventMap> {
-  static readonly type = "audio"
+  static readonly type = "audio";
 }
 
 /**
@@ -69,7 +69,7 @@ export class Audio extends EC<HTMLAudioElement, HTMLVideoElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class B extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "b"
+  static readonly type = "b";
 }
 
 /**
@@ -78,7 +78,7 @@ export class B extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLBaseElement
  */
 export class Base extends EC<HTMLBaseElement, HTMLElementEventMap> {
-  static readonly type = "base"
+  static readonly type = "base";
 }
 
 /**
@@ -87,7 +87,7 @@ export class Base extends EC<HTMLBaseElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Bdi extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "bdi"
+  static readonly type = "bdi";
 }
 
 /**
@@ -96,7 +96,7 @@ export class Bdi extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Bdo extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "bdo"
+  static readonly type = "bdo";
 }
 
 /**
@@ -105,7 +105,7 @@ export class Bdo extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLQuoteElement
  */
 export class Blockquote extends EC<HTMLQuoteElement, HTMLElementEventMap> {
-  static readonly type = "blockquote"
+  static readonly type = "blockquote";
 }
 
 /**
@@ -114,7 +114,7 @@ export class Blockquote extends EC<HTMLQuoteElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLBodyElement
  */
 export class Body extends EC<HTMLBodyElement, HTMLElementEventMap> {
-  static readonly type = "body"
+  static readonly type = "body";
 }
 
 /**
@@ -123,7 +123,7 @@ export class Body extends EC<HTMLBodyElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLBRElement
  */
 export class Br extends EC<HTMLBRElement, HTMLElementEventMap> {
-  static readonly type = "br"
+  static readonly type = "br";
 }
 
 /**
@@ -132,7 +132,7 @@ export class Br extends EC<HTMLBRElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLButtonElement
  */
 export class Button extends EC<HTMLButtonElement, HTMLElementEventMap> {
-  static readonly type = "button"
+  static readonly type = "button";
 }
 
 /**
@@ -141,7 +141,7 @@ export class Button extends EC<HTMLButtonElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement
  */
 export class Canvas extends EC<HTMLCanvasElement, HTMLElementEventMap> {
-  static readonly type = "canvas"
+  static readonly type = "canvas";
 }
 
 /**
@@ -150,7 +150,7 @@ export class Canvas extends EC<HTMLCanvasElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableCaptionElement
  */
 export class Caption extends EC<HTMLTableCaptionElement, HTMLElementEventMap> {
-  static readonly type = "caption"
+  static readonly type = "caption";
 }
 
 /**
@@ -159,7 +159,7 @@ export class Caption extends EC<HTMLTableCaptionElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Cite extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "cite"
+  static readonly type = "cite";
 }
 
 /**
@@ -168,7 +168,7 @@ export class Cite extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Code extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "code"
+  static readonly type = "code";
 }
 
 /**
@@ -177,7 +177,7 @@ export class Code extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableColElement
  */
 export class Col extends EC<HTMLTableColElement, HTMLElementEventMap> {
-  static readonly type = "col"
+  static readonly type = "col";
 }
 
 /**
@@ -186,7 +186,7 @@ export class Col extends EC<HTMLTableColElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableColElement
  */
 export class Colgroup extends EC<HTMLTableColElement, HTMLElementEventMap> {
-  static readonly type = "colgroup"
+  static readonly type = "colgroup";
 }
 
 /**
@@ -195,7 +195,7 @@ export class Colgroup extends EC<HTMLTableColElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDataElement
  */
 export class Data extends EC<HTMLDataElement, HTMLElementEventMap> {
-  static readonly type = "data"
+  static readonly type = "data";
 }
 
 /**
@@ -204,7 +204,7 @@ export class Data extends EC<HTMLDataElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDataListElement
  */
 export class Datalist extends EC<HTMLDataListElement, HTMLElementEventMap> {
-  static readonly type = "datalist"
+  static readonly type = "datalist";
 }
 
 /**
@@ -213,7 +213,7 @@ export class Datalist extends EC<HTMLDataListElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Dd extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "dd"
+  static readonly type = "dd";
 }
 
 /**
@@ -222,7 +222,7 @@ export class Dd extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLModElement
  */
 export class Del extends EC<HTMLModElement, HTMLElementEventMap> {
-  static readonly type = "del"
+  static readonly type = "del";
 }
 
 /**
@@ -231,7 +231,7 @@ export class Del extends EC<HTMLModElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement
  */
 export class Details extends EC<HTMLDetailsElement, HTMLElementEventMap> {
-  static readonly type = "details"
+  static readonly type = "details";
 }
 
 /**
@@ -240,7 +240,7 @@ export class Details extends EC<HTMLDetailsElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Dfn extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "dfn"
+  static readonly type = "dfn";
 }
 
 /**
@@ -249,7 +249,7 @@ export class Dfn extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDialogElement
  */
 export class Dialog extends EC<HTMLDialogElement, HTMLElementEventMap> {
-  static readonly type = "dialog"
+  static readonly type = "dialog";
 }
 
 /**
@@ -258,7 +258,7 @@ export class Dialog extends EC<HTMLDialogElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDivElement
  */
 export class Div extends EC<HTMLDivElement, HTMLElementEventMap> {
-  static readonly type = "div"
+  static readonly type = "div";
 }
 
 /**
@@ -267,7 +267,7 @@ export class Div extends EC<HTMLDivElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLDListElement
  */
 export class Dl extends EC<HTMLDListElement, HTMLElementEventMap> {
-  static readonly type = "dl"
+  static readonly type = "dl";
 }
 
 /**
@@ -276,7 +276,7 @@ export class Dl extends EC<HTMLDListElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Dt extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "dt"
+  static readonly type = "dt";
 }
 
 /**
@@ -285,7 +285,7 @@ export class Dt extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Em extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "em"
+  static readonly type = "em";
 }
 
 /**
@@ -294,7 +294,7 @@ export class Em extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLEmbedElement
  */
 export class Embed extends EC<HTMLEmbedElement, HTMLElementEventMap> {
-  static readonly type = "embed"
+  static readonly type = "embed";
 }
 
 /**
@@ -303,7 +303,7 @@ export class Embed extends EC<HTMLEmbedElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement
  */
 export class Fieldset extends EC<HTMLFieldSetElement, HTMLElementEventMap> {
-  static readonly type = "fieldset"
+  static readonly type = "fieldset";
 }
 
 /**
@@ -312,7 +312,7 @@ export class Fieldset extends EC<HTMLFieldSetElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Figcaption extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "figcaption"
+  static readonly type = "figcaption";
 }
 
 /**
@@ -321,7 +321,7 @@ export class Figcaption extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Figure extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "figure"
+  static readonly type = "figure";
 }
 
 /**
@@ -330,7 +330,7 @@ export class Figure extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Footer extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "footer"
+  static readonly type = "footer";
 }
 
 /**
@@ -339,7 +339,7 @@ export class Footer extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLFormElement
  */
 export class Form extends EC<HTMLFormElement, HTMLElementEventMap> {
-  static readonly type = "form"
+  static readonly type = "form";
 }
 
 /**
@@ -348,7 +348,7 @@ export class Form extends EC<HTMLFormElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H1 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h1"
+  static readonly type = "h1";
 }
 
 /**
@@ -357,7 +357,7 @@ export class H1 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H2 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h2"
+  static readonly type = "h2";
 }
 
 /**
@@ -366,7 +366,7 @@ export class H2 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H3 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h3"
+  static readonly type = "h3";
 }
 
 /**
@@ -375,7 +375,7 @@ export class H3 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H4 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h4"
+  static readonly type = "h4";
 }
 
 /**
@@ -384,7 +384,7 @@ export class H4 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H5 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h5"
+  static readonly type = "h5";
 }
 
 /**
@@ -393,7 +393,7 @@ export class H5 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement
  */
 export class H6 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
-  static readonly type = "h6"
+  static readonly type = "h6";
 }
 
 /**
@@ -402,7 +402,7 @@ export class H6 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadElement
  */
 export class Head extends EC<HTMLHeadElement, HTMLElementEventMap> {
-  static readonly type = "head"
+  static readonly type = "head";
 }
 
 /**
@@ -411,7 +411,7 @@ export class Head extends EC<HTMLHeadElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Header extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "header"
+  static readonly type = "header";
 }
 
 /**
@@ -420,7 +420,7 @@ export class Header extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Hgroup extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "hgroup"
+  static readonly type = "hgroup";
 }
 
 /**
@@ -429,7 +429,7 @@ export class Hgroup extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHRElement
  */
 export class Hr extends EC<HTMLHRElement, HTMLElementEventMap> {
-  static readonly type = "hr"
+  static readonly type = "hr";
 }
 
 /**
@@ -438,7 +438,7 @@ export class Hr extends EC<HTMLHRElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLHtmlElement
  */
 export class Html extends EC<HTMLHtmlElement, HTMLElementEventMap> {
-  static readonly type = "html"
+  static readonly type = "html";
 }
 
 /**
@@ -447,7 +447,7 @@ export class Html extends EC<HTMLHtmlElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class I extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "i"
+  static readonly type = "i";
 }
 
 /**
@@ -456,7 +456,7 @@ export class I extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement
  */
 export class Iframe extends EC<HTMLIFrameElement, HTMLElementEventMap> {
-  static readonly type = "iframe"
+  static readonly type = "iframe";
 }
 
 /**
@@ -465,7 +465,7 @@ export class Iframe extends EC<HTMLIFrameElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLImageElement
  */
 export class Img extends EC<HTMLImageElement, HTMLElementEventMap> {
-  static readonly type = "img"
+  static readonly type = "img";
 }
 
 /**
@@ -474,7 +474,7 @@ export class Img extends EC<HTMLImageElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLInputElement
  */
 export class Input extends EC<HTMLInputElement, HTMLElementEventMap> {
-  static readonly type = "input"
+  static readonly type = "input";
 }
 
 /**
@@ -483,7 +483,7 @@ export class Input extends EC<HTMLInputElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLModElement
  */
 export class Ins extends EC<HTMLModElement, HTMLElementEventMap> {
-  static readonly type = "ins"
+  static readonly type = "ins";
 }
 
 /**
@@ -492,7 +492,7 @@ export class Ins extends EC<HTMLModElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Kbd extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "kbd"
+  static readonly type = "kbd";
 }
 
 /**
@@ -501,7 +501,7 @@ export class Kbd extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLLabelElement
  */
 export class Label extends EC<HTMLLabelElement, HTMLElementEventMap> {
-  static readonly type = "label"
+  static readonly type = "label";
 }
 
 /**
@@ -510,7 +510,7 @@ export class Label extends EC<HTMLLabelElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLLegendElement
  */
 export class Legend extends EC<HTMLLegendElement, HTMLElementEventMap> {
-  static readonly type = "legend"
+  static readonly type = "legend";
 }
 
 /**
@@ -519,7 +519,7 @@ export class Legend extends EC<HTMLLegendElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLLIElement
  */
 export class Li extends EC<HTMLLIElement, HTMLElementEventMap> {
-  static readonly type = "li"
+  static readonly type = "li";
 }
 
 /**
@@ -528,7 +528,7 @@ export class Li extends EC<HTMLLIElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
  */
 export class Link extends EC<HTMLLinkElement, HTMLElementEventMap> {
-  static readonly type = "link"
+  static readonly type = "link";
 }
 
 /**
@@ -537,7 +537,7 @@ export class Link extends EC<HTMLLinkElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Main extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "main"
+  static readonly type = "main";
 }
 
 /**
@@ -546,7 +546,7 @@ export class Main extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLMapElement
  */
 export class Map extends EC<HTMLMapElement, HTMLElementEventMap> {
-  static readonly type = "map"
+  static readonly type = "map";
 }
 
 /**
@@ -555,7 +555,7 @@ export class Map extends EC<HTMLMapElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Mark extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "mark"
+  static readonly type = "mark";
 }
 
 /**
@@ -564,7 +564,7 @@ export class Mark extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLMenuElement
  */
 export class Menu extends EC<HTMLMenuElement, HTMLElementEventMap> {
-  static readonly type = "menu"
+  static readonly type = "menu";
 }
 
 /**
@@ -573,7 +573,7 @@ export class Menu extends EC<HTMLMenuElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLMetaElement
  */
 export class Meta extends EC<HTMLMetaElement, HTMLElementEventMap> {
-  static readonly type = "meta"
+  static readonly type = "meta";
 }
 
 /**
@@ -582,7 +582,7 @@ export class Meta extends EC<HTMLMetaElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLMeterElement
  */
 export class Meter extends EC<HTMLMeterElement, HTMLElementEventMap> {
-  static readonly type = "meter"
+  static readonly type = "meter";
 }
 
 /**
@@ -591,7 +591,7 @@ export class Meter extends EC<HTMLMeterElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Nav extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "nav"
+  static readonly type = "nav";
 }
 
 /**
@@ -600,7 +600,7 @@ export class Nav extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Noscript extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "noscript"
+  static readonly type = "noscript";
 }
 
 /**
@@ -609,7 +609,7 @@ export class Noscript extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLObjectElement
  */
 export class Object extends EC<HTMLObjectElement, HTMLElementEventMap> {
-  static readonly type = "object"
+  static readonly type = "object";
 }
 
 /**
@@ -618,7 +618,7 @@ export class Object extends EC<HTMLObjectElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLOListElement
  */
 export class Ol extends EC<HTMLOListElement, HTMLElementEventMap> {
-  static readonly type = "ol"
+  static readonly type = "ol";
 }
 
 /**
@@ -627,7 +627,7 @@ export class Ol extends EC<HTMLOListElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLOptGroupElement
  */
 export class Optgroup extends EC<HTMLOptGroupElement, HTMLElementEventMap> {
-  static readonly type = "optgroup"
+  static readonly type = "optgroup";
 }
 
 /**
@@ -636,7 +636,7 @@ export class Optgroup extends EC<HTMLOptGroupElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLOptionElement
  */
 export class Option extends EC<HTMLOptionElement, HTMLElementEventMap> {
-  static readonly type = "option"
+  static readonly type = "option";
 }
 
 /**
@@ -645,7 +645,7 @@ export class Option extends EC<HTMLOptionElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLOutputElement
  */
 export class Output extends EC<HTMLOutputElement, HTMLElementEventMap> {
-  static readonly type = "output"
+  static readonly type = "output";
 }
 
 /**
@@ -654,7 +654,7 @@ export class Output extends EC<HTMLOutputElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLParagraphElement
  */
 export class P extends EC<HTMLParagraphElement, HTMLElementEventMap> {
-  static readonly type = "p"
+  static readonly type = "p";
 }
 
 /**
@@ -663,7 +663,7 @@ export class P extends EC<HTMLParagraphElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLPictureElement
  */
 export class Picture extends EC<HTMLPictureElement, HTMLElementEventMap> {
-  static readonly type = "picture"
+  static readonly type = "picture";
 }
 
 /**
@@ -672,7 +672,7 @@ export class Picture extends EC<HTMLPictureElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLPreElement
  */
 export class Pre extends EC<HTMLPreElement, HTMLElementEventMap> {
-  static readonly type = "pre"
+  static readonly type = "pre";
 }
 
 /**
@@ -681,7 +681,7 @@ export class Pre extends EC<HTMLPreElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLProgressElement
  */
 export class Progress extends EC<HTMLProgressElement, HTMLElementEventMap> {
-  static readonly type = "progress"
+  static readonly type = "progress";
 }
 
 /**
@@ -690,7 +690,7 @@ export class Progress extends EC<HTMLProgressElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLQuoteElement
  */
 export class Q extends EC<HTMLQuoteElement, HTMLElementEventMap> {
-  static readonly type = "q"
+  static readonly type = "q";
 }
 
 /**
@@ -699,7 +699,7 @@ export class Q extends EC<HTMLQuoteElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Rp extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "rp"
+  static readonly type = "rp";
 }
 
 /**
@@ -708,7 +708,7 @@ export class Rp extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Rt extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "rt"
+  static readonly type = "rt";
 }
 
 /**
@@ -717,7 +717,7 @@ export class Rt extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Ruby extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "ruby"
+  static readonly type = "ruby";
 }
 
 /**
@@ -726,7 +726,7 @@ export class Ruby extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class S extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "s"
+  static readonly type = "s";
 }
 
 /**
@@ -735,7 +735,7 @@ export class S extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Samp extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "samp"
+  static readonly type = "samp";
 }
 
 /**
@@ -744,7 +744,7 @@ export class Samp extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
  */
 export class Script extends EC<HTMLScriptElement, HTMLElementEventMap> {
-  static readonly type = "script"
+  static readonly type = "script";
 }
 
 /**
@@ -753,7 +753,7 @@ export class Script extends EC<HTMLScriptElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Search extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "search"
+  static readonly type = "search";
 }
 
 /**
@@ -762,7 +762,7 @@ export class Search extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Section extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "section"
+  static readonly type = "section";
 }
 
 /**
@@ -771,7 +771,7 @@ export class Section extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLSelectElement
  */
 export class Select extends EC<HTMLSelectElement, HTMLElementEventMap> {
-  static readonly type = "select"
+  static readonly type = "select";
 }
 
 /**
@@ -780,7 +780,7 @@ export class Select extends EC<HTMLSelectElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLSlotElement
  */
 export class Slot extends EC<HTMLSlotElement, HTMLElementEventMap> {
-  static readonly type = "slot"
+  static readonly type = "slot";
 }
 
 /**
@@ -789,7 +789,7 @@ export class Slot extends EC<HTMLSlotElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Small extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "small"
+  static readonly type = "small";
 }
 
 /**
@@ -798,7 +798,7 @@ export class Small extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLSourceElement
  */
 export class Source extends EC<HTMLSourceElement, HTMLElementEventMap> {
-  static readonly type = "source"
+  static readonly type = "source";
 }
 
 /**
@@ -807,7 +807,7 @@ export class Source extends EC<HTMLSourceElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLSpanElement
  */
 export class Span extends EC<HTMLSpanElement, HTMLElementEventMap> {
-  static readonly type = "span"
+  static readonly type = "span";
 }
 
 /**
@@ -816,7 +816,7 @@ export class Span extends EC<HTMLSpanElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Strong extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "strong"
+  static readonly type = "strong";
 }
 
 /**
@@ -825,7 +825,7 @@ export class Strong extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
  */
 export class Style extends EC<HTMLStyleElement, HTMLElementEventMap> {
-  static readonly type = "style"
+  static readonly type = "style";
 }
 
 /**
@@ -834,7 +834,7 @@ export class Style extends EC<HTMLStyleElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Sub extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "sub"
+  static readonly type = "sub";
 }
 
 /**
@@ -843,7 +843,7 @@ export class Sub extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Summary extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "summary"
+  static readonly type = "summary";
 }
 
 /**
@@ -852,7 +852,7 @@ export class Summary extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Sup extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "sup"
+  static readonly type = "sup";
 }
 
 /**
@@ -861,7 +861,7 @@ export class Sup extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableElement
  */
 export class Table extends EC<HTMLTableElement, HTMLElementEventMap> {
-  static readonly type = "table"
+  static readonly type = "table";
 }
 
 /**
@@ -870,7 +870,7 @@ export class Table extends EC<HTMLTableElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableSectionElement
  */
 export class Tbody extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
-  static readonly type = "tbody"
+  static readonly type = "tbody";
 }
 
 /**
@@ -879,7 +879,7 @@ export class Tbody extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement
  */
 export class Td extends EC<HTMLTableCellElement, HTMLElementEventMap> {
-  static readonly type = "td"
+  static readonly type = "td";
 }
 
 /**
@@ -888,7 +888,7 @@ export class Td extends EC<HTMLTableCellElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement
  */
 export class Template extends EC<HTMLTemplateElement, HTMLElementEventMap> {
-  static readonly type = "template"
+  static readonly type = "template";
 }
 
 /**
@@ -897,7 +897,7 @@ export class Template extends EC<HTMLTemplateElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement
  */
 export class Textarea extends EC<HTMLTextAreaElement, HTMLElementEventMap> {
-  static readonly type = "textarea"
+  static readonly type = "textarea";
 }
 
 /**
@@ -906,7 +906,7 @@ export class Textarea extends EC<HTMLTextAreaElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableSectionElement
  */
 export class Tfoot extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
-  static readonly type = "tfoot"
+  static readonly type = "tfoot";
 }
 
 /**
@@ -915,7 +915,7 @@ export class Tfoot extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement
  */
 export class Th extends EC<HTMLTableCellElement, HTMLElementEventMap> {
-  static readonly type = "th"
+  static readonly type = "th";
 }
 
 /**
@@ -924,7 +924,7 @@ export class Th extends EC<HTMLTableCellElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableSectionElement
  */
 export class Thead extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
-  static readonly type = "thead"
+  static readonly type = "thead";
 }
 
 /**
@@ -933,7 +933,7 @@ export class Thead extends EC<HTMLTableSectionElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTimeElement
  */
 export class Time extends EC<HTMLTimeElement, HTMLElementEventMap> {
-  static readonly type = "time"
+  static readonly type = "time";
 }
 
 /**
@@ -942,7 +942,7 @@ export class Time extends EC<HTMLTimeElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTitleElement
  */
 export class Title extends EC<HTMLTitleElement, HTMLElementEventMap> {
-  static readonly type = "title"
+  static readonly type = "title";
 }
 
 /**
@@ -951,7 +951,7 @@ export class Title extends EC<HTMLTitleElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTableRowElement
  */
 export class Tr extends EC<HTMLTableRowElement, HTMLElementEventMap> {
-  static readonly type = "tr"
+  static readonly type = "tr";
 }
 
 /**
@@ -960,7 +960,7 @@ export class Tr extends EC<HTMLTableRowElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLTrackElement
  */
 export class Track extends EC<HTMLTrackElement, HTMLElementEventMap> {
-  static readonly type = "track"
+  static readonly type = "track";
 }
 
 /**
@@ -969,7 +969,7 @@ export class Track extends EC<HTMLTrackElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class U extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "u"
+  static readonly type = "u";
 }
 
 /**
@@ -978,7 +978,7 @@ export class U extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLUListElement
  */
 export class Ul extends EC<HTMLUListElement, HTMLElementEventMap> {
-  static readonly type = "ul"
+  static readonly type = "ul";
 }
 
 /**
@@ -987,7 +987,7 @@ export class Ul extends EC<HTMLUListElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Var extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "var"
+  static readonly type = "var";
 }
 
 /**
@@ -996,7 +996,7 @@ export class Var extends EC<HTMLElement, HTMLElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
  */
 export class Video extends EC<HTMLVideoElement, HTMLVideoElementEventMap> {
-  static readonly type = "video"
+  static readonly type = "video";
 }
 
 /**
@@ -1005,5 +1005,5 @@ export class Video extends EC<HTMLVideoElement, HTMLVideoElementEventMap> {
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement
  */
 export class Wbr extends EC<HTMLElement, HTMLElementEventMap> {
-  static readonly type = "wbr"
+  static readonly type = "wbr";
 }
