@@ -62,7 +62,9 @@ export abstract class Component<
    * @readonly
    * @property
    */
-  protected get props(): Readonly<ComponentProps<TProps, TRef>> {
+  protected get props(): Readonly<
+    Omit<ComponentProps<TProps, TRef>, "ref" | "key">
+  > {
     return this[$Props];
   }
 
