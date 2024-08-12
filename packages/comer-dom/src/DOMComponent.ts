@@ -55,4 +55,8 @@ export class TextComponent extends HostComponent<TextProps, DOMText> {
   }
 }
 
+/**
+ * Text node
+ * @see https://developer.mozilla.org/docs/Web/API/Text
+ */
 export const TextContent = TextComponent;
