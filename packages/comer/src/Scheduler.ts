@@ -64,7 +64,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     return result;
   }
 
-  // =---------------------------- perform -----------------------------
+  // ----------------------------- perform -----------------------------
 
   perform(task: TaskHandler, options: TaskOptions): void {
     if (!task) return;
@@ -78,5 +78,14 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
       this.immedTasks.add(task);
       this.requestRunImmedTasks();
     }
+  }
+
+  // ----------------------------- cancel ------------------------------
+
+  cancel(task: TaskHandler) {
+    if (!task) return;
+    this.deferTasks.delete(task);
+    this.immedTasks.delete(task);
+    this.syncTasks.delete(task);
   }
 }

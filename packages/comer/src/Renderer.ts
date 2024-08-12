@@ -348,23 +348,31 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return element;
   }
 
+  private _unmount(element: Component, inDeletedSubtree: boolean): void {
+    if (!element) return;
+    element[$Reactiver]?.unsubscribe();
+    if (element[$Update]) this.scheduler.cancel(element[$Update]);
+    element["onDestroy"]?.();
+    if (this.isHostComponent(element) && element[$Host]) {
+      this.adapter.removeElement(element[$Host]);
+      inDeletedSubtree = true;
+    }
+    // broadcast to children
+    if (!element[$Children]) return;
+    element[$Children].forEach((child) =>
+      this.scheduler.perform(() => this._unmount(child, inDeletedSubtree), {
+        deferrable: true,
+      }),
+    );
+  }
+
   /**
    * Unmount and destroy component subtree
    * @param element Element (Subtree root)
    * @returns
    */
   unmount(element: Component): void {
-    if (!element) return;
-    element[$Reactiver]?.unsubscribe();
-    element["onDestroy"]?.();
-    if (this.isHostComponent(element) && element[$Host]) {
-      this.adapter.removeElement(element[$Host]);
-    }
-    // broadcast to children
-    if (!element[$Children]) return;
-    element[$Children].forEach((child) =>
-      this.scheduler.perform(() => this.unmount(child), { deferrable: true }),
-    );
+    this._unmount(element, false);
   }
 
   /**
