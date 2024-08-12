@@ -3,6 +3,7 @@ import { DOMAdapter } from "./DOMAdapter";
 
 export * from "./DOMAdapter";
 export * from "./DOMComponent";
+export * from "./DOMStyle";
 
 export * from "./components/HTML.generated";
 export * from "./components/SVG.generated";
