@@ -26,7 +26,7 @@ export class Demo extends Component {
           }),
         }),
         new Button({
-          style: {},
+          style: { color: 'red' },
           children: new TextContent(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
         }),

@@ -3,7 +3,6 @@ import { isNull, isObject, toSplitCase } from "ntils";
 
 // types ----------------------------------------------------------------------
 
-export * from "csstype";
 export type BasicStyle = Properties<string | 0, string | 0>;
 
 export type NestedStyleK = `${string}&${string}`;
