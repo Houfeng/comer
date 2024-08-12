@@ -1,4 +1,4 @@
-import { Properties } from "csstype";
+import { type Properties } from "csstype";
 import { isNull, isObject, toSplitCase } from "ntils";
 
 // types ----------------------------------------------------------------------
