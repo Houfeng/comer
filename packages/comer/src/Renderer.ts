@@ -110,7 +110,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       .flat(1);
   }
 
-  //TODO: Temporarily public
+  /**
+   * Find the top-level Host elements in the component subtree
+   */
   findHostElements(element: Component): HostElement[] {
     if (!this.isComponent(element)) return [];
     return this.findHostComponents(element)
