@@ -40,16 +40,16 @@ export abstract class Component<
   TRef extends object = {},
 > {
   /** @internal */
-  [$Props]: ComponentProps<TProps, TRef>;
+  protected [$Props]: ComponentProps<TProps, TRef>;
 
   /** @internal */
-  [$Children]?: Component[];
+  protected [$Children]?: Component[];
 
   /** @internal */
-  [$Parent]?: Component;
+  protected [$Parent]?: Component;
 
   /** @internal */
-  [$Reactiver]?: ReactiveFunction;
+  protected [$Reactiver]?: ReactiveFunction;
 
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;
@@ -87,7 +87,7 @@ export abstract class Component<
    * @virtual
    * @method
    */
-  build(): Component {
+  protected build(): Component {
     throw new Error("Unimplemented build method");
   }
 
@@ -97,7 +97,7 @@ export abstract class Component<
    * @callback
    * @method
    */
-  onCreated?: () => void;
+  protected onCreated?: () => void;
 
   /**
    * Component lifecycle hook method
@@ -105,7 +105,7 @@ export abstract class Component<
    * @callback
    * @method
    */
-  onUpdated?: () => void;
+  protected onUpdated?: () => void;
 
   /**
    * Component lifecycle hook method
@@ -113,7 +113,7 @@ export abstract class Component<
    * @callback
    * @method
    */
-  onDestroy?: () => void;
+  protected onDestroy?: () => void;
 }
 
 /**

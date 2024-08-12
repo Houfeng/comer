@@ -73,7 +73,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Create a reactiver
     const trigger = () => this.requestUpdate(element);
     element[$Reactiver] = createReactiver(
-      () => element.build(),
+      () => element["build"](),
       () => {
         const deferrable = this.canDefer(element);
         this.scheduler.perform(trigger, { deferrable });
@@ -164,7 +164,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     // ---------------------------------------
     this.bindRef(element);
-    element.onCreated?.();
+    element["onCreated"]?.();
   }
 
   private bindRef(element: Component): void {
@@ -290,7 +290,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
     }
     element[$Children] = items;
-    element.onUpdated?.();
+    element["onUpdated"]?.();
   }
 
   private root?: Parameters<T["bindRoot"]>[0];
@@ -327,7 +327,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   unmount(element: Component): void {
     if (!element) return;
     element[$Reactiver]?.unsubscribe();
-    element.onDestroy?.();
+    element["onDestroy"]?.();
     if (this.isHostComponent(element) && element[$Host]) {
       this.adapter.removeElement(element[$Host]);
     }
