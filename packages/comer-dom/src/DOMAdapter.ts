@@ -5,7 +5,7 @@ import {
   HostLogger,
   HostProps,
 } from "comer";
-import { DOMHostElement } from "./DOMComponent";
+import { DOMElement, DOMHostElement } from "./DOMComponent";
 import { isString } from "ntils";
 import { BasicStyle, toInlineStyle } from "./DOMStyle";
 
@@ -31,12 +31,12 @@ const NSMap: Record<string, string> = {
   MathML: "http://www.w3.org/1998/Math/MathML",
 };
 
-export class DOMAdapter implements HostAdapter<DOMHostElement> {
+export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   get logger(): HostLogger {
     return console;
   }
 
-  bindRoot(root: DOMHostElement): void {
+  bindRoot(root: DOMElement): void {
     if (!this.isHostElement(root)) return;
     if (root instanceof Text) throw new Error("Invalid host root");
     if (root.children.length > 0) throw new Error("Root is not empty");
