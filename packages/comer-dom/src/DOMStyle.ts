@@ -1,12 +1,13 @@
 import { Properties } from "csstype";
-import { isNull, isObject } from "ntils";
+import { isNull, isObject, toSplitCase } from "ntils";
 
 // types ----------------------------------------------------------------------
 
-export type BasicStyle = Properties;
+export * from "csstype";
+export type BasicStyle = Properties<string | 0, string | 0>;
 
-type NestedStyleK = `${string}&${string}`;
-type NestedStyleV = Record<NestedStyleK, BasicStyle> & BasicStyle;
+export type NestedStyleK = `${string}&${string}`;
+export type NestedStyleV = Record<NestedStyleK, BasicStyle> & BasicStyle;
 
 export type NestedStyle = Record<NestedStyleK, NestedStyleV> & NestedStyleV;
 
@@ -61,13 +62,18 @@ function createStyleRules(
   return rules;
 }
 
+/**
+ *
+ * @param style
+ * @returns
+ */
 export function StyleSheet(style: NestedStyle) {
   const className = Owner.id++;
   createStyleRules(`.c${className}`, style);
   return className;
 }
 
-// keyframe--------------------------------------------------------------------
+// keyframe -------------------------------------------------------------------
 
 function createKeyframesRule(name: string, style: KeyframeStyle) {
   const rule = createRule<CSSKeyframesRule>(`@keyframes ${name} {}`);
@@ -84,8 +90,23 @@ function createKeyframesRule(name: string, style: KeyframeStyle) {
   return rule;
 }
 
+/**
+ *
+ * @param style
+ * @returns
+ */
 export function KeyFrame(style: KeyframeStyle) {
   const name = Owner.id++;
   createKeyframesRule(`_k${name}`, style);
   return name;
+}
+
+// inline style ---------------------------------------------------------------
+
+export function toInlineStyle(style: BasicStyle) {
+  return Object.entries(style)
+    .map(([key, value]: [string, string]) => {
+      return `${toSplitCase(key)}: ${value}`;
+    })
+    .join(";");
 }

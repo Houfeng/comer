@@ -7,6 +7,7 @@ import {
 } from "comer";
 import { DOMHostElement } from "./DOMComponent";
 import { isString } from "ntils";
+import { BasicStyle, toInlineStyle } from "./DOMStyle";
 
 const requestIdleCallback =
   window.requestIdleCallback ||
@@ -95,8 +96,13 @@ export class DOMAdapter implements HostAdapter<DOMHostElement> {
       if (/^(x|data)-/.test(name)) {
         // custom attributes
         target.setAttribute(name, value);
+      } else if (name === "style") {
+        // style
+        target[name] = isString(value)
+          ? value
+          : toInlineStyle(value as BasicStyle);
       } else {
-        // props
+        // other props
         target[name] = value;
       }
     });

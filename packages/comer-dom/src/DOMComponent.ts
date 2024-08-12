@@ -5,6 +5,7 @@ import {
   HostComponent,
   PickAsProps,
 } from "comer";
+import { BasicStyle } from "./DOMStyle";
 
 // Host elements --------------------------------------------------------------
 
@@ -26,7 +27,7 @@ export type ElementProps<
     ConvertToEvents<TEvents, { target: TElement }> &
     ARIAMixin &
     DOMCustomAttributes & {
-      style: string;
+      style: BasicStyle | string;
       children: Component | Component[];
     }
 >;
