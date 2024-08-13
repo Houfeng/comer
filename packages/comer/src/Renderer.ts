@@ -133,7 +133,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
-  private findPrevHostElement(element?: Component): HostElement | undefined {
+  findPrevHostElement(element?: Component): HostElement | undefined {
     const hostComponent = this.findPrevHostComponent(element);
     if (!hostComponent) return;
     const hostElement = hostComponent[$Host];
@@ -162,7 +162,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement && element[$Host]) {
-        const prevHostElement = this.findPrevHostElement(element);
+        const prevHostElement = void 0; //this.findPrevHostElement(element);
         this.adapter.insertElement(
           parentHostElement,
           element[$Host],

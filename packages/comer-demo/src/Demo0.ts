@@ -1,6 +1,8 @@
 import { Component, observable, delegate, Deferrable } from "comer";
 import { Button, Div, Input, TextContent } from "comer-dom";
 
+console.log(Deferrable);
+
 @delegate
 export class Demo extends Component {
   private state = observable({ value: 0 });

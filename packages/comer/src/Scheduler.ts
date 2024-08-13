@@ -33,7 +33,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private runDeferTasks = (deadline: HostIdleDeadline) => {
     if (this.immedRunning) return;
     for (const task of this.deferTasks) {
-      if (deadline.timeRemaining() < 1) break;
+      if (deadline.timeRemaining() < 10) break;
       if (task) task();
       this.deferTasks.delete(task);
     }
