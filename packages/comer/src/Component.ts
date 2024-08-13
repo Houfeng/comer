@@ -6,8 +6,10 @@ import {
   $Children,
   $Parent,
   $Identify,
-  $Reactiver,
+  $Reactive,
+  $Prev,
   $Update,
+  $Mount,
 } from "./Symbols";
 import { type ProviderType } from "./Provider";
 
@@ -56,10 +58,16 @@ export abstract class Component<
   protected [$Parent]?: Component;
 
   /** @internal */
-  protected [$Reactiver]?: ReactiveFunction;
+  protected [$Prev]?: Component;
+
+  /** @internal */
+  protected [$Reactive]?: ReactiveFunction;
 
   /** @internal */
   protected [$Update]?: () => void;
+
+  /** @internal */
+  protected [$Mount]?: () => void;
 
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;

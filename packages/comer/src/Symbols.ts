@@ -1,9 +1,11 @@
 export const $Props = Symbol("Props");
 export const $Children = Symbol("Children");
 export const $Parent = Symbol("Parent");
-export const $Reactiver = Symbol("Reactiver");
+export const $Prev = Symbol("Prev");
+export const $Reactive = Symbol("Reactive");
 export const $FlushId = Symbol("FlushId");
 export const $Identify = Symbol("Identify");
 export const $Value = Symbol("Value");
 export const $Host = Symbol("Host");
 export const $Update = Symbol("Update");
+export const $Mount = Symbol("Mount");

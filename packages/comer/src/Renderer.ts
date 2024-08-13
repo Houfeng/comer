@@ -8,10 +8,12 @@ import {
   $FlushId,
   $Parent,
   $Props,
-  $Reactiver,
+  $Reactive,
   $Value,
   $Host,
+  $Prev,
   $Update,
+  $Mount,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferrable } from "./Deferrable";
@@ -72,18 +74,21 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private bindReactiver(element: Component) {
-    if (element[$Reactiver]) return;
+    if (element[$Reactive]) return;
     // Make the props of the instance observable
     element[$Props] = observable(element[$Props]);
-    // Create a reactiver
-    const requestUpdate = () => this.requestUpdate(element);
-    element[$Update] = () => {
+    // Bind a schedule task
+    element[$Update] = () => this.buildElement(element);
+    // Request rebuild function
+    const requestBuild = () => {
+      if (!element[$Update]) return;
       const deferrable = this.canDefer(element);
-      this.scheduler.perform(requestUpdate, { deferrable });
+      this.scheduler.perform(element[$Update], { deferrable });
     };
-    element[$Reactiver] = createReactiver(
+    // Create a reactiver
+    element[$Reactive] = createReactiver(
       () => element["build"](),
-      element[$Update],
+      requestBuild,
     );
   }
 
@@ -125,12 +130,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return String("type" in ctor ? ctor.type : void 0);
   }
 
-  private createAndBindElement(
-    element: Component,
-    parent: Component | undefined,
-  ): void {
+  private mountElement(element: Component): void {
     if (!this.isComponent(element)) return;
-    element[$Parent] = parent;
     // handle host instance
     if (this.isHostComponent(element)) {
       const hostType = this.isHostComponent(element)
@@ -161,7 +162,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     // ---------------------------------------
     this.bindRef(element);
-    this.bindReactiver(element);
     element["onCreated"]?.();
   }
 
@@ -268,10 +268,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   /**
    * Execute its own build method and return child elements
    */
-  private buildElement(element: Component): Component[] {
+  private executeElement(element: Component): Component[] {
     try {
+      // When executed for the first time, bind Reactiver
+      this.bindReactiver(element);
       // execute the build wrapper
-      const result = element[$Reactiver]?.();
+      const result = element[$Reactive]?.();
       if (!result) return [];
       // normalize the children
       const children = this.isFragment(element) ? element[$Children] : [result];
@@ -282,42 +284,53 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
+  private requestMount(element: Component) {
+    element[$Mount] = () => this.mountElement(element);
+    const deferrable = this.canDefer(element);
+    this.scheduler.perform(element[$Mount], { deferrable });
+  }
+
   /**
-   * Call buildElement to retrieve child elements
+   * Call executeElement to retrieve child elements
    * and perform 'update or replace or append or delete'
    */
-  private requestUpdate(element: Component): void {
+  private buildElement(element: Component): void {
     if (!this.isComponent(element)) return;
     const oldChildren = element[$Children] || [];
-    const newChildren = this.buildElement(element) || [];
-    const items: Component[] = [];
+    const newChildren = this.executeElement(element) || [];
+    const effectiveItems: Component[] = [];
+    const linkEffectiveItem = (item: Component) => {
+      item[$Parent] = element;
+      item[$Prev] = effectiveItems[effectiveItems.length - 1];
+      effectiveItems.push(item);
+    };
     const length = Math.max(oldChildren.length, newChildren.length);
     for (let i = 0; i < length; i++) {
       const oldChild = oldChildren[i];
       const newChild = newChildren[i];
       if (this.canUpdate(oldChild, newChild)) {
         // update
+        linkEffectiveItem(oldChild);
         this.applyLatestProps(oldChild, newChild);
-        items.push(oldChild);
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // append or insert
-        this.createAndBindElement(newChild, element);
-        newChild[$Update]?.();
-        items.push(newChild);
+        linkEffectiveItem(newChild);
+        this.buildElement(newChild);
+        this.requestMount(newChild);
       } else if (oldChild && newChild) {
         // replace
-        this.createAndBindElement(newChild, element);
-        newChild[$Update]?.();
         this.unmount(oldChild);
-        items.push(newChild);
+        linkEffectiveItem(newChild);
+        this.buildElement(newChild);
+        this.requestMount(newChild);
       } else {
         throw new Error("Request update error");
       }
     }
-    element[$Children] = items;
+    element[$Children] = effectiveItems;
     element["onUpdated"]?.();
   }
 
@@ -338,8 +351,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.createAndBindElement(element, void 0);
-    element[$Update]?.();
+    this.buildElement(element);
+    this.requestMount(element);
     // const hostElements = this.findHostElements(element);
     // if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
     //   throw new Error("Invalid host element");
@@ -348,10 +361,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return element;
   }
 
-  private _unmount(element: Component, inDeletedSubtree: boolean): void {
+  private unmountElement(element: Component, inDeletedSubtree: boolean): void {
     if (!element) return;
-    element[$Reactiver]?.unsubscribe();
     if (element[$Update]) this.scheduler.cancel(element[$Update]);
+    if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
+    element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
     if (this.isHostComponent(element) && element[$Host]) {
       this.adapter.removeElement(element[$Host]);
@@ -360,9 +374,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // broadcast to children
     if (!element[$Children]) return;
     element[$Children].forEach((child) =>
-      this.scheduler.perform(() => this._unmount(child, inDeletedSubtree), {
-        deferrable: true,
-      }),
+      this.scheduler.perform(
+        () => this.unmountElement(child, inDeletedSubtree),
+        { deferrable: true },
+      ),
     );
   }
 
@@ -372,7 +387,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * @returns
    */
   unmount(element: Component): void {
-    this._unmount(element, false);
+    this.unmountElement(element, false);
   }
 
   /**
