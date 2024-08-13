@@ -66,9 +66,9 @@ function createStyleRules(
  * @param style
  * @returns
  */
-export function StyleSheet(style: NestedStyle) {
-  const className = Owner.id++;
-  createStyleRules(`.c${className}`, style);
+export function StyleSheet(style: NestedStyle): string {
+  const className = `c${Owner.id++}`;
+  createStyleRules(`.${className}`, style);
   return className;
 }
 
@@ -94,15 +94,15 @@ function createKeyframesRule(name: string, style: KeyframeStyle) {
  * @param style
  * @returns
  */
-export function KeyFrame(style: KeyframeStyle) {
-  const name = Owner.id++;
-  createKeyframesRule(`_k${name}`, style);
+export function KeyFrame(style: KeyframeStyle): string {
+  const name = `_k${Owner.id++}`;
+  createKeyframesRule(name, style);
   return name;
 }
 
 // inline style ---------------------------------------------------------------
 
-export function toInlineStyle(style: BasicStyle) {
+export function toInlineStyle(style: BasicStyle): string {
   return Object.entries(style)
     .map(([key, value]: [string, string]) => {
       return `${toSplitCase(key)}: ${value}`;
