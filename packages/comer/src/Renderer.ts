@@ -290,7 +290,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   private buildElement(element: Component, mount: boolean): void {
     if (!this.isComponent(element)) return;
+    // Besides secondary updates, mounting is usually required
     if (mount) this.requestMount(element);
+    // handle children
     const oldChildren = element[$Children] || [];
     const newChildren = this.executeElement(element) || [];
     const effectiveItems: Component[] = [];
