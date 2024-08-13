@@ -106,26 +106,39 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!hostComponent) return this.root;
     const hostElement = hostComponent[$Host];
     if (hostElement) return hostElement;
-    this.adapter.logger.error("++++++", hostComponent);
-    throw new Error("Invalid parent host element");
+    throw new Error("The nearest parent host element has not been created");
   }
 
-  private findHostComponents(element?: Component): HostComponent[] {
-    if (!element || !element[$Children]) return [];
-    if (this.isHostComponent(element)) return [element];
-    return element[$Children]
-      .map((child) => this.findHostComponents(child))
-      .flat(1);
+  private findLastLeaf(element?: Component): Component | undefined {
+    let lastLeaf = element;
+    while (lastLeaf) {
+      const children = lastLeaf[$Children] || [];
+      const lasChild = children[children.length - 1];
+      if (!lasChild) return lastLeaf;
+      lastLeaf = lasChild;
+    }
+    return lastLeaf;
   }
 
-  /**
-   * Find the top-level Host elements in the component subtree
-   */
-  findHostElements(element: Component): HostElement[] {
-    if (!this.isComponent(element)) return [];
-    return this.findHostComponents(element)
-      .map((it) => it[$Host])
-      .filter((it) => !!it);
+  private findPrevHostComponent(element?: Component): HostComponent | void {
+    if (!element) return;
+    let prev =
+      this.findLastLeaf(element[$Prev]) ||
+      this.findLastLeaf(element[$Parent]?.[$Prev]);
+    while (prev) {
+      if (this.isHostComponent(prev)) return prev;
+      prev =
+        this.findLastLeaf(prev[$Prev]) ||
+        this.findLastLeaf(prev[$Parent]?.[$Prev]);
+    }
+  }
+
+  private findPrevHostElement(element?: Component): HostElement | undefined {
+    const hostComponent = this.findPrevHostComponent(element);
+    if (!hostComponent) return;
+    const hostElement = hostComponent[$Host];
+    if (hostElement) return hostElement;
+    throw new Error("The nearest prev host element has not been created");
   }
 
   private getHostElementType(element: Component): string {
@@ -149,9 +162,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement && element[$Host]) {
-        this.adapter.insertElement(parentHostElement, element[$Host]);
+        const prevHostElement = this.findPrevHostElement(element);
+        this.adapter.insertElement(
+          parentHostElement,
+          element[$Host],
+          prevHostElement,
+        );
       } else {
-        this.adapter.logger.error("Invalid host component");
+        throw new Error("Invalid host component");
       }
     }
     // Bind ref & trigger `onCreated` hook
@@ -279,6 +297,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private requestMount(element: Component) {
+    if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
     element[$Mount] = () => this.mountElement(element);
     const deferrable = this.canDefer(element);
     this.scheduler.perform(element[$Mount], { deferrable });
@@ -298,13 +317,16 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const effectiveItems: Component[] = [];
     const linkEffectiveItem = (item: Component) => {
       item[$Parent] = element;
-      item[$Prev] = effectiveItems[effectiveItems.length - 1];
+      const prevIndex = effectiveItems.length - 1;
+      item[$Prev] = effectiveItems[prevIndex];
+      // this.adapter.logger.info("item[$Prev]", { item, prevItem: item[$Prev] });
       effectiveItems.push(item);
     };
     const length = Math.max(oldChildren.length, newChildren.length);
     for (let i = 0; i < length; i++) {
       const oldChild = oldChildren[i];
       const newChild = newChildren[i];
+      // TODO: Optimize KEY based reuse
       if (this.canUpdate(oldChild, newChild)) {
         // update
         linkEffectiveItem(oldChild);
@@ -362,12 +384,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     // broadcast to children
     if (!element[$Children]) return;
-    element[$Children].forEach((child) =>
-      this.scheduler.perform(
-        () => this.unmountElement(child, inDeletedSubtree),
-        { deferrable: true },
-      ),
-    );
+    element[$Children].forEach((child) => {
+      if (inDeletedSubtree) return this.unmountElement(child, true);
+      this.scheduler.perform(() => this.unmountElement(child, false), {
+        deferrable: true,
+      });
+    });
   }
 
   /**

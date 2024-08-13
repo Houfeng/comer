@@ -11,7 +11,6 @@ export class Demo extends Component {
     const { value } = this.state;
     return new Div({
       children: [
-        new TextContent(`~${value}`),
         new Input({
           value: String(value),
           onInput: (event) => {
@@ -25,9 +24,6 @@ export class Demo extends Component {
           style: { color: "red" },
           children: new TextContent(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
-        }),
-        new Button({
-          children: new TextContent("xxx"),
         }),
       ],
     });
