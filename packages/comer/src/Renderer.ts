@@ -78,7 +78,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Make the props of the instance observable
     element[$Props] = observable(element[$Props]);
     // Bind a schedule task
-    element[$Update] = () => this.buildElement(element);
+    element[$Update] = () => this.buildElement(element, false);
     // Request rebuild function
     const requestBuild = () => {
       if (!element[$Update]) return;
@@ -106,6 +106,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!hostComponent) return this.root;
     const hostElement = hostComponent[$Host];
     if (hostElement) return hostElement;
+    this.adapter.logger.error("++++++", hostComponent);
     throw new Error("Invalid parent host element");
   }
 
@@ -287,8 +288,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Call executeElement to retrieve child elements
    * and perform 'update or replace or append or delete'
    */
-  private buildElement(element: Component): void {
+  private buildElement(element: Component, mount: boolean): void {
     if (!this.isComponent(element)) return;
+    if (mount) this.requestMount(element);
     const oldChildren = element[$Children] || [];
     const newChildren = this.executeElement(element) || [];
     const effectiveItems: Component[] = [];
@@ -311,14 +313,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       } else if (!oldChild && newChild) {
         // insert
         linkEffectiveItem(newChild);
-        this.buildElement(newChild);
-        this.requestMount(newChild);
+        this.buildElement(newChild, true);
       } else if (oldChild && newChild) {
         // replace
         this.unmount(oldChild);
         linkEffectiveItem(newChild);
-        this.buildElement(newChild);
-        this.requestMount(newChild);
+        this.buildElement(newChild, true);
       } else {
         throw new Error("Build element error");
       }
@@ -344,8 +344,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.buildElement(element);
-    this.requestMount(element);
+    this.buildElement(element, true);
     return element;
   }
 
