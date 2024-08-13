@@ -7,7 +7,7 @@ export class Demo extends Component {
     this.state.value1 = 1;
     this.state.value2 = 2;
   };
-  protected build() {
+  build() {
     const { value1, value2 } = this.state;
     return new Div({
       children: [

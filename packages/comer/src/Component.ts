@@ -11,7 +11,6 @@ import {
   $Update,
   $Mount,
 } from "./Symbols";
-import { type ProviderType } from "./Provider";
 
 /**
  * ComponentProps type utils
@@ -92,7 +91,7 @@ export abstract class Component<
    * @returns context value (readonly)
    * @method
    */
-  protected use<T extends ProviderType<any>>(
+  protected use<T extends ProviderLike<any>>(
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
     return useContext(this, providerClass);
@@ -105,7 +104,7 @@ export abstract class Component<
    * @virtual
    * @method
    */
-  protected build(): Component {
+  build(): Component {
     throw new Error("Unimplemented build method");
   }
 
@@ -134,10 +133,17 @@ export abstract class Component<
   protected onDestroy?: () => void;
 }
 
+export interface ProviderLike<TValue = any> {
+  readonly [$Identify]: "Provider";
+  new (...args: any): {
+    readonly value: TValue;
+  };
+}
+
 /**
  * @internal
  */
-export function useContext<TProvider extends ProviderType<any>>(
+export function useContext<TProvider extends ProviderLike>(
   component: Component,
   providerClass: TProvider,
 ): Readonly<InstanceType<TProvider>["value"]> | void {

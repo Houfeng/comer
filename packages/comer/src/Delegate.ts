@@ -10,7 +10,7 @@ export class Delegate extends Component<any> {
     super(props);
   }
   private target?: InstanceType<ComponentType<any, any>>;
-  protected build(): Component {
+  build(): Component {
     if (!this.target) {
       if (this.Target instanceof Delegate) {
         throw new Error("Delegate cannot point to other Delegates");

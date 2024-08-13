@@ -3,7 +3,7 @@ import { Button, Div, TextContent } from "comer-dom";
 
 @delegate
 export class Display extends Component<{ value: number }> {
-  protected build(): Component {
+  build(): Component {
     const { value } = this.props;
     return new TextContent(String(value > 1 ? 1 : value));
   }
@@ -15,7 +15,7 @@ export class Demo extends Component {
   private onButtonClick = () => {
     this.state.value++;
   };
-  protected build() {
+  build() {
     return new Div({
       children: [
         new Button({

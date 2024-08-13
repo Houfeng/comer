@@ -4,7 +4,7 @@ import { Button, Div, Footer, Header, Main, TextContent } from "comer-dom";
 const ThemeProvider = createProvider<number>(1);
 
 class ThemeButton extends Component {
-  protected build(): Component {
+  build(): Component {
     const th = this.use(ThemeProvider);
     return new Button({
       children: new TextContent(String(th)),
@@ -19,7 +19,7 @@ export class Demo extends Component {
     this.state.value++;
     console.log("click", this.ref.current);
   };
-  protected build() {
+  build() {
     return new Div({
       children: new ThemeProvider({
         children: [
