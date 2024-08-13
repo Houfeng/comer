@@ -1,7 +1,7 @@
-import { Component, observable, delegate, Deferrable } from "comer";
+import { Component, observable, delegate, Deferrable, Fragment } from "comer";
 import { Button, Div, Input, TextContent } from "comer-dom";
 
-console.log(Deferrable);
+console.log(Deferrable, Fragment);
 
 @delegate
 export class Demo extends Component {
@@ -19,7 +19,7 @@ export class Demo extends Component {
             this.state.value = Number(event.target.value);
           },
         }),
-        new Deferrable(
+        new Fragment(
           new Array(value).fill("1").map((_, i) => new TextContent(` ${i} `)),
         ),
         new Button({
