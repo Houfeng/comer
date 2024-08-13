@@ -18,7 +18,7 @@ export class Demo extends Component {
           },
         }),
         new Deferrable(
-          new Array(value).fill("1").map(() => new TextContent(` ${value} `)),
+          new Array(value).fill("1").map((_, i) => new TextContent(` ${i} `)),
         ),
         new Button({
           style: { color: "red" },
