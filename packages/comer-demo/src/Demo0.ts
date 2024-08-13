@@ -28,6 +28,9 @@ export class Demo extends Component {
           children: new TextContent(`Click: ${this.state.value}`),
           onClick: this.onButtonClick,
         }),
+        new Button({
+          children: new TextContent("xxx"),
+        }),
       ],
     });
   }

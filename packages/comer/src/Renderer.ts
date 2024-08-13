@@ -104,7 +104,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private findParentHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findParentHostComponent(element);
     if (!hostComponent) return this.root;
-    return hostComponent[$Host] || this.root;
+    const hostElement = hostComponent[$Host];
+    if (hostElement) return hostElement;
+    throw new Error("Invalid parent host element");
   }
 
   private findHostComponents(element?: Component): HostComponent[] {
@@ -142,15 +144,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Apply for the first time,
     // First apply before binding, so no response is triggered
     this.applyLatestProps(element);
-    //----------------------------------------------------------------------
-    // handler children before append document
-    // if (deep) {
-    //   element[$Children] = this.buildElement(element);
-    //   element[$Children].forEach((child) =>
-    //     this.createAndApplyProps(child, element, deep),
-    //   );
-    // }
-    //----------------------------------------------------------------------
     // append to parent host element
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
@@ -160,7 +153,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.adapter.logger.error("Invalid host component");
       }
     }
-    // ---------------------------------------
+    // Bind ref & trigger `onCreated` hook
     this.bindRef(element);
     element["onCreated"]?.();
   }
@@ -316,7 +309,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         // remove
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
-        // append or insert
+        // insert
         linkEffectiveItem(newChild);
         this.buildElement(newChild);
         this.requestMount(newChild);
@@ -327,7 +320,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.buildElement(newChild);
         this.requestMount(newChild);
       } else {
-        throw new Error("Request update error");
+        throw new Error("Build element error");
       }
     }
     element[$Children] = effectiveItems;
@@ -353,11 +346,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     this.adapter.bindRoot(root);
     this.buildElement(element);
     this.requestMount(element);
-    // const hostElements = this.findHostElements(element);
-    // if (hostElements.some((it) => !this.adapter.isHostElement(it))) {
-    //   throw new Error("Invalid host element");
-    // }
-    // hostElements.forEach((it) => this.adapter.insertElement(root, it));
     return element;
   }
 
