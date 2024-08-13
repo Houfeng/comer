@@ -37,7 +37,6 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
       if (task) task();
       this.deferTasks.delete(task);
     }
-    if (this.immedTasks.size > 0) return this.requestRunImmedTasks();
     if (this.deferTasks.size > 0) this.requestRunDeferTasks();
   };
 

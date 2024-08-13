@@ -378,7 +378,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
     element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
-    if (this.isHostComponent(element) && element[$Host]) {
+    if (this.isHostComponent(element) && element[$Host] && !inDeletedSubtree) {
       this.adapter.removeElement(element[$Host]);
       inDeletedSubtree = true;
     }
