@@ -39,7 +39,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -113,38 +113,34 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     throw new Error("The nearest parent host element has not been created");
   }
 
-  private findLastLeaf(element?: Component): Component | undefined {
+  private findLastHostComponentRoot(element?: Component): Component | void {
     let current = element;
     while (current) {
-      const children = current[$Children] || [];
-      const lasChild = children[children.length - 1];
-      if (!lasChild) return current;
-      current = lasChild;
+      if (this.isHostComponent(current) && current[$Host]) return current;
+      if (!current[$Children]) return;
+      current = current[$Children][current[$Children].length - 1];
     }
-    return current;
   }
 
-  // TODO: Possible performance issues
   private findAnchorHostComponent(element?: Component): HostComponent | void {
-    if (!element) return;
-    // @Link: $Prev
-    // Search for '@Anchor: $Prev' in the current file
-    if (element[$Prev] === element[$Parent]) return element[$Prev];
-    // Find now
-    let prev = this.findLastLeaf(element[$Prev]);
-    while (prev) {
-      if (this.isHostComponent(prev)) return prev;
-      prev = this.findLastLeaf(prev[$Prev]);
+    let current = element;
+    while (current) {
+      if (!current[$Prev]) {
+        current = current[$Parent];
+        continue;
+      }
+      const anchor = this.findLastHostComponentRoot(current[$Prev]);
+      if (anchor) return anchor;
+      current = current[$Prev];
     }
   }
 
-  private findAnchorHostElement(element?: Component): HostElement | undefined {
+  private findAnchorHostElement(element?: Component): HostElement | void {
     const hostComponent = this.findAnchorHostComponent(element);
     if (!hostComponent) return;
     const hostElement = hostComponent[$Host];
     if (hostElement) return hostElement;
-    return void 0;
-    //throw new Error("The nearest prev host element has not been created");
+    // throw new Error("The nearest prev host element has not been created");
   }
 
   private getHostElementType(element: Component): string {
@@ -165,14 +161,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // First apply before binding, so no response is triggered
     this.applyLatestProps(element);
     // append to parent host element
-    if (this.isHostComponent(element) && element[$Host]) {
+    if (this.isHostComponent(element)) {
+      if (!element[$Host]) throw new Error("Invalid host element");
       const parent = this.findParentHostElement(element);
-      if (parent) {
-        const anchor = this.findAnchorHostElement(element);
-        this.adapter.insertElement(parent, element[$Host], anchor);
-      } else {
-        throw new Error("Invalid host component");
-      }
+      if (!parent) throw new Error("Parent host element not found");
+      const anchor = this.findAnchorHostElement(element);
+      this.adapter.insertElement(parent, element[$Host], anchor);
     }
     // Bind ref & trigger `onCreated` hook
     this.bindRef(element);
@@ -325,18 +319,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const effectiveItems: Component[] = [];
     const linkEffectiveItem = (item: Component) => {
       item[$Parent] = element;
-      const prevIndex = effectiveItems.length - 1;
-      // @Anchor: $Prev
-      //
-      // Case 1: If it is not firstChild,
-      //         then $Prev points to the previous node.
-      //
-      // Case 2: If it is firstChid and the parent is not HostComponent,
-      //         then $Prev points to the parent's Prev.
-      //
-      // Case 3: If it is firstChid and the parent is HostComponent,
-      //         then $Prev points to the parent.
-      item[$Prev] = effectiveItems[prevIndex] || element[$Prev];
+      item[$Prev] = effectiveItems[effectiveItems.length - 1];
       effectiveItems.push(item);
     };
     const length = Math.max(oldChildren.length, newChildren.length);
