@@ -39,7 +39,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -138,7 +138,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
-  findAnchorHostElement(element?: Component): HostElement | undefined {
+  private findAnchorHostElement(element?: Component): HostElement | undefined {
     const hostComponent = this.findAnchorHostComponent(element);
     if (!hostComponent) return;
     const hostElement = hostComponent[$Host];
