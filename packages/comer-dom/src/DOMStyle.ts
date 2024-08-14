@@ -10,7 +10,7 @@ export type NestedStyleV = Record<NestedStyleK, BasicStyle> & BasicStyle;
 
 export type NestedStyle = Record<NestedStyleK, NestedStyleV> & NestedStyleV;
 
-export type KeyframeStyle = Partial<
+export type KeyFrameStyle = Partial<
   Record<"from" | "to" | `${string}%`, BasicStyle>
 >;
 
@@ -62,19 +62,21 @@ function createStyleRules(
 }
 
 /**
- *
- * @param style
- * @returns
+ * Define a style that supports cascading nesting and return its name,
+ * which can be used for the className of the component
  */
-export function StyleSheet(style: NestedStyle): string {
+export const StyleClass = ((style) => {
   const className = `c${Owner.id++}`;
   createStyleRules(`.${className}`, style);
   return className;
-}
+}) as {
+  new (style: NestedStyle): string;
+  (Style: NestedStyle): string;
+};
 
 // keyframe -------------------------------------------------------------------
 
-function createKeyframesRule(name: string, style: KeyframeStyle) {
+function createKeyframesRule(name: string, style: KeyFrameStyle) {
   const rule = createRule<CSSKeyframesRule>(`@keyframes ${name} {}`);
   if (!rule) return;
   Object.entries(style).forEach(([frameName, frameStyle]) => {
@@ -90,18 +92,21 @@ function createKeyframesRule(name: string, style: KeyframeStyle) {
 }
 
 /**
- *
- * @param style
- * @returns
+ * Define a Keyframe style and return its name,
+ * which can be referenced in other style sheets
  */
-export function KeyFrame(style: KeyframeStyle): string {
+export const KeyFrame = ((style) => {
   const name = `_k${Owner.id++}`;
   createKeyframesRule(name, style);
   return name;
-}
+}) as {
+  new (style: KeyFrameStyle): string;
+  (Style: KeyFrameStyle): string;
+};
 
 // inline style ---------------------------------------------------------------
 
+/** @internal */
 export function toInlineStyle(style: BasicStyle): string {
   return Object.entries(style)
     .map(([key, value]: [string, string]) => {
