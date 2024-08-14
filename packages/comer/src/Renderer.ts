@@ -305,7 +305,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private requestMount(element: Component) {
     if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
-    element[$Mount] = () => this.mountElement(element);
+    element[$Mount] = () => {
+      this.mountElement(element);
+      element[$Mount] = void 0;
+    };
     const deferrable = this.canDefer(element);
     this.scheduler.perform(element[$Mount], { deferrable });
   }
