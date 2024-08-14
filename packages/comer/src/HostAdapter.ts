@@ -71,15 +71,15 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
   /**
    * Insert a host element
    *
-   * Case 1: if (isHostElement(anchor))
+   * Case 1: if ( isHostElement(anchor) && anchor !== parent )
    *         Insert into the parent node after Anchor.
    *
-   * Case 2: if (isString(anchor))
+   * Case 2: if ( isString(anchor) )
    *         Processed by adapter based on anchor value,
    *         usually processed according to fragment mapping configuration,
    *         currently no need to process.
    *
-   * Case 3: Other
+   * Case 3: Other...
    *         Insert into the parent as firstChild
    *
    * @param parent Parent element

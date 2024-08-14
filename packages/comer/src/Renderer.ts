@@ -127,6 +127,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     while (current) {
       if (!current[$Prev]) {
         current = current[$Parent];
+        if (this.isHostComponent(current)) return current;
         continue;
       }
       const anchor = this.findLastHostComponentRoot(current[$Prev]);

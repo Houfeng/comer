@@ -76,7 +76,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     if (parent instanceof Text) return;
     if (!this.isHostElement(parent)) return;
     if (!this.isHostElement(element)) return;
-    if (this.isHostElement(anchor)) {
+    if (this.isHostElement(anchor) && anchor !== parent) {
       // insert after anchor
       anchor.after(element);
     } else if (isString(anchor)) {
