@@ -73,12 +73,13 @@ export function styled<T extends StyledAble>(target: T, style: NestedStyle) {
   const styledClassName = StyleClass(style);
   class Wrapper extends Super {
     constructor(props: ConstructorParameters<T>[0]) {
+      const { className: originClassName, ...others } = props || {};
+      const className = [styledClassName, originClassName].join(" ").trim();
+      const composedProps = { ...others, className };
       if (!new.target || new.target === Wrapper) {
-        const { className: originClassName, ...others } = props || {};
-        const className = [styledClassName, originClassName].join(" ").trim();
-        return new Super({ ...others, className });
+        return new Super(composedProps);
       }
-      super(props);
+      super(composedProps);
     }
   }
   Object.defineProperty(Wrapper, "name", { value: target.name });
