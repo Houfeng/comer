@@ -1,10 +1,14 @@
 import { Component, Deferrable, delegate, observable } from "comer";
 import { Button, Div, styled } from "comer-dom";
 
-const StyledButton = styled(Button, {
+const StyledButton1 = styled(Button, {
   padding: "8px 16px",
   color: "#333",
   margin: "4px",
+});
+
+const StyledButton = styled(StyledButton1, {
+  color: "red",
 });
 
 @delegate
