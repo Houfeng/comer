@@ -124,7 +124,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return current;
   }
 
-  private findPrevHostComponent(element?: Component): HostComponent | void {
+  // TODO: Possible performance issues
+  private findAnchorHostComponent(element?: Component): HostComponent | void {
     if (!element) return;
     // @Link: $Prev
     // Search for '@Anchor: $Prev' in the current file
@@ -137,8 +138,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
-  findPrevHostElement(element?: Component): HostElement | undefined {
-    const hostComponent = this.findPrevHostComponent(element);
+  findAnchorHostElement(element?: Component): HostElement | undefined {
+    const hostComponent = this.findAnchorHostComponent(element);
     if (!hostComponent) return;
     const hostElement = hostComponent[$Host];
     if (hostElement) return hostElement;
@@ -164,15 +165,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // First apply before binding, so no response is triggered
     this.applyLatestProps(element);
     // append to parent host element
-    if (this.isHostComponent(element)) {
-      const parentHostElement = this.findParentHostElement(element);
-      if (parentHostElement && element[$Host]) {
-        const prevHostElement = this.findPrevHostElement(element);
-        this.adapter.insertElement(
-          parentHostElement,
-          element[$Host],
-          prevHostElement,
-        );
+    if (this.isHostComponent(element) && element[$Host]) {
+      const parent = this.findParentHostElement(element);
+      if (parent) {
+        const anchor = this.findAnchorHostElement(element);
+        this.adapter.insertElement(parent, element[$Host], anchor);
       } else {
         throw new Error("Invalid host component");
       }
