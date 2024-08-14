@@ -81,7 +81,7 @@ export const StyleClass = ((style) => {
   createStyleRules(`.${className}`, style);
   return className;
 }) as {
-  new(style: NestedStyle): string;
+  new (style: NestedStyle): string;
   (Style: NestedStyle): string;
 };
 
@@ -111,6 +111,6 @@ export const KeyFrame = ((style) => {
   createKeyframesRule(name, style);
   return name;
 }) as {
-  new(style: KeyFrameStyle): string;
+  new (style: KeyFrameStyle): string;
   (Style: KeyFrameStyle): string;
 };

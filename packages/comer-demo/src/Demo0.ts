@@ -1,9 +1,9 @@
 import { Component, Deferrable, delegate, observable } from "comer";
-import { Button, Div, StyleClass } from "comer-dom";
+import { Button, Div, styled } from "comer-dom";
 
-const btnClass = new StyleClass({
+const StyledButton = styled(Button, {
   padding: "8px 16px",
-  color: "#FFFFFF",
+  color: "#333",
   margin: "4px",
 });
 
@@ -17,16 +17,12 @@ export class Demo extends Component {
     const { value } = this.state;
     return new Div({
       children: [
-        new Button({ className: btnClass, innerText: String(value) }),
+        new StyledButton({ innerText: String(value) }),
         new Deferrable([
-          new Button({ className: btnClass, innerText: "M1" }),
-          new Button({ className: btnClass, innerText: "M2" }),
+          new StyledButton({ innerText: "M1" }),
+          new StyledButton({ innerText: "M2" }),
         ]),
-        new Button({
-          className: btnClass,
-          innerText: "Click",
-          onClick: this.onBtnClick,
-        }),
+        new StyledButton({ innerText: "Click", onClick: this.onBtnClick }),
       ],
     });
   }

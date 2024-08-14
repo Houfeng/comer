@@ -32,7 +32,6 @@ export type ComponentParameters<TProps extends object, TRef extends object> =
 
 /**
  * Component class type
- * @internal
  */
 export type ComponentType<TProps extends object, TRef extends object> = {
   new (...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;

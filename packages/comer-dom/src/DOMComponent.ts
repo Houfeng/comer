@@ -4,8 +4,9 @@ import {
   Fragment,
   HostComponent,
   PickAsProps,
+  ComponentType,
 } from "comer";
-import { BasicStyle } from "./DOMStyle";
+import { BasicStyle, NestedStyle, StyleClass } from "./DOMStyle";
 
 // Host elements --------------------------------------------------------------
 
@@ -60,3 +61,26 @@ export class TextComponent extends HostComponent<TextProps, DOMText> {
  * @see https://developer.mozilla.org/docs/Web/API/Text
  */
 export const TextContent = TextComponent;
+
+// Styled HOC -----------------------------------------------------------------
+
+export interface StyledAble<T extends Component = Component> {
+  new (props: { className: string }): T;
+}
+
+export function styled<T extends StyledAble>(target: T, style: NestedStyle) {
+  const Super = target as ComponentType<any, any>;
+  const styledClassName = StyleClass(style);
+  class Wrapper extends Super {
+    constructor(props: ConstructorParameters<T>[0]) {
+      if (!new.target || new.target === Wrapper) {
+        const { className: originClassName, ...others } = props || {};
+        const className = [styledClassName, originClassName].join(" ").trim();
+        return new Super({ ...others, className });
+      }
+      super(props);
+    }
+  }
+  Object.defineProperty(Wrapper, "name", { value: target.name });
+  return Wrapper as T;
+}
