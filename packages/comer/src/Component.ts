@@ -59,7 +59,7 @@ export abstract class Component<
   protected [$Prev]?: Component;
 
   /** @internal */
-  protected [$Reactive]?: ReactiveFunction;
+  protected [$Reactive]?: ReactiveFunction<() => Component>;
 
   /** @internal */
   protected [$Update]?: () => void;

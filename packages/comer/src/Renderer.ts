@@ -55,6 +55,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!value && value instanceof Fragment;
   }
 
+  private isEmptyFragment(value: unknown): value is Fragment {
+    return this.isFragment(value) && value["props"]?.children?.length < 1;
+  }
+
   private isDelegate(value: unknown) {
     return !!value && value instanceof Delegate;
   }
@@ -110,14 +114,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private findLastLeaf(element?: Component): Component | undefined {
-    let lastLeaf = element;
-    while (lastLeaf) {
-      const children = lastLeaf[$Children] || [];
+    let current = element;
+    while (current) {
+      const children = current[$Children] || [];
       const lasChild = children[children.length - 1];
-      if (!lasChild) return lastLeaf;
-      lastLeaf = lasChild;
+      if (!lasChild) return current;
+      current = lasChild;
     }
-    return lastLeaf;
+    return current;
   }
 
   private findPrevHostComponent(element?: Component): HostComponent | void {
@@ -285,11 +289,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       // When executed for the first time, bind Reactiver
       this.bindReactiver(element);
       // execute the build wrapper
-      const result = element[$Reactive]?.();
-      if (!result) return [];
-      // normalize the children
-      const children = this.isFragment(element) ? element[$Children] : [result];
-      return (children || []).flat(1);
+      if (this.isFragment(element)) {
+        element[$Reactive]?.();
+        return element[$Children] || [];
+      } else {
+        const result = element[$Reactive]?.();
+        if (this.isEmptyFragment(result)) return [];
+        return result ? [result] : [];
+      }
     } catch (err) {
       this.adapter.logger.error(err);
       return [];
