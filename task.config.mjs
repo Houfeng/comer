@@ -19,10 +19,13 @@ export const test = task('测试', async () => {
   await $`c8 node --require ts-node/register --test tests/*.spec.ts`;
 });
 
-export const build = task('构建', [clean, lint], async () => {
+export const generate = task('生成部分代码', async () => {
+  await $`pnpm -F comer-dom generate`;
+});
+
+export const build = task('构建', [clean, generate, lint], async () => {
   await $`tsc -v`;
   await $`tsc -p ./packages/comer`;
-  await $`pnpm -F comer-dom generate`;
   await $`tsc -p ./packages/comer-dom`;
   await $`tsc -p ./packages/comer-demo`;
 });
