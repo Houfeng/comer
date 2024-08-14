@@ -14,7 +14,18 @@ export type KeyFrameStyle = Partial<
   Record<"from" | "to" | `${string}%`, BasicStyle>
 >;
 
-// common ---------------------------------------------------------------------
+// Utils based on string ------------------------------------------------------
+
+/** @internal */
+export function toInlineStyle(style: BasicStyle): string {
+  return Object.entries(style)
+    .map(([key, value]: [string, string]) => {
+      return `${toSplitCase(key)}: ${value}`;
+    })
+    .join(";");
+}
+
+// Utils based on DOM ---------------------------------------------------------
 
 const styleElement = document.createElement("style");
 document.head.append(styleElement);
@@ -70,7 +81,7 @@ export const StyleClass = ((style) => {
   createStyleRules(`.${className}`, style);
   return className;
 }) as {
-  new (style: NestedStyle): string;
+  new(style: NestedStyle): string;
   (Style: NestedStyle): string;
 };
 
@@ -100,17 +111,6 @@ export const KeyFrame = ((style) => {
   createKeyframesRule(name, style);
   return name;
 }) as {
-  new (style: KeyFrameStyle): string;
+  new(style: KeyFrameStyle): string;
   (Style: KeyFrameStyle): string;
 };
-
-// inline style ---------------------------------------------------------------
-
-/** @internal */
-export function toInlineStyle(style: BasicStyle): string {
-  return Object.entries(style)
-    .map(([key, value]: [string, string]) => {
-      return `${toSplitCase(key)}: ${value}`;
-    })
-    .join(";");
-}
