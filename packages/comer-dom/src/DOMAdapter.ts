@@ -65,9 +65,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
 
   removeElement(element: DOMHostElement): void {
     if (!this.isHostElement(element)) return;
-    if (element.remove) return element.remove();
-    if (!element.parentElement) return;
-    element.parentElement.removeChild(element);
+    element.remove();
   }
 
   insertElement(
@@ -75,16 +73,20 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     element: DOMHostElement,
     anchor: DOMHostElement | string,
   ): void {
+    if (parent instanceof Text) return;
     if (!this.isHostElement(parent)) return;
     if (!this.isHostElement(element)) return;
-    if (this.isHostElement(anchor) && anchor.nextSibling) {
-      // insert after
-      parent.insertBefore(anchor.nextSibling, element);
+    if (this.isHostElement(anchor) && anchor === parent) {
+      // Insert into Parent as firstChild
+      parent.prepend(element);
+    } else if (this.isHostElement(anchor)) {
+      // insert after anchor
+      anchor.after(element);
     } else if (isString(anchor)) {
       // At present, there is no need to handle it
     } else {
       // append
-      parent.appendChild(element);
+      parent.append(element);
     }
   }
 

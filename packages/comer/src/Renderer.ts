@@ -126,14 +126,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private findPrevHostComponent(element?: Component): HostComponent | void {
     if (!element) return;
-    let prev =
-      this.findLastLeaf(element[$Prev]) ||
-      this.findLastLeaf(element[$Parent]?.[$Prev]);
+    // @Link: $Prev
+    // Search for '@Anchor: $Prev' in the current file
+    if (element[$Prev] === element[$Parent]) return element[$Prev];
+    // Find now
+    let prev = this.findLastLeaf(element[$Prev]);
     while (prev) {
       if (this.isHostComponent(prev)) return prev;
-      prev =
-        this.findLastLeaf(prev[$Prev]) ||
-        this.findLastLeaf(prev[$Parent]?.[$Prev]);
+      prev = this.findLastLeaf(prev[$Prev]);
     }
   }
 
@@ -142,7 +142,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!hostComponent) return;
     const hostElement = hostComponent[$Host];
     if (hostElement) return hostElement;
-    throw new Error("The nearest prev host element has not been created");
+    return void 0;
+    //throw new Error("The nearest prev host element has not been created");
   }
 
   private getHostElementType(element: Component): string {
@@ -166,7 +167,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isHostComponent(element)) {
       const parentHostElement = this.findParentHostElement(element);
       if (parentHostElement && element[$Host]) {
-        const prevHostElement = void 0; //this.findPrevHostElement(element);
+        const prevHostElement = this.findPrevHostElement(element);
         this.adapter.insertElement(
           parentHostElement,
           element[$Host],
@@ -287,7 +288,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private executeElement(element: Component): Component[] {
     try {
       // When executed for the first time, bind Reactiver
-      this.bindReactiver(element);
+      if (!element[$Reactive]) this.bindReactiver(element);
       // execute the build wrapper
       if (this.isFragment(element)) {
         element[$Reactive]?.();
@@ -328,8 +329,17 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const linkEffectiveItem = (item: Component) => {
       item[$Parent] = element;
       const prevIndex = effectiveItems.length - 1;
-      item[$Prev] = effectiveItems[prevIndex];
-      // this.adapter.logger.info("item[$Prev]", { item, prevItem: item[$Prev] });
+      // @Anchor: $Prev
+      //
+      // Case 1: If it is not firstChild,
+      //         then $Prev points to the previous node.
+      //
+      // Case 2: If it is firstChid and the parent is not HostComponent,
+      //         then $Prev points to the parent's Prev.
+      //
+      // Case 3: If it is firstChid and the parent is HostComponent,
+      //         then $Prev points to the parent.
+      item[$Prev] = effectiveItems[prevIndex] || element[$Prev];
       effectiveItems.push(item);
     };
     const length = Math.max(oldChildren.length, newChildren.length);
