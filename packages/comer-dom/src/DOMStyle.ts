@@ -5,10 +5,14 @@ import { isNull, isObject, toSplitCase } from "ntils";
 
 export type BasicStyle = Properties<string | 0, string | 0>;
 
+export type StyleExtends = { $extends?: string | string[] };
+
 export type NestedStyleK = `${string}&${string}`;
 export type NestedStyleV = Record<NestedStyleK, BasicStyle> & BasicStyle;
 
-export type NestedStyle = Record<NestedStyleK, NestedStyleV> & NestedStyleV;
+export type NestedStyle = Record<NestedStyleK, NestedStyleV> &
+  NestedStyleV &
+  StyleExtends;
 
 export type KeyFrameStyle = Partial<
   Record<"from" | "to" | `${string}%`, BasicStyle>
@@ -77,9 +81,12 @@ function createStyleRules(
  * which can be used for the className of the component
  */
 export const StyleClass = ((style) => {
+  if (!style) return "";
+  const { $extends = "" } = style;
+  const normalizeEx = Array.isArray($extends) ? $extends.join(" ") : $extends;
   const className = `c${Owner.id++}`;
   createStyleRules(`.${className}`, style);
-  return className;
+  return `${normalizeEx} ${className}`.trim();
 }) as {
   new (style: NestedStyle): string;
   (Style: NestedStyle): string;

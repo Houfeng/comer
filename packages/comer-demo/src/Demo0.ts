@@ -1,13 +1,17 @@
 import { Component, Deferrable, delegate, observable } from "comer";
-import { Button, Div, styled } from "comer-dom";
+import { Button, Div, StyleClass, styled } from "comer-dom";
 
-const StyledButton1 = styled(Button, {
+const btnStyle = StyleClass({
   padding: "8px 16px",
+});
+
+const StyledButtonBase = styled(Button, {
+  $extends: btnStyle,
   color: "#333",
   margin: "4px",
 });
 
-const StyledButton = styled(StyledButton1, {
+const StyledButton = styled(StyledButtonBase, {
   color: "red",
 });
 
