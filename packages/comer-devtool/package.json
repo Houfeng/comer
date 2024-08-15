@@ -2,6 +2,9 @@
   "name": "comer-devtool",
   "version": "0.1.0",
   "description": "",
+  "scripts": {
+    "build": "rollup -c ./rollup.config.mjs"
+  },
   "author": {
     "name": "Houfeng",
     "email": "admin@xhou.net"

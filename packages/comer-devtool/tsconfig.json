@@ -8,6 +8,9 @@
       "ESNext",
       "DOM",
       "WebWorker",
+    ],
+    "types": [
+      "./node_modules/chrome-types/"
     ]
   },
   "include": [
