@@ -22,7 +22,7 @@ const SideView = styled(Div, {
 
 const BarWrapper = styled(Div, {
   backgroundColor: "#fafafa",
-  padding: "6px 8px",
+  padding: "8px 10px",
   borderBottom: "1px solid #e3e3e3",
   userSelect: "none",
 });
