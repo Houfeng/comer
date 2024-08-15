@@ -1,48 +1,42 @@
 import { Component, delegate } from "comer";
-import { Div, renderer, styled, TextContent } from "comer-dom";
-
-const Container = styled(Div, {
-  height: "100vh",
-  display: "grid",
-  gridTemplateRows: "1fr",
-  gridTemplateColumns: "1fr 25%",
-  "&, & *": {
-    boxSizing: "border-box",
-  },
-  fontSize: "13px",
-  color: "#555",
-});
-
-const MainView = styled(Div, {});
-
-const SideView = styled(Div, {
-  backgroundColor: "#fefefe",
-  borderLeft: "1px solid #e3e3e3",
-});
-
-const BarWrapper = styled(Div, {
-  backgroundColor: "#fafafa",
-  padding: "8px 10px",
-  borderBottom: "1px solid #e3e3e3",
-  userSelect: "none",
-});
+import { renderer } from "comer-dom";
+import { Container } from "./components/Container";
+import { MainView } from "./components/MainView";
+import { SideView } from "./components/SideView";
+import { SectionBar } from "./components/SectionBar";
+import { Icon } from "./components/Icon";
+import { SectionTitle } from "./components/SectionTitle";
+import { ElementModel } from "./models/ElementsModel";
 
 @delegate
 export class Demo extends Component {
+  model = new ElementModel();
+  toggleInspecting = () => this.model.toggleInspecting();
   build() {
+    const { inspecting } = this.model;
     return new Container({
       children: [
         new MainView({
           children: [
-            new BarWrapper({
-              children: new TextContent("Elements"),
+            new SectionBar({
+              children: [
+                new Icon({
+                  name: "pointer",
+                  checked: inspecting,
+                  onClick: this.toggleInspecting,
+                }),
+                new SectionTitle("Elements"),
+              ],
             }),
           ],
         }),
         new SideView({
           children: [
-            new BarWrapper({
-              children: new TextContent("Props"),
+            new SectionBar({
+              children: [
+                new Icon({ name: "props" }),
+                new SectionTitle("Props"),
+              ],
             }),
           ],
         }),

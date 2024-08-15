@@ -57,6 +57,7 @@ module.exports = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchFiles: ["src/**/*"],
     historyApiFallback: true,
+    static:'./'
   },
   plugins: [
     new webpack.DefinePlugin({

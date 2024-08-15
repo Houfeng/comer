@@ -38,6 +38,6 @@ export const dev = task('本地开发', [build], async () => {
   await $`pnpm -F comer-demo dev`;
 });
 
-export const dev_tool = task('DevTool', [], async () => {
+export const devtool = task('DevTool', [], async () => {
   await $`pnpm -F comer-devtool dev`;
 });

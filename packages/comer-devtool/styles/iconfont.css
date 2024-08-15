@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "comer"; /* Project id 4655143 */
+  src: url('iconfont.woff2?t=1723730542143') format('woff2'),
+       url('iconfont.woff?t=1723730542143') format('woff'),
+       url('iconfont.ttf?t=1723730542143') format('truetype');
+}
+
+.comer {
+  font-family: "comer" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.comer-props:before {
+  content: "\e727";
+}
+
+.comer-context:before {
+  content: "\e68f";
+}
+
+.comer-pointer:before {
+  content: "\ec32";
+}
+
