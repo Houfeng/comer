@@ -1,0 +1,16 @@
+{
+  "name": "comer-devtool",
+  "version": "0.1.0",
+  "description": "",
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "comer": "workspace:*",
+    "comer-dom": "workspace:*",
+    "chrome-types": "*",
+    "tslib": "*"
+  }
+}

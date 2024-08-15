@@ -147,6 +147,21 @@ importers:
         specifier: '*'
         version: 2.6.3
 
+  packages/comer-devtool:
+    devDependencies:
+      chrome-types:
+        specifier: '*'
+        version: 0.1.297
+      comer:
+        specifier: workspace:*
+        version: link:../comer
+      comer-dom:
+        specifier: workspace:*
+        version: link:../comer-dom
+      tslib:
+        specifier: '*'
+        version: 2.6.3
+
   packages/comer-dom:
     dependencies:
       comer:
@@ -1558,6 +1573,10 @@ packages:
   /chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
+    dev: true
+
+  /chrome-types@0.1.297:
+    resolution: {integrity: sha512-pVvyKx+JBZ5jh08bU6qL2IepJItfVOyGeMJtxfi9T5/LBXGbRlbCm7wMUvW51VqqGniPwJjtU20/M0oxH/wsFg==}
     dev: true
 
   /clean-css@5.3.3:

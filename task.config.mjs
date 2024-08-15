@@ -27,6 +27,7 @@ export const build = task('构建', [clean, generate, lint], async () => {
   await $`tsc -v`;
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
+  await $`tsc -p ./packages/comer-devtool`;
   await $`tsc -p ./packages/comer-demo`;
 });
 
