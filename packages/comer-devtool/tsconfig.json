@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./lib/",
     "declarationDir": "./types/",
+    "target": "ES5",
     "lib": [
       "ESNext",
       "DOM",
