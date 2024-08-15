@@ -3,6 +3,8 @@ import { Button, Div, styled } from "comer-dom";
 
 const StyledButton = styled(Button, {
   color: "red",
+  padding: "8px 16px",
+  margin: "4px",
 });
 
 @delegate
