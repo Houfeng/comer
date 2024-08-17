@@ -76,7 +76,7 @@ export const TextBlock = TextComponent;
 
 // Styled HOC -----------------------------------------------------------------
 
-export interface StyledAble<T extends Component = Component> {
+export interface StyleAble<T extends Component = Component> {
   new (props: { className: string }): T;
 }
 
@@ -84,7 +84,7 @@ export interface StyledAble<T extends Component = Component> {
  * Create high-level components with additional styles
  * from the original components
  */
-export function styled<T extends StyledAble>(target: T, style: NestedStyle) {
+export function styled<T extends StyleAble>(target: T, style: NestedStyle) {
   const Super = target as ComponentType<any, any>;
   const styledClassName = StyleClass(style);
   class Wrapper extends Super {
