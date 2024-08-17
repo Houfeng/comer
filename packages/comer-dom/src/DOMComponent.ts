@@ -46,6 +46,10 @@ export class ElementComponent<
 
 export type TextProps = { textContent?: string };
 
+/**
+ * Text node
+ * @see https://developer.mozilla.org/docs/Web/API/Text
+ */
 export class TextComponent extends HostComponent<TextProps, DOMText> {
   static readonly type = "text";
   constructor(textContent: string) {
@@ -59,8 +63,16 @@ export class TextComponent extends HostComponent<TextProps, DOMText> {
 /**
  * Text node
  * @see https://developer.mozilla.org/docs/Web/API/Text
+ * @alias TextComponent
  */
 export const TextContent = TextComponent;
+
+/**
+ * Text node
+ * @see https://developer.mozilla.org/docs/Web/API/Text
+ * @alias TextComponent
+ */
+export const TextBlock = TextComponent;
 
 // Styled HOC -----------------------------------------------------------------
 
