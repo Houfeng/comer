@@ -1,9 +1,4 @@
-export {
-  observable,
-  takeDependencies,
-  ObserveConfig,
-  type ObserveMode,
-} from "ober";
+export { observable, takeDependencies, ObserveConfig } from "ober";
 
 export type * from "./TypeUtil";
 

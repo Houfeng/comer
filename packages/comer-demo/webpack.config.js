@@ -37,7 +37,7 @@ module.exports = {
         enforce: "pre",
         use: ["source-map-loader"],
       },
-      { 
+      {
         test: /\.ts?$/,
         use: {
           loader: 'ts-loader',
@@ -60,7 +60,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      OBER_CONFIG: JSON.stringify({ mode: 'property' }),
+      OBER_MODE: 'proxy',
     }),
     new HtmlWebpackPlugin({
       template: require.resolve('./assets/index.html'),
