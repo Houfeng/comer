@@ -92,9 +92,6 @@ importers:
 
   packages/comer:
     dependencies:
-      ntils:
-        specifier: 5.2.4
-        version: 5.2.4
       ober:
         specifier: 9.0.0-rc
         version: 9.0.0-rc

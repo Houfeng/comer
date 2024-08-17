@@ -15,7 +15,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "ntils": "5.2.4",
     "ober": "9.0.0-rc",
     "tslib": "*"
   }
