@@ -3,7 +3,7 @@ import { HostAdapter, HostElement, HostIdleDeadline } from "./HostAdapter";
 import { Flag } from "./Flag";
 
 export type TaskHandler = () => void;
-export type TaskOptions = { deferrable: boolean };
+export type TaskOptions = { defer: boolean };
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
   constructor(protected adapter: T) {}
@@ -56,7 +56,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     return this.syncFlag.current();
   }
 
-  flushSync<H extends () => any>(handler: H): ReturnType<H> {
+  sync<H extends () => any>(handler: H): ReturnType<H> {
     this.syncTasks.clear();
     const result = this.syncFlag.run(true, handler);
     this.syncTasks.forEach((task) => task());
@@ -68,10 +68,10 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   perform(task: TaskHandler, options: TaskOptions): void {
     if (!task) return;
-    const { deferrable } = options;
+    const { defer } = options;
     if (this.syncFlag.current()) {
       this.syncTasks.add(task);
-    } else if (deferrable) {
+    } else if (defer) {
       this.deferTasks.add(task);
       this.requestRunDeferTasks();
     } else {

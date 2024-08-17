@@ -1,4 +1,4 @@
-import { Component, Deferrable, delegate, Fragment, observable } from "comer";
+import { Component, Deferment, delegate, Fragment, observable } from "comer";
 import { Button, Div, StyleClass, styled } from "comer-dom";
 
 const button_class = StyleClass({
@@ -26,7 +26,7 @@ export class Demo extends Component {
     return new Div({
       children: [
         new Fragment([
-          new Deferrable([
+          new Deferment([
             new StyledButton({ innerText: "M1" }),
             new StyledButton({ innerText: "M2" }),
           ]),

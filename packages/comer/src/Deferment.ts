@@ -2,10 +2,10 @@ import { Component } from "./Component";
 import { Provider } from "./Provider";
 
 /**
- * Declare component subtree as deferrable
+ * Declare component subtree as deferred
  * @class
  */
-export class Deferrable extends Provider<true> {
+export class Deferment extends Provider<true> {
   constructor(items: Readonly<Component[] | Component>) {
     const children = items ? (Array.isArray(items) ? items : [items]) : [];
     super({ value: true, children });

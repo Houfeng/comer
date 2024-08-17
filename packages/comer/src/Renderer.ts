@@ -16,7 +16,7 @@ import {
   $Mount,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
-import { Deferrable } from "./Deferrable";
+import { Deferment } from "./Deferment";
 import { Scheduler } from "./Scheduler";
 
 function createReactiver(build: () => Component, update: () => void) {
@@ -86,8 +86,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Request rebuild function
     const requestBuild = () => {
       if (!element[$Update]) return;
-      const deferrable = this.canDefer(element);
-      this.scheduler.perform(element[$Update], { deferrable });
+      const defer = this.canDefer(element);
+      this.scheduler.perform(element[$Update], { defer });
     };
     // Create a reactiver
     element[$Reactive] = createReactiver(
@@ -270,8 +270,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private canDefer(element: Component): boolean {
     if (!element) return false;
-    if (element instanceof Deferrable) return !!element.value;
-    return !!useContext(element, Deferrable);
+    if (element instanceof Deferment) return !!element.value;
+    return !!useContext(element, Deferment);
   }
 
   /**
@@ -302,8 +302,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       this.mountElement(element);
       element[$Mount] = void 0;
     };
-    const deferrable = this.canDefer(element);
-    this.scheduler.perform(element[$Mount], { deferrable });
+    const defer = this.canDefer(element);
+    this.scheduler.perform(element[$Mount], { defer });
   }
 
   /**
@@ -383,7 +383,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       inDeletedTree = true;
       this.scheduler.perform(
         () => element[$Host] && this.adapter.removeElement(element[$Host]),
-        { deferrable: true },
+        { defer: true },
       );
     }
     // broadcast to children
@@ -407,6 +407,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * please use with caution as it may cause lag.
    */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
-    return this.scheduler.flushSync(handler);
+    return this.scheduler.sync(handler);
   }
 }
