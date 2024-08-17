@@ -7,7 +7,7 @@ import { $Value } from "./Symbols";
  */
 export class Ref<T> {
   /** @internal */
-  [$Value]?: T;
+  private [$Value]?: T;
 
   constructor(initialValue?: T) {
     this[$Value] = initialValue;
