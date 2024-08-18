@@ -21,6 +21,10 @@ const TreeNodeIconWrapper = styled(Icon, {
   fontSize: "12px",
 });
 
+const TreeNodeLabeWrapper = styled(Label, {
+  fontSize: "12px",
+});
+
 const TreeNodeChildrenWrapper = styled(Div, {
   padding: "0 0 0 16px",
 });
@@ -56,7 +60,7 @@ class TreeTitle extends Component<ElementTreeNodeViewProps> {
       onClick: this.toggleExpandState,
       children: [
         new TreeNodeIconWrapper({ name: iconName }),
-        new Label(node.title),
+        new TreeNodeLabeWrapper(node.title),
       ],
     });
   }

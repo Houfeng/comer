@@ -1,5 +1,6 @@
 import { Component } from "comer";
 import { Label as HtmlLabel, styled, TextContent } from "comer-dom";
+import { isString } from "ntils";
 
 const LabelWrapper = styled(HtmlLabel, {
   verticalAlign: "middle",
@@ -7,13 +8,17 @@ const LabelWrapper = styled(HtmlLabel, {
   margin: "4px",
 });
 
-export class Label extends Component<{ text: string }> {
-  constructor(text: string) {
-    super({ text });
+export type LabelProps = { text: string; className?: string };
+
+export class Label extends Component<LabelProps> {
+  constructor(props: string | LabelProps) {
+    const composedProps = isString(props) ? { text: props } : props;
+    super(composedProps);
   }
   build(): Component {
-    const { text } = this.props;
+    const { text, className } = this.props;
     return new LabelWrapper({
+      className,
       children: new TextContent(text),
     });
   }
