@@ -4,9 +4,8 @@ import {
   Fragment,
   HostComponent,
   PickAsProps,
-  ComponentType,
 } from "comer";
-import { BasicStyle, NestedStyle, StyleClass } from "./DOMStyle";
+import { BasicStyle } from "./DOMStyle";
 
 // Host elements --------------------------------------------------------------
 
@@ -73,31 +72,3 @@ export const TextContent = TextComponent;
  * @alias TextComponent
  */
 export const TextBlock = TextComponent;
-
-// Styled HOC -----------------------------------------------------------------
-
-export interface StyleAble<T extends Component = Component> {
-  new (props: { className: string }): T;
-}
-
-/**
- * Create high-level components with additional styles
- * from the original components
- */
-export function styled<T extends StyleAble>(target: T, style: NestedStyle) {
-  const Super = target as ComponentType<any, any>;
-  const styledClassName = StyleClass(style);
-  class Wrapper extends Super {
-    constructor(props: ConstructorParameters<T>[0]) {
-      const { className: originClassName = "", ...others } = props || {};
-      const className = `${styledClassName} ${originClassName}`.trim();
-      const composedProps = { ...others, className };
-      if (!new.target || new.target === Wrapper) {
-        return new Super(composedProps);
-      }
-      super(composedProps);
-    }
-  }
-  Object.defineProperty(Wrapper, "name", { value: target.name });
-  return Wrapper as T;
-}

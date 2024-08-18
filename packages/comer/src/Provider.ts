@@ -26,7 +26,7 @@ export abstract class Provider<TValue> extends Component<
   }
 }
 
-export type ProviderType<TValue = unknown> = {
+export type ProviderConstructor<TValue = unknown> = {
   new (
     ...args: ConstructorParameters<typeof Provider<TValue>>
   ): Provider<TValue>;
@@ -42,7 +42,7 @@ export type ProviderType<TValue = unknown> = {
  */
 export function createProvider<TValue>(
   defaultValue?: TValue,
-): ProviderType<TValue> {
+): ProviderConstructor<TValue> {
   return class TypedProvider extends Provider<TValue> {
     constructor(props: ProviderProps<TValue>) {
       props.value = props.value ?? defaultValue;

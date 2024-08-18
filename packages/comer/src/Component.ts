@@ -31,9 +31,9 @@ export type ComponentParameters<TProps extends object, TRef extends object> =
     : Parameters<(props: ComponentProps<TProps, TRef>) => void>;
 
 /**
- * Component class type
+ * Component class constructor
  */
-export type ComponentType<TProps extends object, TRef extends object> = {
+export type ComponentConstructor<TProps extends object, TRef extends object> = {
   new (...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;
 };
 
@@ -90,7 +90,7 @@ export abstract class Component<
    * @returns context value (readonly)
    * @method
    */
-  protected use<T extends ProviderLike<any>>(
+  protected use<T extends ProviderConstructorLike<any>>(
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
     return useContext(this, providerClass);
@@ -132,7 +132,7 @@ export abstract class Component<
   protected onDestroy?: () => void;
 }
 
-export interface ProviderLike<TValue = any> {
+export interface ProviderConstructorLike<TValue = any> {
   readonly [$Identify]: "Provider";
   new (...args: any): {
     readonly value: TValue;
@@ -142,7 +142,7 @@ export interface ProviderLike<TValue = any> {
 /**
  * @internal
  */
-export function useContext<TProvider extends ProviderLike>(
+export function useContext<TProvider extends ProviderConstructorLike>(
   component: Component,
   providerClass: TProvider,
 ): Readonly<InstanceType<TProvider>["value"]> | void {

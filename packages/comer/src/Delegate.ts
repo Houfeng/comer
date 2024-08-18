@@ -1,15 +1,15 @@
-import { Component, type ComponentType } from "./Component";
+import { Component, type ComponentConstructor } from "./Component";
 import { $Props } from "./Symbols";
 
 /** @internal */
 export class Delegate extends Component<any> {
   constructor(
     props: any,
-    public Target: ComponentType<any, any>,
+    public Target: ComponentConstructor<any, any>,
   ) {
     super(props);
   }
-  private target?: InstanceType<ComponentType<any, any>>;
+  private target?: InstanceType<ComponentConstructor<any, any>>;
   build(): Component {
     if (!this.target) {
       if (this.Target instanceof Delegate) {
@@ -34,8 +34,10 @@ export class Delegate extends Component<any> {
  * @returns Delegate component
  * @function
  */
-export function delegate<T extends ComponentType<any, any>>(target: T): T {
-  const Super = target as ComponentType<any, any>;
+export function delegate<T extends ComponentConstructor<any, any>>(
+  target: T,
+): T {
+  const Super = target as ComponentConstructor<any, any>;
   class Wrapper extends Super {
     constructor(props: ConstructorParameters<T>[0]) {
       if (!new.target || new.target === Wrapper) {

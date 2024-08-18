@@ -13,14 +13,15 @@ const IconWrapper = styled(I, {
 });
 
 export class Icon extends Component<{
-  name: "pointer" | "context" | "props" | "expanded" | "collapsed" | "ring";
+  name: "pointer" | "context" | "props" | "expanded" | "collapsed";
   checked?: boolean;
   onClick?: () => void;
+  className?: string;
 }> {
   build(): Component {
-    const { name, checked = false, onClick } = this.props;
+    const { className = "", name, checked = false, onClick } = this.props;
     return new IconWrapper({
-      className: `comer comer-${name}`,
+      className: `comer comer-${name} ${className}`.trim(),
       onClick,
       "data-checked": String(checked),
     });

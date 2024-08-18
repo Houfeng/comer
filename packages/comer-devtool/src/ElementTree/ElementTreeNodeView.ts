@@ -17,6 +17,10 @@ const TreeNodeTitleWrapper = styled(Div, {
   },
 });
 
+const TreeNodeIconWrapper = styled(Icon, {
+  fontSize: "12px",
+});
+
 const TreeNodeChildrenWrapper = styled(Div, {
   padding: "0 0 0 16px",
 });
@@ -45,17 +49,20 @@ class TreeTitle extends Component<ElementTreeNodeViewProps> {
   build(): Component {
     const { node } = this.props;
     const iconName =
-      (node.children?.length || 0) > 0
-        ? node.expanded
-          ? "expanded"
-          : "collapsed"
-        : "ring";
+      (node.children?.length || 0) < 1 || node.expanded
+        ? "expanded"
+        : "collapsed";
     return new TreeNodeTitleWrapper({
       onClick: this.toggleExpandState,
-      children: [new Icon({ name: iconName }), new Label(node.title)],
+      children: [
+        new TreeNodeIconWrapper({ name: iconName }),
+        new Label(node.title),
+      ],
     });
   }
 }
+
+// const X = styled(TreeTitle, {});
 
 export class ElementTreeNodeView extends Component<ElementTreeNodeViewProps> {
   build(): Component {

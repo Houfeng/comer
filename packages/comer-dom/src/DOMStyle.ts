@@ -1,3 +1,4 @@
+import { Component, ComponentConstructor } from "comer";
 import { type Properties } from "csstype";
 import { isNull, isObject, toSplitCase } from "ntils";
 
@@ -121,3 +122,34 @@ export const KeyFrame = ((style) => {
   new (style: KeyFrameStyle): string;
   (Style: KeyFrameStyle): string;
 };
+
+// Styled HOC -----------------------------------------------------------------
+
+export interface StyleComponentConstructor<T extends Component = Component> {
+  new (props: { className: string }): T;
+}
+
+/**
+ * Create high-level components with additional styles
+ * from the original components
+ */
+export function styled<T extends StyleComponentConstructor>(
+  target: T,
+  style: NestedStyle,
+) {
+  const Super = target as ComponentConstructor<any, any>;
+  const styledClassName = StyleClass(style);
+  class Wrapper extends Super {
+    constructor(props: ConstructorParameters<T>[0]) {
+      const { className: originClassName = "", ...others } = props || {};
+      const className = `${styledClassName} ${originClassName}`.trim();
+      const composedProps = { ...others, className };
+      if (!new.target || new.target === Wrapper) {
+        return new Super(composedProps);
+      }
+      super(composedProps);
+    }
+  }
+  Object.defineProperty(Wrapper, "name", { value: target.name });
+  return Wrapper as T;
+}
