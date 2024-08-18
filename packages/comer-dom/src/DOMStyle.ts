@@ -89,7 +89,7 @@ export const StyleClass = ((style) => {
   createStyleRules(`.${className}`, style);
   return `${normalizeEx} ${className}`.trim();
 }) as {
-  new(style: NestedStyle): string;
+  new (style: NestedStyle): string;
   (Style: NestedStyle): string;
 };
 
@@ -119,7 +119,7 @@ export const KeyFrame = ((style) => {
   createKeyframesRule(name, style);
   return name;
 }) as {
-  new(style: KeyFrameStyle): string;
+  new (style: KeyFrameStyle): string;
   (Style: KeyFrameStyle): string;
 };
 
@@ -134,8 +134,8 @@ export function styled<
   S extends UnionToIntersection<
     Required<Exclude<ConstructorParameters<T>[0], undefined>> | {}
   > extends { className: string }
-  ? NestedStyle
-  : never,
+    ? NestedStyle
+    : never,
 >(target: T, style: S) {
   const Super = target as ComponentConstructor<any, any>;
   const styledClassName = StyleClass(style);
