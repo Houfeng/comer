@@ -1,4 +1,4 @@
-import { Component, ComponentConstructor } from "comer";
+import { ComponentConstructor, UnionToIntersection, ValueOf } from "comer";
 import { type Properties } from "csstype";
 import { isNull, isObject, toSplitCase } from "ntils";
 
@@ -125,22 +125,23 @@ export const KeyFrame = ((style) => {
 
 // Styled HOC -----------------------------------------------------------------
 
-export interface StyleComponentConstructor<T extends Component = Component> {
-  new (props?: { className?: string }): T;
-}
-
 /**
  * Create high-level components with additional styles
  * from the original components
  */
-export function styled<T extends StyleComponentConstructor>(
-  target: T,
-  style: NestedStyle,
-) {
+export function styled<
+  T extends ComponentConstructor<any, any>,
+  S extends Required<
+    Exclude<UnionToIntersection<ValueOf<ConstructorParameters<T>>>, undefined>
+  > extends { className: string }
+    ? NestedStyle
+    : never,
+>(target: T, style: S) {
   const Super = target as ComponentConstructor<any, any>;
   const styledClassName = StyleClass(style);
   class Wrapper extends Super {
     constructor(props: ConstructorParameters<T>[0]) {
+      //@ts-ignore
       const { className: originClassName = "", ...others } = props || {};
       const className = `${styledClassName} ${originClassName}`.trim();
       const composedProps = { ...others, className };
