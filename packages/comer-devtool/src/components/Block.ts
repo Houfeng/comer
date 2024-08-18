@@ -1,6 +1,7 @@
 import { Component } from "comer";
-import { Header, Label, Main, Section, styled, TextContent } from "comer-dom";
+import { Header, Main, Section, styled } from "comer-dom";
 import { Icon } from "./Icon";
+import { Label } from "./Label";
 
 const BlockWrapper = styled(Section, {
   display: "flex",
@@ -21,25 +22,8 @@ const BlockHeaderWrapper = styled(Header, {
 
 const BlockBodyWrapper = styled(Main, {
   flex: "1",
+  padding: "10px",
 });
-
-const BlockTitleWrapper = styled(Label, {
-  verticalAlign: "middle",
-  padding: "4px",
-  margin: "4px",
-});
-
-class BlockTitle extends Component<{ text: string }> {
-  constructor(text: string) {
-    super({ text });
-  }
-  build(): Component {
-    const { text } = this.props;
-    return new BlockTitleWrapper({
-      children: new TextContent(text),
-    });
-  }
-}
 
 export type BlockProps = {
   icon: ConstructorParameters<typeof Icon>[0]["name"];
@@ -62,7 +46,7 @@ export class Block extends Component<BlockProps> {
               checked: iconChecked,
               onClick: onIconClick,
             }),
-            new BlockTitle(title),
+            new Label(title),
           ],
         }),
         new BlockBodyWrapper({ children: body }),

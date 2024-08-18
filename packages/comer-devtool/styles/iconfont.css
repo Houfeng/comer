@@ -1,8 +1,8 @@
 @font-face {
   font-family: "comer"; /* Project id 4655143 */
-  src: url('iconfont.woff2?t=1723730542143') format('woff2'),
-       url('iconfont.woff?t=1723730542143') format('woff'),
-       url('iconfont.ttf?t=1723730542143') format('truetype');
+  src: url('iconfont.woff2?t=1723958681964') format('woff2'),
+       url('iconfont.woff?t=1723958681964') format('woff'),
+       url('iconfont.ttf?t=1723958681964') format('truetype');
 }
 
 .comer {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.comer-ring:before {
+  content: "\e72f";
+}
+
+.comer-collapsed:before {
+  content: "\e8df";
+}
+
+.comer-expanded:before {
+  content: "\e8e6";
 }
 
 .comer-props:before {

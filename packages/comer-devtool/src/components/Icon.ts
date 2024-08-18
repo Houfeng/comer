@@ -13,7 +13,7 @@ const IconWrapper = styled(I, {
 });
 
 export class Icon extends Component<{
-  name: "pointer" | "context" | "props";
+  name: "pointer" | "context" | "props" | "expanded" | "collapsed" | "ring";
   checked?: boolean;
   onClick?: () => void;
 }> {

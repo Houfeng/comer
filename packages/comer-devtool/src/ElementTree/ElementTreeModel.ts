@@ -2,6 +2,7 @@ import { observable } from "comer";
 
 export type ElementTreeNode = {
   title: string;
+  expanded?: boolean;
   children?: ElementTreeNode[];
 };
 
@@ -17,4 +18,8 @@ export class ElementTreeModel {
     title: "demo",
     children: [{ title: "sub1" }, { title: "sub2" }, { title: "sub3" }],
   };
+
+  toggleExpandState(node: ElementTreeNode) {
+    node.expanded = !node.expanded;
+  }
 }
