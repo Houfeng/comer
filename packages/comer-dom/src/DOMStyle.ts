@@ -126,7 +126,7 @@ export const KeyFrame = ((style) => {
 // Styled HOC -----------------------------------------------------------------
 
 export interface StyleComponentConstructor<T extends Component = Component> {
-  new (props: { className: string }): T;
+  new (props?: { className?: string }): T;
 }
 
 /**
