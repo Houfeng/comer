@@ -6,7 +6,7 @@ const PopupWrapper = styled(Div, {
 });
 
 @delegate
-export class Demo extends Component {
+export class Popup extends Component {
   build() {
     return new PopupWrapper({
       children: [new TextContent("Comer DevTool")],
@@ -14,4 +14,4 @@ export class Demo extends Component {
   }
 }
 
-renderer.render(new Demo(), document.getElementById("root")!);
+renderer.render(new Popup(), document.getElementById("root")!);

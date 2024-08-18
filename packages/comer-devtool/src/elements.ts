@@ -1,48 +1,27 @@
 import { Component, delegate } from "comer";
-import { renderer } from "comer-dom";
-import { Container } from "./components/Container";
-import { MainView } from "./components/MainView";
-import { SideView } from "./components/SideView";
-import { SectionBar } from "./components/SectionBar";
-import { Icon } from "./components/Icon";
-import { SectionTitle } from "./components/SectionTitle";
-import { ElementModel } from "./models/ElementsModel";
+import { Div, renderer, styled } from "comer-dom";
+import { ElementTreeView } from "./ElementTree/ElementTreeView";
+import { ElementInfoView } from "./ElementInfo";
+
+export const ElementsContainerWrapper = styled(Div, {
+  height: "100vh",
+  display: "grid",
+  gridTemplateRows: "1fr",
+  gridTemplateColumns: "1fr 25%",
+  "&, & *": {
+    boxSizing: "border-box",
+  },
+  fontSize: "13px",
+  color: "#555",
+});
 
 @delegate
-export class Demo extends Component {
-  model = new ElementModel();
-  toggleInspecting = () => this.model.toggleInspecting();
+export class Elements extends Component {
   build() {
-    const { inspecting } = this.model;
-    return new Container({
-      children: [
-        new MainView({
-          children: [
-            new SectionBar({
-              children: [
-                new Icon({
-                  name: "pointer",
-                  checked: inspecting,
-                  onClick: this.toggleInspecting,
-                }),
-                new SectionTitle("Elements"),
-              ],
-            }),
-          ],
-        }),
-        new SideView({
-          children: [
-            new SectionBar({
-              children: [
-                new Icon({ name: "props" }),
-                new SectionTitle("Props"),
-              ],
-            }),
-          ],
-        }),
-      ],
+    return new ElementsContainerWrapper({
+      children: [new ElementTreeView(), new ElementInfoView()],
     });
   }
 }
 
-renderer.render(new Demo(), document.getElementById("root")!);
+renderer.render(new Elements(), document.getElementById("root")!);
