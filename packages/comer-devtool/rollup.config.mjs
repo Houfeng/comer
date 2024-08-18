@@ -1,6 +1,6 @@
 import { defineConfig } from 'rollup';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-// import terser from '@rollup/plugin-terser';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
 
 const createConfig = (page) => {
   return defineConfig({
@@ -14,14 +14,14 @@ const createConfig = (page) => {
       }
     ],
     plugins: [
-      nodeResolve(),
-      //terser(),
+      resolve(),
+      terser(),
     ]
   });
 };
 
 export default [
-  createConfig('index'),
-  createConfig('elements'),
   createConfig('popup'),
+  createConfig('devtools'),
+  createConfig('elements'),
 ];
