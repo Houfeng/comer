@@ -1,4 +1,4 @@
-import { ComponentConstructor, UnionToIntersection, ValueOf } from "comer";
+import { ComponentConstructor, UnionToIntersection } from "comer";
 import { type Properties } from "csstype";
 import { isNull, isObject, toSplitCase } from "ntils";
 
@@ -131,8 +131,8 @@ export const KeyFrame = ((style) => {
  */
 export function styled<
   T extends ComponentConstructor<any, any>,
-  S extends Required<
-    Exclude<UnionToIntersection<ValueOf<ConstructorParameters<T>>>, undefined>
+  S extends UnionToIntersection<
+    Required<Exclude<ConstructorParameters<T>[0], undefined>> | {}
   > extends { className: string }
     ? NestedStyle
     : never,
