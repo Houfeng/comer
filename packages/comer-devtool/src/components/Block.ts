@@ -6,6 +6,7 @@ import { Label } from "./Label";
 const BlockWrapper = styled(Section, {
   display: "flex",
   flexDirection: "column",
+  overflow: "hidden",
   "&+&": {
     borderLeft: "1px solid #e3e3e3",
   },
@@ -23,6 +24,7 @@ const BlockHeaderWrapper = styled(Header, {
 const BlockBodyWrapper = styled(Main, {
   flex: "1",
   padding: "10px",
+  overflow: "auto",
 });
 
 export type BlockProps = {

@@ -5,6 +5,7 @@ import { ElementInfoView } from "./ElementInfo";
 
 export const ElementsContainerWrapper = styled(Div, {
   height: "100vh",
+  overflow: "hidden",
   display: "grid",
   gridTemplateRows: "1fr",
   gridTemplateColumns: "1fr 25%",
