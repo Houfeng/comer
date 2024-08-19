@@ -67,6 +67,10 @@ export abstract class Component<
   /** @internal */
   protected [$Mount]?: () => void;
 
+  /**
+   * Construct a component instance through props
+   * @param props Component props
+   */
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;
   }
@@ -78,10 +82,19 @@ export abstract class Component<
    * @readonly
    * @property
    */
-  protected get props(): Readonly<
-    Omit<ComponentProps<TProps, TRef>, "ref" | "key">
-  > {
+  get props(): Readonly<Omit<ComponentProps<TProps, TRef>, "ref" | "key">> {
     return this[$Props];
+  }
+
+  /**
+   * Generate component rendering content, do not include time-consuming logic,
+   * cannot be asynchronous, and must return component elements
+   * @returns Component element (subtree root)
+   * @virtual
+   * @method
+   */
+  build(): Component {
+    throw new Error("Unimplemented build method");
   }
 
   /**
@@ -94,17 +107,6 @@ export abstract class Component<
     providerClass: T,
   ): Readonly<InstanceType<T>["value"]> | void {
     return useContext(this, providerClass);
-  }
-
-  /**
-   * Generate component rendering content, do not include time-consuming logic,
-   * cannot be asynchronous, and must return component elements
-   * @returns Component element (subtree root)
-   * @virtual
-   * @method
-   */
-  build(): Component {
-    throw new Error("Unimplemented build method");
   }
 
   /**
@@ -130,6 +132,12 @@ export abstract class Component<
    * @method
    */
   protected onDestroy?: () => void;
+
+  /**
+   * Normalize the Props of all instances of the current component class
+   * Be cautious when using, be sure to declare the type of props
+   */
+  static normalizeProps?: (props: object) => object;
 }
 
 export interface ProviderConstructorLike<TValue = any> {
