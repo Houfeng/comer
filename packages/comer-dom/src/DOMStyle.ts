@@ -1,4 +1,4 @@
-import { ComponentConstructor, UnionToIntersection } from "comer";
+import { ComponentConstructor } from "comer";
 import { type Properties } from "csstype";
 import { isNull, isObject, toSplitCase } from "ntils";
 
@@ -131,24 +131,23 @@ export const KeyFrame = ((style) => {
  */
 export function styled<
   T extends ComponentConstructor<any, any>,
-  S extends UnionToIntersection<
-    Required<Exclude<ConstructorParameters<T>[0], undefined>> | {}
-  > extends { className: string }
+  S extends Required<InstanceType<T>["props"]> extends { className: string }
     ? NestedStyle
     : never,
 >(target: T, style: S) {
   const Super = target as ComponentConstructor<any, any>;
   const styledClassName = StyleClass(style);
   class Wrapper extends Super {
-    constructor(props: ConstructorParameters<T>[0]) {
-      //@ts-ignore
+    static normalizeProps(
+      props: InstanceType<T>["props"],
+    ): InstanceType<T>["props"] {
       const { className: originClassName = "", ...otherProps } = props || {};
       const className = `${styledClassName} ${originClassName}`.trim();
       const composedProps = { ...otherProps, className };
-      if (!new.target || new.target === Wrapper) {
-        return new Super(composedProps);
-      }
-      super(composedProps);
+      super.normalizeProps?.(composedProps);
+      return super.normalizeProps
+        ? super.normalizeProps(composedProps)
+        : composedProps;
     }
   }
   Object.defineProperty(Wrapper, "name", { value: target.name });
