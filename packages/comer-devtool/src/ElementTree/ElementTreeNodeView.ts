@@ -71,8 +71,6 @@ class TreeTitle extends Component<ElementTreeNodeViewProps> {
   }
 }
 
-// const X = styled(TreeTitle, {});
-
 export class ElementTreeNodeView extends Component<ElementTreeNodeViewProps> {
   build(): Component {
     const { model, node } = this.props;
