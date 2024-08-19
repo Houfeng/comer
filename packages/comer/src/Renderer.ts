@@ -83,6 +83,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private bindReactiver(element: Component) {
     if (element[$Reactive]) return;
+    // Normalize the props of element
+    this.normalizeProps(element);
     // Make the props of the instance observable
     element[$Props] = observable(element[$Props]);
     // Bind a schedule task
@@ -212,7 +214,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!ctor.normalizeProps) return;
     const normalizedProps = ctor.normalizeProps(element[$Props]);
     if (isObservable(element[$Props])) {
-      Object.assign(element[$Props], normalizedProps);
+      throw new Error("Cannot normalize props of already created components");
     } else {
       element[$Props] = normalizedProps;
     }
@@ -225,8 +227,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
-    // Normalize the props of new elements
-    this.normalizeProps(newElement);
     // ----
     const oldProps: Record<string, any> = oldElement[$Props];
     const newProps: Record<string, any> = newElement[$Props];
@@ -351,6 +351,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       if (this.canUpdate(oldChild, newChild)) {
         // update
         linkEffectiveItem(oldChild);
+        // Normalize the props of new child
+        this.normalizeProps(newChild);
+        // apply
         this.applyLatestProps(oldChild, newChild);
       } else if (oldChild && !newChild) {
         // remove
