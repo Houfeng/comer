@@ -23,6 +23,7 @@ const TreeNodeIconWrapper = styled(Icon, {
 
 const TreeNodeLabeWrapper = styled(Label, {
   fontSize: "12px",
+  color: "red",
 });
 
 const TreeNodeChildrenWrapper = styled(Div, {

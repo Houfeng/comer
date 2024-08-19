@@ -144,7 +144,6 @@ export function styled<
       const { className: originClassName = "", ...otherProps } = props || {};
       const className = `${styledClassName} ${originClassName}`.trim();
       const composedProps = { ...otherProps, className };
-      super.normalizeProps?.(composedProps);
       return super.normalizeProps
         ? super.normalizeProps(composedProps)
         : composedProps;
