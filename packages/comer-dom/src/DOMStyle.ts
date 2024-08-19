@@ -134,7 +134,9 @@ export function styled<
   S extends Required<InstanceType<T>["props"]> extends { className: string }
     ? NestedStyle
     : never,
->(target: T, style: S) {
+  // mask S full match NestedStyle
+  SS = S extends NestedStyle ? NestedStyle : never,
+>(target: T, style: S & SS) {
   const Super = target as ComponentConstructor<any, any>;
   const styledClassName = StyleClass(style);
   class Wrapper extends Super {
@@ -148,7 +150,11 @@ export function styled<
         ? super.normalizeProps(composedProps)
         : composedProps;
     }
+    // className of Wrapper component
+    static get className() {
+      return styledClassName;
+    }
   }
   Object.defineProperty(Wrapper, "name", { value: target.name });
-  return Wrapper as T;
+  return Wrapper as T & { readonly className: string };
 }
