@@ -35,6 +35,7 @@ export type ComponentParameters<TProps extends object, TRef extends object> =
  */
 export type ComponentConstructor<TProps extends object, TRef extends object> = {
   new (...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;
+  normalizeProps?: (props: object) => object;
 };
 
 /**

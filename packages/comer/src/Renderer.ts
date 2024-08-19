@@ -1,5 +1,5 @@
 import { HostAdapter, HostElement } from "./HostAdapter";
-import { Component, useContext } from "./Component";
+import { Component, ComponentConstructor, useContext } from "./Component";
 import { observable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
@@ -43,6 +43,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private scheduler = new Scheduler(this.adapter);
 
+  private getComponentConstructor(element: Component) {
+    return element.constructor as ComponentConstructor<any, any>;
+  }
+
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
   }
@@ -67,7 +71,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return (
       this.isComponent(el1) &&
       this.isComponent(el2) &&
-      el1.constructor === el2.constructor
+      this.getComponentConstructor(el1) === this.getComponentConstructor(el2)
     );
   }
 
@@ -144,9 +148,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // throw new Error("The nearest prev host element has not been created");
   }
 
-  private getHostElementType(element: Component): string {
-    const ctor = element.constructor;
-    return String("type" in ctor ? ctor.type : void 0);
+  private getHostElementType(element: Component): string | void {
+    const ctor = this.getComponentConstructor(element);
+    return this.isHostComponent(element) && "type" in ctor
+      ? String(ctor.type)
+      : void 0;
   }
 
   private mountElement(element: Component): void {
@@ -201,6 +207,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     hostElement[$FlushId] = this.adapter.requestPaintCallback(flushHandler);
   }
 
+  private normalizeProps(element: Component): void {
+    const ctor = this.getComponentConstructor(element);
+    if (!ctor.normalizeProps) return;
+    element[$Props] = ctor.normalizeProps(element[$Props]);
+  }
+
   private applyLatestProps(
     oldElement: Component,
     newElement: Component = oldElement,
@@ -208,6 +220,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
+    // Normalize the props of new elements
+    this.normalizeProps(newElement);
+    // ----
     const oldProps: Record<string, any> = oldElement[$Props];
     const newProps: Record<string, any> = newElement[$Props];
     const willUpdateHostProps: Record<string, any> = {};
