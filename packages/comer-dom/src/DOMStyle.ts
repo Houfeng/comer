@@ -4,7 +4,7 @@ import { isNull, isObject, toSplitCase } from "ntils";
 
 // types ----------------------------------------------------------------------
 
-export type BasicStyle = Properties<string | 0, string | 0>;
+export type BasicStyle = Properties;
 
 export type StyleExtends = { $extends?: string | string[] };
 

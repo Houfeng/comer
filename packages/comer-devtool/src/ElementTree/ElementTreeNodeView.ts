@@ -18,16 +18,20 @@ const TreeNodeTitleWrapper = styled(Div, {
 });
 
 const TreeNodeIconWrapper = styled(Icon, {
-  fontSize: "12px",
+  fontSize: "10px",
+  verticalAlign: "middle",
+  fontWeight: "bold",
 });
 
 const TreeNodeLabeWrapper = styled(Label, {
-  fontSize: "12px",
-  color: "red",
+  padding: "0 2px",
+  margin: "0 2px",
+  verticalAlign: "middle",
+  textTransform: "capitalize",
 });
 
 const TreeNodeChildrenWrapper = styled(Div, {
-  padding: "0 0 0 16px",
+  padding: "0 0 0 14px",
 });
 
 export type ElementTreeNodeViewProps = {
