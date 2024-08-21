@@ -1,4 +1,4 @@
-import { Component, Modify, observable } from "comer";
+import { Component, Deferment, Modify, observable } from "comer";
 import { Div, Input, renderer, Span, TextContent } from "comer-dom";
 
 class Item extends Component<{ text: string }> {
@@ -25,9 +25,11 @@ class List extends Component {
         new Input({ value: String(value), onInput: this.updateValue }),
         new Div({
           style: { wordWrap: "break-word", wordBreak: "break-all" },
-          children: new Array(num)
-            .fill(" ")
-            .map((_, i) => new Item({ text: `${i}:${value}, ` })),
+          children: new Deferment(
+            new Array(num)
+              .fill(" ")
+              .map((_, i) => new Item({ text: `${i}:${value}, ` })),
+          ),
         }),
       ],
     });

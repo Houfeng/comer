@@ -48,7 +48,8 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private requestRunDeferTasks() {
     if (this.usualRunning) return;
     if (this.deferCallbackId) return;
-    this.deferCallbackId = this.adapter.requestIdleCallback(this.runDeferTasks);
+    const { requestIdleCallback } = this.adapter;
+    this.deferCallbackId = requestIdleCallback(this.runDeferTasks);
   }
 
   // ----------------------------- immed -----------------------------
@@ -75,14 +76,13 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     if (this.paintCallbackId) return;
     const priority = this.priority.current();
     if (priority === "flush") return;
-    this.paintCallbackId = this.adapter.requestPaintCallback(
-      this.runPaintTasks,
-    );
+    const { requestPaintCallback } = this.adapter;
+    this.paintCallbackId = requestPaintCallback(this.runPaintTasks);
   }
 
   // ----------------------- execute & cancel -------------------------
 
-  post(task: TaskHandler): void {
+  post = (task: TaskHandler): void => {
     if (!task) return;
     const priority = this.priority.current();
     if (priority === "immed" || priority === "flush") {
@@ -94,37 +94,37 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
       this.usualTasks.add(task);
       this.requestRunUsualTasks();
     }
-  }
+  };
 
-  paint(task: TaskHandler): void {
+  paint = (task: TaskHandler): void => {
     if (!task) return;
     this.paintTasks.add(task);
     this.requestRunPaintTasks();
-  }
+  };
 
-  cancel(task: TaskHandler) {
+  cancel = (task?: TaskHandler): void => {
     if (!task) return;
     this.deferTasks.delete(task);
     this.usualTasks.delete(task);
     this.immedTasks.delete(task);
     this.paintTasks.delete(task);
-  }
+  };
 
   // ---------------------------- context -----------------------------
 
-  defer<C extends TaskContext>(fn: C): ReturnType<C> {
+  defer = <C extends TaskContext>(fn: C): ReturnType<C> => {
     return this.priority.run("defer", fn);
-  }
+  };
 
-  immed<C extends TaskContext>(fn: C): ReturnType<C> {
+  immed = <C extends TaskContext>(fn: C): ReturnType<C> => {
     const result = this.priority.run("immed", fn);
     this.runImmedTasks();
     return result;
-  }
+  };
 
-  flush<C extends TaskContext>(fn: C): ReturnType<C> {
+  flush = <C extends TaskContext>(fn: C): ReturnType<C> => {
     const result = this.immed(() => this.priority.run("flush", fn));
     this.runPaintTasks();
     return result;
-  }
+  };
 }

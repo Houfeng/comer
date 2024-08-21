@@ -94,10 +94,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Request rebuild function
     const requestBuild = () => {
       if (!element[$Update]) return;
-      const defer = this.canDefer(element);
-      return defer
-        ? this.scheduler.defer(() => this.scheduler.post(element[$Update]!))
-        : this.scheduler.post(element[$Update]);
+      const willDefer = this.canDefer(element);
+      const { defer, post } = this.scheduler;
+      return willDefer
+        ? defer(() => post(element[$Update]!))
+        : post(element[$Update]);
     };
     // Create a reactiver
     element[$Reactive] = createReactiver(
@@ -332,15 +333,16 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private requestMount(element: Component): void {
-    if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
+    const { defer, post, cancel } = this.scheduler;
+    if (element[$Mount]) cancel(element[$Mount]);
     element[$Mount] = () => {
       this.mountElement(element);
       element[$Mount] = void 0;
     };
-    const defer = this.canDefer(element);
-    return defer
-      ? this.scheduler.defer(() => this.scheduler.post(element[$Mount]!))
-      : this.scheduler.post(element[$Mount]);
+    const willDefer = this.canDefer(element);
+    return willDefer
+      ? defer(() => post(element[$Mount]!))
+      : post(element[$Mount]);
   }
 
   /**
@@ -415,17 +417,21 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private unmountElement(element: Component, inDeletedTree: boolean): void {
     if (!element) return;
-    if (element[$Update]) this.scheduler.cancel(element[$Update]);
-    if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
+    const { cancel, defer, post } = this.scheduler;
+    cancel(element[$Mount]);
+    cancel(element[$Update]);
     element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
-    if (this.isHostComponent(element) && !inDeletedTree) {
-      inDeletedTree = true;
-      this.scheduler.defer(() =>
-        this.scheduler.post(
-          () => element[$Host] && this.adapter.removeElement(element[$Host]),
-        ),
-      );
+    if (this.isHostComponent(element)) {
+      cancel(element[$Host]?.[$Flush]?.handler);
+      if (!inDeletedTree) {
+        inDeletedTree = true;
+        defer(() =>
+          post(
+            () => element[$Host] && this.adapter.removeElement(element[$Host]),
+          ),
+        );
+      }
     }
     // broadcast to children
     if (!element[$Children]) return;
