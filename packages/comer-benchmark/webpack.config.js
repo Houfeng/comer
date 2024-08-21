@@ -9,24 +9,12 @@ module.exports = {
   mode: NODE_ENV || 'production',
   entry: {
     comer: './src/comer.ts',
-    react: './src/react.ts',
+    react: './src/react.tsx',
   },
   output: {
     path: resolve(__dirname, './dist/'),
     filename: '[name].bundle.js',
     publicPath: publicPath,
-  },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          priority: -10
-        },
-      },
-    }
   },
   target: 'web',
   resolve: {
@@ -41,7 +29,7 @@ module.exports = {
         use: ["source-map-loader"],
       },
       {
-        test: /\.ts?$/,
+        test: /\.tsx?$/,
         use: {
           loader: 'ts-loader',
           options: {
@@ -59,7 +47,6 @@ module.exports = {
     liveReload: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchFiles: ["src/**/*"],
-    historyApiFallback: true,
   },
   plugins: [
     new webpack.DefinePlugin({

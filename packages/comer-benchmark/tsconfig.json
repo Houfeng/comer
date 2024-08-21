@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist/",
     "declarationDir": "./types/",
-    "jsx": "preserve",
+    "jsx": "react",
     "lib": [
       "ESNext",
       "DOM",

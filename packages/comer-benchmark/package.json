@@ -18,6 +18,12 @@
   "dependencies": {
     "comer": "workspace:*",
     "comer-dom": "workspace:*",
+    "react": "*",
+    "react-dom": "*",
     "tslib": "*"
+  },
+  "devDependencies": {
+    "@types/react": "*",
+    "@types/react-dom": "*"
   }
 }
