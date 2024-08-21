@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 function Item(props: { text: string }) {
-  return <span style={{ padding: 4 }}>{props.text}</span>
+  return <span>{props.text}</span>
 }
 
 function List() {
