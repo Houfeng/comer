@@ -3,30 +3,30 @@ import { HostAdapter, HostElement, HostIdleDeadline } from "./HostAdapter";
 import { Flag } from "./Flag";
 
 export type TaskHandler = () => void;
-export type TaskPriority = "flush" | "immed" | "main" | "defer";
+export type TaskPriority = "flush" | "immed" | "usual" | "defer";
 export type TaskContext = () => any;
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
   constructor(protected adapter: T) {}
 
-  private priority = Flag<TaskPriority>("main");
+  private priority = Flag<TaskPriority>("usual");
 
-  // ---------------------------- main -----------------------------
+  // ---------------------------- usual -----------------------------
 
-  private mainRunning = false;
-  private mainTasks = new Set<TaskHandler>();
+  private usualRunning = false;
+  private usualTasks = new Set<TaskHandler>();
 
-  private runMainTasks = () => {
-    this.mainTasks.forEach((task) => task());
-    this.mainTasks.clear();
-    this.mainRunning = false;
+  private runUsualTasks = () => {
+    this.usualTasks.forEach((task) => task());
+    this.usualTasks.clear();
+    this.usualRunning = false;
     this.requestRunDeferTasks();
   };
 
-  private requestRunMainTasks() {
-    if (this.mainRunning) return;
-    this.mainRunning = true;
-    nextTick(this.runMainTasks);
+  private requestRunUsualTasks() {
+    if (this.usualRunning) return;
+    this.usualRunning = true;
+    nextTick(this.runUsualTasks);
   }
 
   // ---------------------------- defer -----------------------------
@@ -35,7 +35,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private deferTasks = new Set<TaskHandler>();
 
   private runDeferTasks = (deadline: HostIdleDeadline) => {
-    if (this.mainRunning) return;
+    if (this.usualRunning) return;
     for (const task of this.deferTasks) {
       if (deadline.timeRemaining() <= 0) break;
       if (task) task();
@@ -46,7 +46,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   };
 
   private requestRunDeferTasks() {
-    if (this.mainRunning) return;
+    if (this.usualRunning) return;
     if (this.deferCallbackId) return;
     this.deferCallbackId = this.adapter.requestIdleCallback(this.runDeferTasks);
   }
@@ -91,8 +91,8 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
       this.deferTasks.add(task);
       this.requestRunDeferTasks();
     } else {
-      this.mainTasks.add(task);
-      this.requestRunMainTasks();
+      this.usualTasks.add(task);
+      this.requestRunUsualTasks();
     }
   }
 
@@ -105,7 +105,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   cancel(task: TaskHandler) {
     if (!task) return;
     this.deferTasks.delete(task);
-    this.mainTasks.delete(task);
+    this.usualTasks.delete(task);
     this.immedTasks.delete(task);
     this.paintTasks.delete(task);
   }
