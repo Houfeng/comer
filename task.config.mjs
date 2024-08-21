@@ -1,11 +1,11 @@
 import { task, $ } from 'taskd';
 
-export const lint = task('代码风格检查', async () => {
+export const lint = task('Lint', async () => {
   await $`eslint -v`;
   await $`eslint --fix --ext .ts ./packages/*/{src,tests}/`;
 });
 
-export const clean = task('清理', async () => {
+export const clean = task('Clean', async () => {
   await $`
   rm -rf ./packages/*/tsconfig.tsbuildinfo
   rm -rf ./packages/*/types/
@@ -15,15 +15,15 @@ export const clean = task('清理', async () => {
   `;
 });
 
-export const test = task('测试', async () => {
+export const test = task('Test', async () => {
   await $`c8 node --require ts-node/register --test tests/*.spec.ts`;
 });
 
-export const generate = task('生成部分代码', async () => {
+export const generate = task('Generate', async () => {
   await $`pnpm -F comer-dom generate`;
 });
 
-export const build = task('构建', [clean, generate, lint], async () => {
+export const build = task('Build', [clean, generate, lint], async () => {
   await $`tsc -v`;
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
@@ -31,7 +31,7 @@ export const build = task('构建', [clean, generate, lint], async () => {
   await $`tsc -p ./packages/comer-demo`;
 });
 
-export const dev = task('本地开发', [build], async () => {
+export const dev = task('Dev', [build], async () => {
   await $`tsc -v`;
   $`tsc -w -p ./packages/comer`;
   $`tsc -w -p ./packages/comer-dom`;
@@ -42,6 +42,6 @@ export const devtool = task('DevTool', [build], async () => {
   await $`pnpm -F comer-devtool dev`;
 });
 
-export const benchmark = task('DevTool', [build], async () => {
+export const benchmark = task('Benchmark', [build], async () => {
   await $`pnpm -F comer-benchmark dev`;
 });
