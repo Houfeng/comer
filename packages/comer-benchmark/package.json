@@ -1,0 +1,22 @@
+{
+  "name": "comer-benchmark",
+  "version": "0.1.0",
+  "description": "",
+  "module": "./dist/index-es.js",
+  "main": "./dist/index-cjs.js",
+  "types": "./types/index.d.ts",
+  "directories": {},
+  "scripts": {
+    "dev": "NODE_ENV=development webpack serve"
+  },
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "comer": "workspace:*",
+    "comer-dom": "workspace:*",
+    "tslib": "*"
+  }
+}

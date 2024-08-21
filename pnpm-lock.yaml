@@ -99,6 +99,18 @@ importers:
         specifier: '*'
         version: 2.6.3
 
+  packages/comer-benchmark:
+    dependencies:
+      comer:
+        specifier: workspace:*
+        version: link:../comer
+      comer-dom:
+        specifier: workspace:*
+        version: link:../comer-dom
+      tslib:
+        specifier: '*'
+        version: 2.6.3
+
   packages/comer-demo:
     dependencies:
       comer:

@@ -1,0 +1,13 @@
+*.log
+*.map
+*.tsbuildinfo
+.DS_Store
+.nyc_output/
+node_modules/
+coverage/
+debug/
+dist/
+build/
+types/
+logs/
+lib/
