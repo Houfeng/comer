@@ -137,7 +137,7 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    * Cancel a change and rendering task from the host's event loop
    * @param id Task id
    */
-  cancelPaintCallback(id: unknown): void;
+  cancelPaintCallback?(id: unknown): void;
 
   /**
    *  Add a deferrable task
@@ -153,5 +153,5 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    * Remove a deferrable task
    * @param id Task id
    */
-  cancelIdleCallback(id: unknown): void;
+  cancelIdleCallback?(id: unknown): void;
 }
