@@ -1,11 +1,18 @@
-import { $FlushId } from "./Symbols";
+import { $Flush } from "./Symbols";
+
+type HostElementFlushInfo = {
+  handler: () => void;
+  willUpdateProps: Record<string, any>;
+  willAttachEvents: Record<string, any>;
+  willRemoveEvents: Record<string, any>;
+};
 
 /**
  * @interface
  */
 export type HostElement = object & {
   /** @internal */
-  [$FlushId]?: unknown;
+  [$Flush]?: HostElementFlushInfo;
 };
 
 export type HostProps = Record<string, unknown>;

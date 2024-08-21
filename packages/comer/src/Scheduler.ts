@@ -3,89 +3,128 @@ import { HostAdapter, HostElement, HostIdleDeadline } from "./HostAdapter";
 import { Flag } from "./Flag";
 
 export type TaskHandler = () => void;
-export type TaskOptions = { defer: boolean };
+export type TaskPriority = "flush" | "immed" | "main" | "defer";
+export type TaskContext = () => any;
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
   constructor(protected adapter: T) {}
 
-  // ---------------------------- immed -----------------------------
+  private priority = Flag<TaskPriority>("main");
 
-  private immedRunning = false;
-  private immedTasks = new Set<TaskHandler>();
+  // ---------------------------- main -----------------------------
 
-  private runImmedTasks = () => {
-    this.immedTasks.forEach((task) => task());
-    this.immedTasks.clear();
-    this.immedRunning = false;
+  private mainRunning = false;
+  private mainTasks = new Set<TaskHandler>();
+
+  private runMainTasks = () => {
+    this.mainTasks.forEach((task) => task());
+    this.mainTasks.clear();
+    this.mainRunning = false;
     this.requestRunDeferTasks();
   };
 
-  private requestRunImmedTasks() {
-    if (this.immedRunning) return;
-    this.immedRunning = true;
-    nextTick(this.runImmedTasks);
+  private requestRunMainTasks() {
+    if (this.mainRunning) return;
+    this.mainRunning = true;
+    nextTick(this.runMainTasks);
   }
 
   // ---------------------------- defer -----------------------------
 
+  private deferCallbackId: unknown;
   private deferTasks = new Set<TaskHandler>();
 
   private runDeferTasks = (deadline: HostIdleDeadline) => {
-    if (this.immedRunning) return;
+    if (this.mainRunning) return;
     for (const task of this.deferTasks) {
       if (deadline.timeRemaining() <= 0) break;
       if (task) task();
       this.deferTasks.delete(task);
     }
+    this.deferCallbackId = void 0;
     if (this.deferTasks.size > 0) this.requestRunDeferTasks();
   };
 
-  private deferRunId: unknown;
   private requestRunDeferTasks() {
-    if (this.immedRunning) return;
-    if (this.deferRunId) this.adapter.cancelIdleCallback(this.deferRunId);
-    this.deferRunId = this.adapter.requestIdleCallback(this.runDeferTasks);
+    if (this.mainRunning) return;
+    if (this.deferCallbackId) return;
+    this.deferCallbackId = this.adapter.requestIdleCallback(this.runDeferTasks);
   }
 
-  // ---------------------------- sync -----------------------------
+  // ----------------------------- immed -----------------------------
 
-  private syncFlag = Flag(false);
-  private syncTasks = new Set<TaskHandler>();
+  private immedTasks = new Set<TaskHandler>();
 
-  get syncing() {
-    return this.syncFlag.current();
+  private runImmedTasks = () => {
+    this.immedTasks.forEach((task) => task());
+    this.immedTasks.clear();
+  };
+
+  // ----------------------------- paint -----------------------------
+
+  private paintCallbackId: unknown;
+  private paintTasks = new Set<TaskHandler>();
+
+  private runPaintTasks = () => {
+    this.mainTasks.forEach((task) => task());
+    this.mainTasks.clear();
+    this.paintCallbackId = void 0;
+  };
+
+  private requestRunPaintTasks() {
+    if (this.paintCallbackId) return;
+    const priority = this.priority.current();
+    if (priority === "flush") return;
+    this.paintCallbackId = this.adapter.requestPaintCallback(
+      this.runPaintTasks,
+    );
   }
 
-  sync<H extends () => any>(handler: H): ReturnType<H> {
-    this.syncTasks.clear();
-    const result = this.syncFlag.run(true, handler);
-    this.syncTasks.forEach((task) => task());
-    this.syncTasks.clear();
-    return result;
-  }
+  // ----------------------- execute & cancel -------------------------
 
-  // ----------------------------- perform -----------------------------
-
-  perform(task: TaskHandler, options: TaskOptions): void {
+  post(task: TaskHandler): void {
     if (!task) return;
-    const { defer } = options;
-    if (this.syncFlag.current()) {
-      this.syncTasks.add(task);
-    } else if (defer) {
+    const priority = this.priority.current();
+    if (priority === "immed" || priority === "flush") {
+      this.immedTasks.add(task);
+    } else if (priority === "defer") {
       this.deferTasks.add(task);
       this.requestRunDeferTasks();
     } else {
-      this.immedTasks.add(task);
-      this.requestRunImmedTasks();
+      this.mainTasks.add(task);
+      this.requestRunMainTasks();
     }
   }
 
-  // ----------------------------- cancel ------------------------------
+  paint(task: TaskHandler): void {
+    if (!task) return;
+    this.paintTasks.add(task);
+    this.requestRunPaintTasks();
+  }
 
   cancel(task: TaskHandler) {
     if (!task) return;
     this.deferTasks.delete(task);
+    this.mainTasks.delete(task);
     this.immedTasks.delete(task);
-    this.syncTasks.delete(task);
+    this.paintTasks.delete(task);
+  }
+
+  // ---------------------------- context -----------------------------
+
+  defer<C extends TaskContext>(contextHandler: C): ReturnType<C> {
+    return this.priority.run("defer", contextHandler);
+  }
+
+  immed<C extends TaskContext>(contextHandler: C): ReturnType<C> {
+    const result = this.priority.run("immed", contextHandler);
+    this.runImmedTasks();
+    return result;
+  }
+
+  flush<C extends TaskContext>(contextHandler: C): ReturnType<C> {
+    const result = this.immed(() => this.priority.run("flush", contextHandler));
+    this.runPaintTasks();
+    return result;
   }
 }

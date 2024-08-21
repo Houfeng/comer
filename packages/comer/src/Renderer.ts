@@ -5,7 +5,7 @@ import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import {
   $Children,
-  $FlushId,
+  $Flush,
   $Parent,
   $Props,
   $Reactive,
@@ -43,7 +43,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private scheduler = new Scheduler(this.adapter);
 
-  private getComponentConstructor(element: Component) {
+  private getComponentConstructor(
+    element: Component,
+  ): ComponentConstructor<any, any> {
     return element.constructor as ComponentConstructor<any, any>;
   }
 
@@ -63,7 +65,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return this.isFragment(value) && value["props"]?.children?.length < 1;
   }
 
-  private isDelegate(value: unknown) {
+  private isDelegate(value: unknown): value is Delegate {
     return !!value && value instanceof Delegate;
   }
 
@@ -81,7 +83,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     );
   }
 
-  private bindReactiver(element: Component) {
+  private bindReactiver(element: Component): void {
     if (element[$Reactive]) return;
     // Normalize the props of element
     this.normalizeProps(element);
@@ -93,7 +95,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const requestBuild = () => {
       if (!element[$Update]) return;
       const defer = this.canDefer(element);
-      this.scheduler.perform(element[$Update], { defer });
+      return defer
+        ? this.scheduler.defer(() => this.scheduler.post(element[$Update]!))
+        : this.scheduler.post(element[$Update]);
     };
     // Create a reactiver
     element[$Reactive] = createReactiver(
@@ -194,19 +198,28 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     willUpdateProps: Record<string, any>,
     willAttachEvents: Record<string, any>,
     willRemoveEvents: Record<string, any>,
-  ) {
+  ): void {
     if (!hostElement) return;
-    const flushHandler = () => {
-      this.adapter.updateProps(hostElement, willUpdateProps);
-      this.adapter.removeEvents(hostElement, willRemoveEvents);
-      this.adapter.attachEvents(hostElement, willAttachEvents);
-      hostElement[$FlushId] = void 0;
-    };
-    if (this.scheduler.syncing) return flushHandler();
-    if (hostElement[$FlushId]) {
-      this.adapter.cancelPaintCallback(hostElement[$FlushId]);
+    if (!hostElement[$Flush]) {
+      hostElement[$Flush] = {
+        willUpdateProps,
+        willAttachEvents,
+        willRemoveEvents,
+        handler: () => {
+          this.adapter.updateProps(hostElement, willUpdateProps);
+          this.adapter.removeEvents(hostElement, willRemoveEvents);
+          this.adapter.attachEvents(hostElement, willAttachEvents);
+          hostElement[$Flush] = void 0;
+        },
+      };
+    } else {
+      Object.assign(hostElement[$Flush], {
+        willUpdateProps,
+        willAttachEvents,
+        willRemoveEvents,
+      });
     }
-    hostElement[$FlushId] = this.adapter.requestPaintCallback(flushHandler);
+    this.scheduler.paint(hostElement[$Flush].handler);
   }
 
   private normalizeProps(element: Component): void {
@@ -316,14 +329,16 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
   }
 
-  private requestMount(element: Component) {
+  private requestMount(element: Component): void {
     if (element[$Mount]) this.scheduler.cancel(element[$Mount]);
     element[$Mount] = () => {
       this.mountElement(element);
       element[$Mount] = void 0;
     };
     const defer = this.canDefer(element);
-    this.scheduler.perform(element[$Mount], { defer });
+    return defer
+      ? this.scheduler.defer(() => this.scheduler.post(element[$Mount]!))
+      : this.scheduler.post(element[$Mount]);
   }
 
   /**
@@ -404,9 +419,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element["onDestroy"]?.();
     if (this.isHostComponent(element) && !inDeletedTree) {
       inDeletedTree = true;
-      this.scheduler.perform(
-        () => element[$Host] && this.adapter.removeElement(element[$Host]),
-        { defer: true },
+      this.scheduler.defer(() =>
+        this.scheduler.post(
+          () => element[$Host] && this.adapter.removeElement(element[$Host]),
+        ),
       );
     }
     // broadcast to children
@@ -430,6 +446,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * please use with caution as it may cause lag.
    */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
-    return this.scheduler.sync(handler);
+    return this.scheduler.flush(handler);
   }
 }
