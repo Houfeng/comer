@@ -66,14 +66,16 @@ module.exports = {
       OBER_MODE: 'proxy',
     }),
     new HtmlWebpackPlugin({
-      name: 'comer',
+      filename: 'comer.html',
       template: require.resolve('./assets/index.html'),
       publicPath: publicPath,
+      chunks: ["vendors", "comer"],
     }),
     new HtmlWebpackPlugin({
-      name: 'comer',
+      filename: 'react.html',
       template: require.resolve('./assets/index.html'),
       publicPath: publicPath,
+      chunks: ["vendors", "react"],
     }),
   ],
 };

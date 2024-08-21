@@ -28,6 +28,7 @@ export const build = task('Build', [clean, generate, lint], async () => {
   await $`tsc -p ./packages/comer`;
   await $`tsc -p ./packages/comer-dom`;
   await $`tsc -p ./packages/comer-devtool && pnpm -F comer-devtool build`;
+  await $`pnpm -F comer-benchmark build`;
   await $`tsc -p ./packages/comer-demo`;
 });
 
