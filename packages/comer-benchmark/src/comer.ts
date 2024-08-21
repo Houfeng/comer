@@ -1,7 +1,6 @@
-import { Component, delegate, Modify, observable } from "comer";
+import { Component, Modify, observable } from "comer";
 import { Div, Input, renderer, Span, TextContent } from "comer-dom";
 
-@delegate
 class Item extends Component<{ text: string }> {
   build(): Component {
     return new Span({
@@ -10,18 +9,13 @@ class Item extends Component<{ text: string }> {
   }
 }
 
-@delegate
 class List extends Component {
   state = observable({ num: 100, value: 1 });
   updateNum = (event: Modify<Event, { target: HTMLInputElement }>) => {
-    renderer.flushSync(() => {
-      this.state.num = Number(event.target.value);
-    });
+    this.state.num = Number(event.target.value);
   };
   updateValue = (event: Modify<Event, { target: HTMLInputElement }>) => {
-    renderer.flushSync(() => {
-      this.state.value = Number(event.target.value);
-    });
+    this.state.value = Number(event.target.value);
   };
   build() {
     const { num, value } = this.state;
@@ -33,7 +27,7 @@ class List extends Component {
           style: { wordWrap: "break-word", wordBreak: "break-all" },
           children: new Array(num)
             .fill(" ")
-            .map((_, i) => new Item({ text: `${i}:${value}` })),
+            .map((_, i) => new Item({ text: `${i}:${value}, ` })),
         }),
       ],
     });

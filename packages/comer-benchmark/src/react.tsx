@@ -20,7 +20,7 @@ function List() {
       <input value={value} onChange={updateValue} />
       <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
         {new Array(num).fill(' ')
-          .map((_, i) => <Item text={`${i}:${value}`} />)}
+          .map((_, i) => <Item text={`${i}:${value}, `} />)}
       </div>
     </div>
   );
