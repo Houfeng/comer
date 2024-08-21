@@ -66,8 +66,8 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   private paintTasks = new Set<TaskHandler>();
 
   private runPaintTasks = () => {
-    this.mainTasks.forEach((task) => task());
-    this.mainTasks.clear();
+    this.paintTasks.forEach((task) => task());
+    this.paintTasks.clear();
     this.paintCallbackId = void 0;
   };
 
@@ -112,18 +112,18 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   // ---------------------------- context -----------------------------
 
-  defer<C extends TaskContext>(contextHandler: C): ReturnType<C> {
-    return this.priority.run("defer", contextHandler);
+  defer<C extends TaskContext>(fn: C): ReturnType<C> {
+    return this.priority.run("defer", fn);
   }
 
-  immed<C extends TaskContext>(contextHandler: C): ReturnType<C> {
-    const result = this.priority.run("immed", contextHandler);
+  immed<C extends TaskContext>(fn: C): ReturnType<C> {
+    const result = this.priority.run("immed", fn);
     this.runImmedTasks();
     return result;
   }
 
-  flush<C extends TaskContext>(contextHandler: C): ReturnType<C> {
-    const result = this.immed(() => this.priority.run("flush", contextHandler));
+  flush<C extends TaskContext>(fn: C): ReturnType<C> {
+    const result = this.immed(() => this.priority.run("flush", fn));
     this.runPaintTasks();
     return result;
   }

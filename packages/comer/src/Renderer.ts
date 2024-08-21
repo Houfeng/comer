@@ -206,9 +206,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         willAttachEvents,
         willRemoveEvents,
         handler: () => {
-          this.adapter.updateProps(hostElement, willUpdateProps);
-          this.adapter.removeEvents(hostElement, willRemoveEvents);
-          this.adapter.attachEvents(hostElement, willAttachEvents);
+          const { willUpdateProps, willAttachEvents, willRemoveEvents } =
+            hostElement[$Flush] || {};
+          this.adapter.updateProps(hostElement, willUpdateProps || {});
+          this.adapter.removeEvents(hostElement, willRemoveEvents || {});
+          this.adapter.attachEvents(hostElement, willAttachEvents || {});
           hostElement[$Flush] = void 0;
         },
       };
