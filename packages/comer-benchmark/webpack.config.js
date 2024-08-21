@@ -41,12 +41,15 @@ module.exports = {
       },
     ]
   },
+  performance: { hints: false },
   devtool: NODE_ENV === 'development' ? 'inline-source-map' : false,
   devServer: {
     port: 8082,
     liveReload: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchFiles: ["src/**/*"],
+    static: { directory: __dirname },
+    devMiddleware: { index: true, writeToDisk: true },
   },
   plugins: [
     new webpack.DefinePlugin({

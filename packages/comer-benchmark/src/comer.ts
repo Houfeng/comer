@@ -9,7 +9,7 @@ export class Demo extends Component {
   };
   build() {
     return new Div({
-      children: new TextContent("Comer"),
+      children: new TextContent("Comer demo"),
     });
   }
 }
