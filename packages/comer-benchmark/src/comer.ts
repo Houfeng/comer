@@ -1,5 +1,5 @@
-import { Component, Deferment, Modify, observable } from "comer";
-import { Div, Input, renderer, Span, TextContent } from "comer-dom";
+import { Component, Deferment, observable } from "comer";
+import { Div, Input, InputEvent, renderer, Span, TextContent } from "comer-dom";
 
 class Item extends Component<{ text: string }> {
   build(): Component {
@@ -11,10 +11,10 @@ class Item extends Component<{ text: string }> {
 
 class List extends Component {
   state = observable({ num: 100, value: 1 });
-  updateNum = (event: Modify<Event, { target: HTMLInputElement }>) => {
-    this.state.num = Number(event.target.value);
+  updateNum = (event: InputEvent<HTMLInputElement>) => {
+    this.state.num = Number(event);
   };
-  updateValue = (event: Modify<Event, { target: HTMLInputElement }>) => {
+  updateValue = (event: InputEvent<HTMLInputElement>) => {
     this.state.value = Number(event.target.value);
   };
   build() {

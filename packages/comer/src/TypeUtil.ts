@@ -10,7 +10,7 @@ export type AnyFunction = (...args: any) => any;
 
 export type ValueOf<T, K extends keyof T = keyof T> = T[K];
 
-export type Modify<T, R> = Omit<T, keyof R> & R;
+export type Override<T, R> = Omit<T, keyof R> & R;
 
 export type StringKeyOf<T> = Exclude<keyof T, number | symbol>;
 
@@ -24,7 +24,7 @@ export type OptionalKeyToNullable<T> = {
   [K in OptionalKeyOf<T>]: T[K] | undefined;
 } & { [K in RequiredKeyOf<T>]: T[K] };
 
-export type NullableKeyToOptional<T> = Modify<
+export type NullableKeyToOptional<T> = Override<
   T,
   Partial<{ [K in NullableKeyOf<T>]-?: T[K] | undefined }>
 >;
@@ -72,7 +72,7 @@ export type ConvertToEvents<
 > = UnionToIntersection<
   UnionTypeOfValues<{
     [KK in K]: {
-      [KKK in `on${Capitalize<KK>}`]: (event: Modify<M[KK], E>) => void;
+      [KKK in `on${Capitalize<KK>}`]: (event: Override<M[KK], E>) => void;
     };
   }>
 >;

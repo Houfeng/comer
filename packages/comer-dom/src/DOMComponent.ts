@@ -17,6 +17,11 @@ export type DOMCustomAttributes = {
 
 export type DOMHostElement = DOMElement | DOMText;
 
+export type ElementEvents<
+  TElement extends DOMElement,
+  TEvents extends ElementEventMap = ElementEventMap,
+> = ConvertToEvents<TEvents, { target: TElement }>;
+
 // Element wrapper ------------------------------------------------------------
 
 export type ElementProps<
@@ -24,7 +29,7 @@ export type ElementProps<
   TEvents extends ElementEventMap,
 > = Partial<
   PickAsProps<TElement> &
-    ConvertToEvents<TEvents, { target: TElement }> &
+    ElementEvents<TElement, TEvents> &
     ARIAMixin &
     DOMCustomAttributes & {
       style: BasicStyle | string;
