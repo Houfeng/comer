@@ -11,7 +11,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   private priority = Flag<TaskPriority>("usual");
 
-  current() {
+  get current() {
     return this.priority.current();
   }
 
@@ -42,7 +42,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     if (this.usualRunning) return;
     for (const task of this.deferTasks) {
       if (deadline.timeRemaining() <= 0) break;
-      if (task) task();
+      this.defer(() => task());
       this.deferTasks.delete(task);
     }
     this.deferCallbackId = void 0;
@@ -78,7 +78,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   private requestRunPaintTasks() {
     if (this.paintCallbackId) return;
-    const priority = this.current();
+    const priority = this.current;
     if (priority === "flush") return;
     const { requestPaintCallback } = this.adapter;
     this.paintCallbackId = requestPaintCallback(this.runPaintTasks);
@@ -88,7 +88,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   post = (task: TaskHandler): void => {
     if (!task) return;
-    const priority = this.current();
+    const priority = this.current;
     if (priority === "immed" || priority === "flush") {
       this.immedTasks.add(task);
     } else if (priority === "defer") {
@@ -121,14 +121,19 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   };
 
   immed = <C extends TaskContext>(fn: C): ReturnType<C> => {
-    const result = this.priority.run("immed", fn);
-    this.runImmedTasks();
-    return result;
+    return this.priority.run("immed", () => {
+      const result = fn();
+      this.runImmedTasks();
+      return result;
+    });
   };
 
   flush = <C extends TaskContext>(fn: C): ReturnType<C> => {
-    const result = this.immed(() => this.priority.run("flush", fn));
-    this.runPaintTasks();
-    return result;
+    return this.priority.run("flush", () => {
+      const result = fn();
+      this.runImmedTasks();
+      this.runPaintTasks();
+      return result;
+    });
   };
 }
