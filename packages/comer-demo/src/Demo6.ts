@@ -15,7 +15,7 @@ export class Demo extends Component {
     this.state.num = Number(event.target.value);
   };
   updateValue = (event: InputEvent<HTMLInputElement>) => {
-    renderer["scheduler"]["flush"](() => {
+    renderer.flushSync(() => {
       this.state.value = Number(event.target.value);
     });
   };
