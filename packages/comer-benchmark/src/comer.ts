@@ -12,7 +12,7 @@ class Item extends Component<{ text: string }> {
 class List extends Component {
   state = observable({ num: 100, value: 1 });
   updateNum = (event: InputEvent<HTMLInputElement>) => {
-    this.state.num = Number(event);
+    this.state.num = Number(event.target.value);
   };
   updateValue = (event: InputEvent<HTMLInputElement>) => {
     this.state.value = Number(event.target.value);
