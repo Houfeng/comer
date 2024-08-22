@@ -39,7 +39,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -305,10 +305,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private canDefer(element: Component): boolean {
+    if (!element) return false;
     const { current } = this.scheduler;
     if (current === "flush") return false;
     if (current === "defer") return true;
-    if (!element) return false;
     if (element instanceof Deferment) return !!element.value;
     return !!useContext(element, Deferment);
   }
