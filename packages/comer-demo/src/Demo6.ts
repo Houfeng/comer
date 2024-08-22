@@ -1,5 +1,5 @@
 import { Component, observable } from "comer";
-import { Div, Input, InputEvent, renderer, Span, TextContent } from "comer-dom";
+import { Div, Input, InputEvent, Span, TextContent } from "comer-dom";
 
 class Item extends Component<{ text: string }> {
   build(): Component {
@@ -15,9 +15,7 @@ export class Demo extends Component {
     this.state.num = Number(event.target.value);
   };
   updateValue = (event: InputEvent<HTMLInputElement>) => {
-    renderer.flushSync(() => {
-      this.state.value = Number(event.target.value);
-    });
+    this.state.value = Number(event.target.value);
   };
   build() {
     const { num, value } = this.state;
