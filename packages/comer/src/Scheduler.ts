@@ -11,6 +11,10 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   private priority = Flag<TaskPriority>("usual");
 
+  current() {
+    return this.priority.current();
+  }
+
   // ---------------------------- usual -----------------------------
 
   private usualRunning = false;
@@ -74,7 +78,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   private requestRunPaintTasks() {
     if (this.paintCallbackId) return;
-    const priority = this.priority.current();
+    const priority = this.current();
     if (priority === "flush") return;
     const { requestPaintCallback } = this.adapter;
     this.paintCallbackId = requestPaintCallback(this.runPaintTasks);
@@ -84,7 +88,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   post = (task: TaskHandler): void => {
     if (!task) return;
-    const priority = this.priority.current();
+    const priority = this.current();
     if (priority === "immed" || priority === "flush") {
       this.immedTasks.add(task);
     } else if (priority === "defer") {
