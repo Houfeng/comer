@@ -4,6 +4,8 @@ import { ElementComponent as EC } from "../DOMComponent";
  * MathML Tag: maction
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/maction
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MAction extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:maction";
@@ -13,6 +15,8 @@ export class MAction extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: math
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/math
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MAth extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:math";
@@ -22,6 +26,8 @@ export class MAth extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: merror
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/merror
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MError extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:merror";
@@ -31,6 +37,8 @@ export class MError extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mfrac
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mfrac
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MFrac extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mfrac";
@@ -40,6 +48,8 @@ export class MFrac extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mi
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mi
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MI extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mi";
@@ -49,6 +59,8 @@ export class MI extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mmultiscripts
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mmultiscripts
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MMultiscripts extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mmultiscripts";
@@ -58,6 +70,8 @@ export class MMultiscripts extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mn
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mn
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MN extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mn";
@@ -67,6 +81,8 @@ export class MN extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mo
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mo
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MO extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mo";
@@ -76,6 +92,8 @@ export class MO extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mover
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mover
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MOver extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mover";
@@ -85,6 +103,8 @@ export class MOver extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mpadded
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mpadded
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MPadded extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mpadded";
@@ -94,6 +114,8 @@ export class MPadded extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mphantom
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mphantom
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MPhantom extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mphantom";
@@ -103,6 +125,8 @@ export class MPhantom extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mprescripts
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mprescripts
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MPrescripts extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mprescripts";
@@ -112,6 +136,8 @@ export class MPrescripts extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mroot
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mroot
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MRoot extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mroot";
@@ -121,6 +147,8 @@ export class MRoot extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mrow
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mrow
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MRow extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mrow";
@@ -130,6 +158,8 @@ export class MRow extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: ms
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/ms
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MS extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:ms";
@@ -139,6 +169,8 @@ export class MS extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mspace
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mspace
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MSpace extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mspace";
@@ -148,6 +180,8 @@ export class MSpace extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: msqrt
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/msqrt
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MSqrt extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:msqrt";
@@ -157,6 +191,8 @@ export class MSqrt extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mstyle
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mstyle
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MStyle extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mstyle";
@@ -166,6 +202,8 @@ export class MStyle extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: msub
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/msub
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MSub extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:msub";
@@ -175,6 +213,8 @@ export class MSub extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: msubsup
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/msubsup
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MSubsup extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:msubsup";
@@ -184,6 +224,8 @@ export class MSubsup extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: msup
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/msup
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MSup extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:msup";
@@ -193,6 +235,8 @@ export class MSup extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mtable
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mtable
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MTable extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mtable";
@@ -202,6 +246,8 @@ export class MTable extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mtd
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mtd
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MTd extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mtd";
@@ -211,6 +257,8 @@ export class MTd extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mtext
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mtext
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MText extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mtext";
@@ -220,6 +268,8 @@ export class MText extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: mtr
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/mtr
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MTr extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:mtr";
@@ -229,6 +279,8 @@ export class MTr extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: munder
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/munder
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MUnder extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:munder";
@@ -238,6 +290,8 @@ export class MUnder extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: munderover
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/munderover
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MUnderover extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:munderover";
@@ -247,6 +301,8 @@ export class MUnderover extends EC<MathMLElement, MathMLElementEventMap> {
  * MathML Tag: semantics
  * @see https://developer.mozilla.org/docs/Web/MathML/Element/semantics
  * @see https://developer.mozilla.org/docs/Web/API/MathMLElement
+ * @class
+ * @sealed
  */
 export class MEmantics extends EC<MathMLElement, MathMLElementEventMap> {
   static readonly type = "MathML:semantics";

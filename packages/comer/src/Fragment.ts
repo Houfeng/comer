@@ -4,6 +4,7 @@ import { $Children } from "./Symbols";
 /**
  * Component elements fragment
  * @class
+ * @sealed
  */
 export class Fragment extends Component<{ children: Component[] }> {
   constructor(items?: Readonly<Component[] | Component>) {

@@ -33,6 +33,7 @@ export class Delegate extends Component<any> {
  * @param target Target component
  * @returns Delegate component
  * @function
+ * @decorator
  */
 export function delegate<T extends ComponentConstructor<any, any>>(
   target: T,

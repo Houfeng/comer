@@ -115,6 +115,7 @@ export abstract class Component<
    * Triggered when component creation is completed and available
    * @callback
    * @method
+   * @virtual
    */
   protected onCreated?: () => void;
 
@@ -123,6 +124,7 @@ export abstract class Component<
    * Triggered when a component is updated
    * @callback
    * @method
+   * @virtual
    */
   protected onUpdated?: () => void;
 
@@ -131,12 +133,16 @@ export abstract class Component<
    * Triggered during component destruction
    * @callback
    * @method
+   * @virtual
    */
   protected onDestroy?: () => void;
 
   /**
    * Normalize the Props of all instances of the current component class
    * Be cautious when using, be sure to declare the type of props
+   * @static
+   * @method
+   * @virtual
    */
   static normalizeProps?: (props: object) => object;
 }

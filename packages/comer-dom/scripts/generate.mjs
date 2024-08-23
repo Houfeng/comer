@@ -18,11 +18,13 @@ function generateCode(define) {
       ` * ${ns || 'HTML'} Tag: ${tag}`,
       ` * @see https://developer.mozilla.org/docs/Web/${ns || 'HTML'}/Element/${tag}`,
       ` * @see https://developer.mozilla.org/docs/Web/API/${element}`,
+      ` * @class`,
+      ` * @sealed`,
       ` */`,
       `export class ${name} extends EC<${element}, ${events}> {`,
       `  static readonly type = "${type}";`,
       `}`,
-      ''
+      ``
     ];
   });
   lines.unshift(`import { ElementComponent as EC } from "../DOMComponent";${EOL}`);

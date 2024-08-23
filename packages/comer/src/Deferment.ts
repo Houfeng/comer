@@ -4,6 +4,7 @@ import { Provider } from "./Provider";
 /**
  * Declare component subtree as deferred
  * @class
+ * @sealed
  */
 export class Deferment extends Provider<true> {
   constructor(items: Readonly<Component[] | Component>) {
