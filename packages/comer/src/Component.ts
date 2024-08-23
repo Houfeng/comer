@@ -72,10 +72,6 @@ export abstract class Component<
   /** @internal */
   protected [$Mount]?: () => void;
 
-  /**
-   * Construct a component instance through props
-   * @param props Component props
-   */
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;
   }
