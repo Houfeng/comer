@@ -91,8 +91,8 @@ export abstract class Component<
    * Generate component rendering content, do not include time-consuming logic,
    * cannot be asynchronous, and must return component elements
    * @returns Component element (subtree root)
-   * @virtual
    * @method
+   * @virtual
    */
   build(): Component {
     throw new Error("Unimplemented build method");
@@ -113,7 +113,6 @@ export abstract class Component<
   /**
    * Component lifecycle hook method
    * Triggered when component creation is completed and available
-   * @callback
    * @method
    * @virtual
    */
@@ -122,7 +121,6 @@ export abstract class Component<
   /**
    * Component lifecycle hook method
    * Triggered when a component is updated
-   * @callback
    * @method
    * @virtual
    */
@@ -131,7 +129,6 @@ export abstract class Component<
   /**
    * Component lifecycle hook method
    * Triggered during component destruction
-   * @callback
    * @method
    * @virtual
    */
