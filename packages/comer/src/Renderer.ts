@@ -40,7 +40,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -240,7 +240,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private applyLatestProps(
     oldElement: Component,
     newElement: Component = oldElement,
-  ): void {
+  ): boolean {
     if (!this.isSomeComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
@@ -250,6 +250,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const willUpdateHostProps: Record<string, any> = {};
     const willAttachHostEvents: Record<string, any> = {};
     const willRemoveHostEvents: Record<string, any> = {};
+    let changed = false;
     if (oldElement !== newElement) {
       // update new props
       const allKeys = new Set([
@@ -269,6 +270,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
           oldProps[key] = newProps[key] ?? null;
           willUpdateHostProps[key] = oldProps[key];
         }
+        changed = true;
         // TODO: When LowProxy mode
         // The new field needs to be set to be responsive
       });
@@ -282,6 +284,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
           willUpdateHostProps[key] = value;
         }
       });
+      changed = true;
     }
     // flush to host element
     if (this.isHostComponent(oldElement) && oldElement[$Host]) {
@@ -292,6 +295,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         willRemoveHostEvents,
       );
     }
+    return changed;
   }
 
   private canUpdate(oldElement: Component, newElement: Component): boolean {
@@ -377,8 +381,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         // Normalize the props of new child
         this.normalizeProps(newChild);
         // apply
-        this.applyLatestProps(oldChild, newChild);
-        oldChild[$Request]?.();
+        const changed = this.applyLatestProps(oldChild, newChild);
+        if (changed) oldChild[$Request]?.();
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
