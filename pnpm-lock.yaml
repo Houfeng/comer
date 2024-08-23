@@ -93,8 +93,8 @@ importers:
   packages/comer:
     dependencies:
       ober:
-        specifier: 9.0.0-rc3
-        version: 9.0.0-rc3
+        specifier: 9.0.0-rc5
+        version: 9.0.0-rc5
       tslib:
         specifier: '*'
         version: 2.6.3
@@ -3941,8 +3941,8 @@ packages:
   /ntils@5.2.4:
     resolution: {integrity: sha512-VUdpPYb0bvVpxkzFYx2o3I0VWIYtz+8VGlA55dlSTb7eInvWrazV+InQAM3aNfWkdLZL4LFay7eitUYGuZKhjQ==}
 
-  /ober@9.0.0-rc3:
-    resolution: {integrity: sha512-R0ZtaLvcBpLU0ACDKNDBPT5lgHwI9hLySPS6QF+7Ua6AZ3/LvuEobxufkiLV0wQCoai2j4pHQ2v/8RI2Arv9HA==, tarball: https://registry.npmjs.org/ober/-/ober-9.0.0-rc3.tgz}
+  /ober@9.0.0-rc5:
+    resolution: {integrity: sha512-MXIwBzWGYLrP5fYWyHYSz1xitJZy6iphbmJCs2H9sAgebfr73MtZbFWOxdzaYHkGHvFAKsUzA/wx3xXtYQCGPw==, tarball: https://registry.npmjs.org/ober/-/ober-9.0.0-rc5.tgz}
     dev: false
 
   /object-assign@4.1.1:
