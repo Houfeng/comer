@@ -6,10 +6,11 @@ import {
   $Children,
   $Parent,
   $Identify,
-  $Reactive,
+  $Build,
   $Prev,
   $Update,
   $Mount,
+  $Request,
 } from "./Symbols";
 
 /**
@@ -60,10 +61,13 @@ export abstract class Component<
   protected [$Prev]?: Component;
 
   /** @internal */
-  protected [$Reactive]?: ReactiveFunction<() => Component>;
+  protected [$Build]?: ReactiveFunction<() => Component>;
 
   /** @internal */
   protected [$Update]?: () => void;
+
+  /** @internal */
+  protected [$Request]?: () => void;
 
   /** @internal */
   protected [$Mount]?: () => void;

@@ -8,12 +8,13 @@ import {
   $Flush,
   $Parent,
   $Props,
-  $Reactive,
+  $Build,
   $Value,
   $Host,
   $Prev,
   $Update,
   $Mount,
+  $Request,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferment } from "./Deferment";
@@ -84,7 +85,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private bindReactiver(element: Component): void {
-    if (element[$Reactive]) return;
+    if (element[$Build]) return;
     // Normalize the props of element
     this.normalizeProps(element);
     // Make the props of the instance observable
@@ -92,7 +93,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Bind a schedule task
     element[$Update] = () => this.buildElement(element, false);
     // Request rebuild function
-    const requestBuild = () => {
+    element[$Request] = () => {
       if (!element[$Update]) return;
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
@@ -101,9 +102,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         : post(element[$Update]);
     };
     // Create a reactiver
-    element[$Reactive] = createReactiver(
+    element[$Build] = createReactiver(
       () => element["build"](),
-      requestBuild,
+      element[$Request],
     );
   }
 
@@ -282,7 +283,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         }
       });
     }
+    // if (oldElement[$Request]) {
+    //   oldElement[$Request]();
+    // } else {
     this.buildElement(oldElement, false);
+    // }
+    // oldElement[$Request]?.();
     // flush to host element
     if (this.isHostComponent(oldElement) && oldElement[$Host]) {
       this.flushToHostElement(
@@ -320,13 +326,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private executeElement(element: Component): Component[] {
     try {
       // When executed for the first time, bind Reactiver
-      if (!element[$Reactive]) this.bindReactiver(element);
+      if (!element[$Build]) this.bindReactiver(element);
       // execute the build wrapper
       if (this.isFragment(element)) {
-        element[$Reactive]?.();
+        element[$Build]?.();
         return element[$Children] || [];
       } else {
-        const result = element[$Reactive]?.();
+        const result = element[$Build]?.();
         if (this.isEmptyFragment(result)) return [];
         return result ? [result] : [];
       }
@@ -424,7 +430,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     const { cancel, defer, post } = this.scheduler;
     cancel(element[$Mount]);
     cancel(element[$Update]);
-    element[$Reactive]?.unsubscribe();
+    element[$Build]?.unsubscribe();
     element["onDestroy"]?.();
     if (this.isHostComponent(element)) {
       cancel(element[$Host]?.[$Flush]?.handler);
