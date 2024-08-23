@@ -1,6 +1,6 @@
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, ComponentConstructor, useContext } from "./Component";
-import { isObservable, observable, reactivable } from "ober";
+import { isObservable, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import {
@@ -88,7 +88,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Normalize the props of element
     this.normalizeProps(element);
     // Make the props of the instance observable
-    element[$Props] = observable(element[$Props]);
+    // element[$Props] = observable(element[$Props]);
     // Bind a schedule task
     element[$Update] = () => this.buildElement(element, false);
     // Request rebuild function
@@ -282,6 +282,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         }
       });
     }
+    this.buildElement(oldElement, false);
     // flush to host element
     if (this.isHostComponent(oldElement) && oldElement[$Host]) {
       this.flushToHostElement(
