@@ -40,7 +40,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -283,12 +283,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         }
       });
     }
-    // if (oldElement[$Request]) {
-    //   oldElement[$Request]();
-    // } else {
-    this.buildElement(oldElement, false);
-    // }
-    // oldElement[$Request]?.();
     // flush to host element
     if (this.isHostComponent(oldElement) && oldElement[$Host]) {
       this.flushToHostElement(
@@ -384,6 +378,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.normalizeProps(newChild);
         // apply
         this.applyLatestProps(oldChild, newChild);
+        oldChild[$Request]?.();
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
