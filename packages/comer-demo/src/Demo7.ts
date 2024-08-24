@@ -11,7 +11,7 @@ const state = observable({ value: 0 });
 
 class Child extends Component<{ value: number }> {
   build(): Component {
-    console.log('Build: child');
+    console.log("Build: child");
     return new Div({
       children: [
         new Div({ children: new TextBlock("Child") }),
@@ -23,7 +23,7 @@ class Child extends Component<{ value: number }> {
 
 class Parent extends Component {
   build(): Component {
-    console.log('Build: parent');
+    console.log("Build: parent");
     return new Div({
       children: [
         new Div({ children: new TextBlock("Parent") }),

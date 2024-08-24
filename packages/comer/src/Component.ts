@@ -6,11 +6,12 @@ import {
   $Children,
   $Parent,
   $Identify,
-  $Build,
+  $Reactive,
   $Prev,
-  $Update,
+  $Build,
   $Mount,
-  $Request,
+  $Update,
+  $Step,
 } from "./Symbols";
 
 /**
@@ -61,16 +62,19 @@ export abstract class Component<
   protected [$Prev]?: Component;
 
   /** @internal */
-  protected [$Build]?: ReactiveFunction<() => Component>;
+  protected [$Reactive]?: ReactiveFunction<() => Component>;
+
+  /** @internal */
+  protected [$Build]?: () => void;
 
   /** @internal */
   protected [$Update]?: () => void;
 
   /** @internal */
-  protected [$Request]?: () => void;
+  protected [$Mount]?: () => void;
 
   /** @internal */
-  protected [$Mount]?: () => void;
+  protected [$Step]?: number;
 
   constructor(...params: ComponentParameters<TProps, TRef>) {
     this[$Props] = (params[0] || {}) as ComponentProps<TProps, TRef>;

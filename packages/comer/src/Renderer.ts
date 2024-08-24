@@ -8,17 +8,19 @@ import {
   $Flush,
   $Parent,
   $Props,
-  $Build,
+  $Reactive,
   $Value,
   $Host,
   $Prev,
-  $Update,
+  $Build,
   $Mount,
-  $Request,
+  $Update,
+  $Step,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferment } from "./Deferment";
 import { Scheduler } from "./Scheduler";
+import { Stepper } from "./Stepper";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
@@ -43,6 +45,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   constructor(protected adapter: T) {}
 
   private scheduler = new Scheduler(this.adapter);
+  private stepper = new Stepper();
 
   private getComponentConstructor(
     element: Component,
@@ -85,26 +88,27 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   }
 
   private bindReactiver(element: Component): void {
-    if (element[$Build]) return;
+    if (element[$Reactive]) return;
     // Normalize the props of element
     this.normalizeProps(element);
     // Make the props of the instance observable
     // element[$Props] = observable(element[$Props]);
     // Bind a schedule task
-    element[$Update] = () => this.buildElement(element, false);
+    element[$Build] = () => this.buildElement(element, false);
     // Request rebuild function
-    element[$Request] = () => {
-      if (!element[$Update]) return;
+    element[$Update] = () => {
+      if (!element[$Build]) return;
+      this.stepper.next();
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
       return willDefer
-        ? defer(() => post(element[$Update]!))
-        : post(element[$Update]);
+        ? defer(() => post(element[$Build]!))
+        : post(element[$Build]);
     };
     // Create a reactiver
-    element[$Build] = createReactiver(
+    element[$Reactive] = createReactiver(
       () => element["build"](),
-      element[$Request],
+      element[$Update],
     );
   }
 
@@ -324,13 +328,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private executeElement(element: Component): Component[] {
     try {
       // When executed for the first time, bind Reactiver
-      if (!element[$Build]) this.bindReactiver(element);
+      if (!element[$Reactive]) this.bindReactiver(element);
       // execute the build wrapper
       if (this.isFragment(element)) {
-        element[$Build]?.();
+        element[$Reactive]?.();
         return element[$Children] || [];
       } else {
-        const result = element[$Build]?.();
+        const result = element[$Reactive]?.();
         if (this.isEmptyFragment(result)) return [];
         return result ? [result] : [];
       }
@@ -359,6 +363,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   private buildElement(element: Component, mount: boolean): void {
     if (!this.isComponent(element)) return;
+    if ((element[$Step] || 0) >= this.stepper.current) return;
+    element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
     if (mount) this.requestMount(element);
     // handle children
@@ -382,7 +388,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.normalizeProps(newChild);
         // apply
         const changed = this.applyLatestProps(oldChild, newChild);
-        if (changed) oldChild[$Request]?.();
+        if (changed) oldChild[$Update]?.();
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
@@ -428,8 +434,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!element) return;
     const { cancel, defer, post } = this.scheduler;
     cancel(element[$Mount]);
-    cancel(element[$Update]);
-    element[$Build]?.unsubscribe();
+    cancel(element[$Build]);
+    element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
     if (this.isHostComponent(element)) {
       cancel(element[$Host]?.[$Flush]?.handler);
