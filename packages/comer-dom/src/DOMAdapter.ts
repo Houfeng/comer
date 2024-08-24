@@ -26,6 +26,10 @@ const requestIdleCallback =
 const cancelIdleCallback =
   window.cancelIdleCallback || ((id) => window.clearTimeout(id));
 
+function isCustomAttribute(name: string) {
+  return name.indexOf("data-") === 0 || name.indexOf("x-") === 0;
+}
+
 const NSMap: Record<string, string> = {
   SVG: "http://www.w3.org/2000/svg",
   MathML: "http://www.w3.org/1998/Math/MathML",
@@ -92,7 +96,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     const target = element as Record<string, any>;
     Object.entries(props).forEach(([name, value]) => {
       if (name === "children") return;
-      if (/^(x|data)-/.test(name)) {
+      if (isCustomAttribute(name)) {
         // custom attributes
         target.setAttribute(name, value);
       } else if (name === "style") {

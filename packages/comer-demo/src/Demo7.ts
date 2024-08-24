@@ -19,6 +19,15 @@ class Child extends Component<{ value: number }> {
       ],
     });
   }
+  onCreated(): void {
+    console.log("onCreated");
+  }
+  onUpdated(): void {
+    console.log("onUpdated");
+  }
+  onDestroy(): void {
+    console.log("onDestroy");
+  }
 }
 
 class Parent extends Component {

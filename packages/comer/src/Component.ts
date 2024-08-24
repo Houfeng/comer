@@ -120,7 +120,7 @@ export abstract class Component<
    * @method
    * @virtual
    */
-  protected onCreated?: () => void;
+  protected onCreated?(): void;
 
   /**
    * Component lifecycle hook method
@@ -128,7 +128,7 @@ export abstract class Component<
    * @method
    * @virtual
    */
-  protected onUpdated?: () => void;
+  protected onUpdated?(): void;
 
   /**
    * Component lifecycle hook method
@@ -136,7 +136,7 @@ export abstract class Component<
    * @method
    * @virtual
    */
-  protected onDestroy?: () => void;
+  protected onDestroy?(): void;
 
   /**
    * Normalize the Props of all instances of the current component class
@@ -145,7 +145,7 @@ export abstract class Component<
    * @method
    * @virtual
    */
-  static normalizeProps?: (props: object) => object;
+  static normalizeProps?(props: object): object;
 }
 
 export interface ProviderConstructorLike<TValue = any> {

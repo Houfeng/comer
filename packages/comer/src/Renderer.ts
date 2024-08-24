@@ -27,7 +27,7 @@ function createReactiver(build: () => Component, update: () => void) {
 }
 
 function isEventKey(name: string) {
-  return !!name && /^on/.test(name);
+  return !!name && name.indexOf("on") === 0;
 }
 
 function isReservedKey(name: string) {
