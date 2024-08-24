@@ -1,5 +1,5 @@
 import { renderer } from "comer-dom";
-import { Demo } from "./Demo6";
+import { Demo } from "./Demo7";
 
 const root = document.getElementById("root")!;
 const app = renderer.render(new Demo(), root);
