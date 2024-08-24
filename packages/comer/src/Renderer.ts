@@ -363,6 +363,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   private buildElement(element: Component, mount: boolean): void {
     if (!this.isComponent(element)) return;
+    // Ensure that each change is executed only once
     if ((element[$Step] || 0) >= this.stepper.current) return;
     element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
