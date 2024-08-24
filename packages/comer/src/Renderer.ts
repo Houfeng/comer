@@ -96,9 +96,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Bind a schedule task
     element[$Build] = () => this.buildElement(element, false);
     // Request rebuild function
-    element[$Update] = () => {
+    element[$Update] = (nextStep = true) => {
       if (!element[$Build]) return;
-      this.stepper.next();
+      if (nextStep) this.stepper.next();
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
       return willDefer
@@ -389,7 +389,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.normalizeProps(newChild);
         // apply
         const changed = this.applyLatestProps(oldChild, newChild);
-        if (changed) oldChild[$Update]?.();
+        if (changed) oldChild[$Update]?.(false);
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);

@@ -65,13 +65,13 @@ export abstract class Component<
   protected [$Reactive]?: ReactiveFunction<() => Component>;
 
   /** @internal */
-  protected [$Build]?: () => void;
+  protected [$Build]?(): void;
 
   /** @internal */
-  protected [$Update]?: () => void;
+  protected [$Update]?(nextStep?: boolean): void;
 
   /** @internal */
-  protected [$Mount]?: () => void;
+  protected [$Mount]?(): void;
 
   /** @internal */
   protected [$Step]?: number;
