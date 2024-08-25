@@ -18,12 +18,14 @@ function createConfig(min = false) {
       {
         file: `./dist/comer-dom.umd.${suffix}`,
         format: 'umd',
-        name: "ComerDOM"
+        name: "ComerDOM",
+        globals: { comer: "Comer" }
       },
       {
         file: `./dist/comer-dom.iife.${suffix}`,
         format: 'iife',
-        name: "ComerDOM"
+        name: "ComerDOM",
+        globals: { comer: "Comer" }
       }
     ],
     external: ["comer"],
