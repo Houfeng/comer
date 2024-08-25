@@ -65,34 +65,31 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!value && value instanceof Fragment;
   }
 
-  private isEmptyFragment(value: unknown): value is Fragment {
-    return this.isFragment(value) && value["props"]?.children?.length < 1;
-  }
-
   private isDelegate(value: unknown): value is Delegate {
     return !!value && value instanceof Delegate;
+  }
+
+  private getComponentType(element: Component): ComponentConstructor<any, any> {
+    return this.isDelegate(element)
+      ? element.Target
+      : this.getComponentConstructor(element);
   }
 
   private isSomeComponentType(el1: unknown, el2: unknown): boolean {
     return (
       this.isComponent(el1) &&
       this.isComponent(el2) &&
-      this.getComponentConstructor(el1) === this.getComponentConstructor(el2)
-    );
-  }
-
-  private isSomeDelegateTarget(el1: unknown, el2: unknown): boolean {
-    return (
-      this.isDelegate(el1) && this.isDelegate(el2) && el1.Target === el2.Target
+      this.getComponentType(el1) === this.getComponentType(el2)
     );
   }
 
   private bindReactiver(element: Component): void {
     if (element[$Reactive]) return;
+    if (this.isDelegate(element) || this.isFragment(element)) return;
     // Normalize the props of element
     this.normalizeProps(element);
-    // Make the props of the instance observable
-    // element[$Props] = observable(element[$Props]);
+    // unless: Make the props of the instance observable
+    // unless: element[$Props] = observable(element[$Props]);
     // Bind a schedule task
     element[$Build] = () => this.buildElement(element, false);
     // Request rebuild function
@@ -305,12 +302,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private canUpdate(oldElement: Component, newElement: Component): boolean {
     if (!oldElement || !newElement) return false;
     const isSameKey = oldElement[$Props].key === newElement[$Props].key;
-    if (!isSameKey) return false;
-    if (this.isDelegate(oldElement) && this.isDelegate(newElement)) {
-      return this.isSomeDelegateTarget(oldElement, newElement);
-    } else {
-      return this.isSomeComponentType(oldElement, newElement);
-    }
+    return isSameKey && this.isSomeComponentType(oldElement, newElement);
   }
 
   private canDefer(element: Component): boolean {
@@ -329,15 +321,20 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     try {
       // When executed for the first time, bind Reactiver
       if (!element[$Reactive]) this.bindReactiver(element);
-      // execute the build wrapper
-      if (this.isFragment(element)) {
-        element[$Reactive]?.();
-        return element[$Children] || [];
+      let results: Component[];
+      if (this.isDelegate(element)) {
+        results = [element.build()];
+      } else if (this.isFragment(element)) {
+        element.build();
+        results = element[$Children] || [];
       } else {
-        const result = element[$Reactive]?.();
-        if (this.isEmptyFragment(result)) return [];
-        return result ? [result] : [];
+        results = [element[$Reactive]!()];
       }
+      return results.reduce<Component[]>((items, it) => {
+        return this.isDelegate(it) || this.isFragment(it)
+          ? [...items, ...this.executeElement(it)]
+          : [...items, it];
+      }, []);
     } catch (err) {
       this.adapter.logger.error(err);
       return [];
@@ -427,8 +424,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    this.buildElement(element, true);
-    return element;
+    const composedElement = this.isDelegate(element)
+      ? element.build()
+      : element;
+    this.buildElement(composedElement, true);
+    return composedElement as E;
   }
 
   private unmountElement(element: Component, inDeletedTree: boolean): void {

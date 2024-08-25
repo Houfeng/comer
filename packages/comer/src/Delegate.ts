@@ -1,5 +1,5 @@
 import { Component, type ComponentConstructor } from "./Component";
-import { $Props } from "./Symbols";
+// import { $Props } from "./Symbols";
 
 /** @internal */
 export class Delegate extends Component<any> {
@@ -9,17 +9,8 @@ export class Delegate extends Component<any> {
   ) {
     super(props);
   }
-  private target?: InstanceType<ComponentConstructor<any, any>>;
   build(): Component {
-    if (!this.target) {
-      if (this.Target instanceof Delegate) {
-        throw new Error("Delegate cannot point to other Delegates");
-      }
-      this.target = new this.Target(this.props);
-    } else {
-      Object.assign(this.target[$Props], this[$Props]);
-    }
-    return this.target;
+    return new this.Target(this.props);
   }
 }
 
@@ -38,6 +29,9 @@ export class Delegate extends Component<any> {
 export function delegate<T extends ComponentConstructor<any, any>>(
   target: T,
 ): T {
+  if (target instanceof Delegate) {
+    throw new Error("Delegate cannot point to other Delegates");
+  }
   const DelegateSuper = target as ComponentConstructor<any, any>;
   class DelegateWrapper extends DelegateSuper {
     constructor(props: ConstructorParameters<T>[0]) {
