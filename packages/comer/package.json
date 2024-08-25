@@ -5,6 +5,9 @@
   "module": "./lib/index.js",
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

@@ -25,8 +25,8 @@ export const generate = task('Generate', async () => {
 
 export const build = task('Build', [clean, generate, lint], async () => {
   await $`tsc -v`;
-  await $`tsc -p ./packages/comer`;
-  await $`tsc -p ./packages/comer-dom`;
+  await $`tsc -p ./packages/comer && pnpm -F comer build`;
+  await $`tsc -p ./packages/comer-dom && pnpm -F comer-dom build`;
   await $`tsc -p ./packages/comer-devtool && pnpm -F comer-devtool build`;
   await $`pnpm -F comer-benchmark build`;
   await $`tsc -p ./packages/comer-demo`;

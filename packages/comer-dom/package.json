@@ -6,7 +6,8 @@
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "generate": "node ./scripts/generate.mjs"
+    "generate": "node ./scripts/generate.mjs",
+    "build": "NODE_ENV=production rollup -c"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

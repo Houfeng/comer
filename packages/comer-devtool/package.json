@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "NODE_ENV=development webpack serve",
-    "build": "rollup -c ./rollup.config.mjs"
+    "build": "NODE_ENV=production rollup -c ./rollup.config.mjs"
   },
   "author": {
     "name": "Houfeng",
