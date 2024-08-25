@@ -9,6 +9,6 @@ import { Provider } from "./Provider";
 export class Deferment extends Provider<true> {
   constructor(items: Readonly<Component[] | Component>) {
     const children = items ? (Array.isArray(items) ? items : [items]) : [];
-    super({ value: true, children });
+    super({ readonly: true, value: true, children });
   }
 }
