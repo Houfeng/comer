@@ -361,13 +361,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Call executeElement to retrieve child elements
    * and perform 'update or replace or append or delete'
    */
-  private buildElement(element: Component, mount: boolean): void {
+  private buildElement(element: Component, isCreate: boolean): void {
     if (!this.isComponent(element)) return;
     // Ensure that each change is executed only once
     if ((element[$Step] || 0) >= this.stepper.current) return;
     element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
-    if (mount) this.requestMount(element);
+    if (isCreate) this.requestMount(element);
     // handle children
     const oldChildren = element[$Children] || [];
     const newChildren = this.executeElement(element) || [];
@@ -407,7 +407,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
     }
     element[$Children] = effectiveItems;
-    element["onUpdated"]?.();
+    if (!isCreate) element["onUpdated"]?.();
   }
 
   private root?: Parameters<T["bindRoot"]>[0];
