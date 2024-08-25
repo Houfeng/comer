@@ -137,9 +137,9 @@ export function styled<
   // mask S full match NestedStyle
   SS = S extends NestedStyle ? NestedStyle : never,
 >(target: T, style: S & SS) {
-  const Super = target as ComponentConstructor<any, any>;
+  const StyledSuper = target as ComponentConstructor<any, any>;
   const styledClassName = StyleClass(style);
-  class Wrapper extends Super {
+  class StyledWrapper extends StyledSuper {
     static normalizeProps(
       props: InstanceType<T>["props"],
     ): InstanceType<T>["props"] {
@@ -155,6 +155,6 @@ export function styled<
       return styledClassName;
     }
   }
-  Object.defineProperty(Wrapper, "name", { value: target.name });
-  return Wrapper as T & { readonly className: string };
+  Object.defineProperty(StyledWrapper, "name", { value: target.name });
+  return StyledWrapper as T & { readonly className: string };
 }

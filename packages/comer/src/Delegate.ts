@@ -38,15 +38,15 @@ export class Delegate extends Component<any> {
 export function delegate<T extends ComponentConstructor<any, any>>(
   target: T,
 ): T {
-  const Super = target as ComponentConstructor<any, any>;
-  class Wrapper extends Super {
+  const DelegateSuper = target as ComponentConstructor<any, any>;
+  class DelegateWrapper extends DelegateSuper {
     constructor(props: ConstructorParameters<T>[0]) {
-      if (!new.target || new.target === Wrapper) {
+      if (!new.target || new.target === DelegateWrapper) {
         return new Delegate(props, target);
       }
       super(props);
     }
   }
-  Object.defineProperty(Wrapper, "name", { value: target.name });
-  return Wrapper as T;
+  Object.defineProperty(DelegateWrapper, "name", { value: target.name });
+  return DelegateWrapper as T;
 }

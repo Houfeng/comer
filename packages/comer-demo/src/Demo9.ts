@@ -18,6 +18,14 @@ class DemoCustomer extends Component {
   }
 }
 
+class DemoContainer extends Component {
+  build(): Component {
+    return new Div({
+      children: new DemoCustomer(),
+    });
+  }
+}
+
 @delegate
 export class Demo extends Component {
   state = observable({ value: 0 });
@@ -30,7 +38,7 @@ export class Demo extends Component {
       children: [
         new DemoProvider({
           value: value,
-          children: new DemoCustomer(),
+          children: new DemoContainer(),
         }),
         new StyledButton({ innerText: "Click", onClick: this.onBtnClick }),
       ],
