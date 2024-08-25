@@ -1,7 +1,7 @@
 import { observable } from "ober";
 import { Component } from "./Component";
 import { Fragment } from "./Fragment";
-import { $Identify, $Value } from "./Symbols";
+import { $Identify, $State } from "./Symbols";
 
 export type ProviderProps<TValue> = {
   value?: TValue;
@@ -24,21 +24,21 @@ export abstract class Provider<TValue> extends Component<
     return new Fragment(this.props.children);
   }
 
-  private [$Value]?: { current?: TValue };
+  private [$State]?: { value?: TValue };
 
   protected onUpdated(): void {
     const { readonly, value } = this.props;
-    if (readonly || !this[$Value]) return;
-    this[$Value].current = value;
+    if (readonly || !this[$State]) return;
+    this[$State].value = value;
   }
 
   get value() {
     const { value, readonly } = this.props;
     if (readonly) return value;
-    if (!this[$Value]) {
-      this[$Value] = observable({ current: value });
+    if (!this[$State]) {
+      this[$State] = observable({ value });
     }
-    return this[$Value].current;
+    return this[$State].value;
   }
 }
 

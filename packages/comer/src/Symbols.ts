@@ -6,6 +6,7 @@ export const $Reactive = Symbol("Reactive");
 export const $Flush = Symbol("Flush");
 export const $Identify = Symbol("Identify");
 export const $Value = Symbol("Value");
+export const $State = Symbol("State");
 export const $Host = Symbol("Host");
 export const $Update = Symbol("Update");
 export const $Build = Symbol("Build");
