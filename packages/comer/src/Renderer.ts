@@ -387,7 +387,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         linkEffectiveItem(oldChild);
         // Normalize the props of new child
         this.normalizeProps(newChild);
-        // apply
+        // apply & update
         const changed = this.applyLatestProps(oldChild, newChild);
         if (changed) oldChild[$Update]?.(false);
       } else if (oldChild && !newChild) {
