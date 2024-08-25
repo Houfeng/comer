@@ -7,14 +7,14 @@ function createConfig(min = false) {
   return defineConfig({
     input: './lib/index.js',
     output: [
-      {
-        file: `./dist/comer.es.${suffix}`,
-        format: 'esm'
-      },
-      {
-        file: `./dist/comer.cjs.${suffix}`,
-        format: 'cjs'
-      },
+      // {
+      //   file: `./dist/comer.es.${suffix}`,
+      //   format: 'esm'
+      // },
+      // {
+      //   file: `./dist/comer.cjs.${suffix}`,
+      //   format: 'cjs'
+      // },
       {
         file: `./dist/comer.umd.${suffix}`,
         format: 'umd',
