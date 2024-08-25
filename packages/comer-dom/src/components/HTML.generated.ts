@@ -133,17 +133,6 @@ export class Blockquote extends EC<HTMLQuoteElement, HTMLElementEventMap> {
 }
 
 /**
- * HTML Tag: body
- * @see https://developer.mozilla.org/docs/Web/HTML/Element/body
- * @see https://developer.mozilla.org/docs/Web/API/HTMLBodyElement
- * @class
- * @sealed
- */
-export class Body extends EC<HTMLBodyElement, HTMLElementEventMap> {
-  static readonly type = "body";
-}
-
-/**
  * HTML Tag: br
  * @see https://developer.mozilla.org/docs/Web/HTML/Element/br
  * @see https://developer.mozilla.org/docs/Web/API/HTMLBRElement
@@ -482,17 +471,6 @@ export class H5 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
  */
 export class H6 extends EC<HTMLHeadingElement, HTMLElementEventMap> {
   static readonly type = "h6";
-}
-
-/**
- * HTML Tag: head
- * @see https://developer.mozilla.org/docs/Web/HTML/Element/head
- * @see https://developer.mozilla.org/docs/Web/API/HTMLHeadElement
- * @class
- * @sealed
- */
-export class Head extends EC<HTMLHeadElement, HTMLElementEventMap> {
-  static readonly type = "head";
 }
 
 /**
