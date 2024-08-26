@@ -21,6 +21,11 @@ export abstract class HostComponent<
    */
   static readonly type?: string;
 
+  /**
+   * If portal===true, it will be used as a portal element
+   */
+  static readonly portal?: boolean;
+
   /** @internal */
   [$Host]?: TElement;
 }

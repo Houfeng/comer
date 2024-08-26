@@ -55,6 +55,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!value && value instanceof HostComponent;
   }
 
+  private isPortalComponent(element: HostComponent) {
+    if (!element) return false;
+    const ctor = element.constructor as typeof HostComponent;
+    return ctor.portal;
+  }
+
   private getComponentConstructor(
     element: Component,
   ): ComponentConstructor<any, any> {
@@ -139,11 +145,12 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     while (current) {
       if (!current[$Prev]) {
         current = current[$Parent];
+        if (current && this.isPortalComponent(current)) return;
         if (this.isHostComponent(current)) return current;
         continue;
       }
       const anchor = this.findLastHostComponentRoot(current[$Prev]);
-      if (anchor) return anchor;
+      if (anchor && !this.isPortalComponent(anchor)) return anchor;
       current = current[$Prev];
     }
   }
@@ -166,7 +173,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private mountElement(element: Component): void {
     if (!this.isComponent(element)) return;
     // handle host instance
-    if (this.isHostComponent(element)) {
+    if (this.isHostComponent(element) && !element[$Host]) {
       const hostType = this.isHostComponent(element)
         ? this.getHostElementType(element)
         : void 0;
@@ -176,7 +183,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // First apply before binding, so no response is triggered
     this.applyLatestProps(element);
     // append to parent host element
-    if (this.isHostComponent(element)) {
+    if (this.isHostComponent(element) && !this.isPortalComponent(element)) {
       if (!element[$Host]) throw new Error("Invalid host element");
       const parent = this.findParentHostElement(element);
       if (!parent) throw new Error("Parent host element not found");
@@ -437,15 +444,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
     if (this.isHostComponent(element)) {
-      cancel(element[$Host]?.[$Flush]?.handler);
-      if (!inDeletedTree) {
+      const host = element[$Host];
+      cancel(host?.[$Flush]?.handler);
+      const isPortal = this.isPortalComponent(element);
+      if (!inDeletedTree && !isPortal) {
         inDeletedTree = true;
-        defer(() =>
-          post(
-            () => element[$Host] && this.adapter.removeElement(element[$Host]),
-          ),
-        );
+        defer(() => post(() => host && this.adapter.removeElement(host)));
       }
+      if (isPortal) inDeletedTree = false;
     }
     // broadcast to children
     if (!element[$Children]) return;
