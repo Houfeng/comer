@@ -47,12 +47,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private scheduler = new Scheduler(this.adapter);
   private stepper = new Stepper();
 
-  private getComponentConstructor(
-    element: Component,
-  ): ComponentConstructor<any, any> {
-    return element.constructor as ComponentConstructor<any, any>;
-  }
-
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
   }
@@ -61,12 +55,21 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!value && value instanceof HostComponent;
   }
 
-  private isFragment(value: unknown): value is Fragment {
-    return !!value && value instanceof Fragment;
+  private getComponentConstructor(
+    element: Component,
+  ): ComponentConstructor<any, any> {
+    return element.constructor as ComponentConstructor<any, any>;
   }
 
-  private isDelegate(value: unknown): value is Delegate {
-    return !!value && value instanceof Delegate;
+  private isFragment(element: Component): element is Fragment {
+    return !!element && this.getComponentConstructor(element) === Fragment;
+  }
+
+  private isDelegate(element: Component): element is Delegate {
+    return (
+      !!element &&
+      (this.getComponentConstructor(element) as unknown) === Delegate
+    );
   }
 
   private getComponentType(element: Component): ComponentConstructor<any, any> {
@@ -75,12 +78,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       : this.getComponentConstructor(element);
   }
 
-  private isSomeComponentType(el1: unknown, el2: unknown): boolean {
-    return (
-      this.isComponent(el1) &&
-      this.isComponent(el2) &&
-      this.getComponentType(el1) === this.getComponentType(el2)
-    );
+  private isSomeComponentType(el1: Component, el2: Component): boolean {
+    return this.getComponentType(el1) === this.getComponentType(el2);
   }
 
   private bindReactiver(element: Component): void {
@@ -319,19 +318,17 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   private executeElement(element: Component): Component[] {
     try {
-      // When executed for the first time, bind Reactiver
-      if (!element[$Reactive]) this.bindReactiver(element);
       let results: Component[];
-      if (this.isDelegate(element)) {
-        results = [element.build()];
-      } else if (this.isFragment(element)) {
+      if (this.isFragment(element)) {
         element.build();
         results = element[$Children] || [];
       } else {
+        // When executed for the first time, bind Reactiver
+        if (!element[$Reactive]) this.bindReactiver(element);
         results = [element[$Reactive]!()];
       }
       return results.reduce<Component[]>((items, it) => {
-        return this.isDelegate(it) || this.isFragment(it)
+        return this.isFragment(it)
           ? [...items, ...this.executeElement(it)]
           : [...items, it];
       }, []);
@@ -352,6 +349,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return willDefer
       ? defer(() => post(element[$Mount]!))
       : post(element[$Mount]);
+  }
+
+  private composeRawElement(element: Component) {
+    return this.isDelegate(element) ? element.build() : element;
   }
 
   /**
@@ -392,13 +393,15 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // insert
-        linkEffectiveItem(newChild);
-        this.buildElement(newChild, true);
+        const target = this.composeRawElement(newChild);
+        linkEffectiveItem(target);
+        this.buildElement(target, true);
       } else if (oldChild && newChild) {
         // replace
         this.unmount(oldChild);
-        linkEffectiveItem(newChild);
-        this.buildElement(newChild, true);
+        const target = this.composeRawElement(newChild);
+        linkEffectiveItem(target);
+        this.buildElement(target, true);
       } else {
         throw new Error("Build element error");
       }
@@ -424,11 +427,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    const composedElement = this.isDelegate(element)
-      ? element.build()
-      : element;
-    this.buildElement(composedElement, true);
-    return composedElement as E;
+    const target = this.composeRawElement(element);
+    this.buildElement(target, true);
+    return target as E;
   }
 
   private unmountElement(element: Component, inDeletedTree: boolean): void {
