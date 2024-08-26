@@ -1,6 +1,5 @@
 import { ComponentConstructor } from "comer";
 import { type Properties } from "csstype";
-import { isNull, isObject, toSplitCase } from "ntils";
 
 // types ----------------------------------------------------------------------
 
@@ -25,7 +24,7 @@ export type KeyFrameStyle = Partial<
 export function toInlineStyle(style: BasicStyle): string {
   return Object.entries(style)
     .map(([key, value]: [string, string]) => {
-      return `${toSplitCase(key)}: ${value}`;
+      return `${key.replace(/([A-Z])/g, "-$1")}: ${value}`;
     })
     .join(";");
 }
@@ -44,13 +43,16 @@ const sheet = styleElement.sheet;
 function createRule<T extends CSSRule>(ruleText: string): T | undefined {
   if (!sheet) return;
   const index = sheet.insertRule(ruleText || "", sheet.cssRules.length);
-  if (isNull(index)) return;
   return sheet.cssRules[index] as T;
 }
 
 const Owner = { id: 0 };
 
 // class ----------------------------------------------------------------------
+
+function isObject(value: unknown): value is object {
+  return !!value && typeof value === "object";
+}
 
 function createStyleRules(
   selector: string,

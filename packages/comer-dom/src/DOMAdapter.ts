@@ -6,8 +6,11 @@ import {
   HostProps,
 } from "comer";
 import { DOMElement, DOMHostElement } from "./DOMComponent";
-import { isString } from "ntils";
 import { BasicStyle, toInlineStyle } from "./DOMStyle";
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
 
 const requestIdleCallback =
   window.requestIdleCallback ||
@@ -57,7 +60,6 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   createElement(type: string): DOMHostElement {
-    if (!type) throw new Error("Invalid host element type");
     if (type === "text") return document.createTextNode("");
     if (type.includes(":")) {
       const [ns, tag] = type.split(":");
@@ -78,32 +80,29 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     anchor: DOMHostElement | string,
   ): void {
     if (parent instanceof Text) return;
-    if (!this.isHostElement(parent)) return;
-    if (!this.isHostElement(element)) return;
-    if (this.isHostElement(anchor) && anchor !== parent) {
+    if (isString(anchor)) {
+      // At present, there is no need to handle it
+    } else if (anchor === parent) {
+      // insert as first child
+      parent.prepend(element);
+    } else {
       // insert after anchor
       anchor.after(element);
-    } else if (isString(anchor)) {
-      // At present, there is no need to handle it
-    } else {
-      // append
-      parent.prepend(element);
     }
   }
 
   updateProps(element: DOMHostElement, props: HostProps): void {
-    if (!this.isHostElement(element)) return;
     const target = element as Record<string, any>;
     Object.entries(props).forEach(([name, value]) => {
       if (name === "children") return;
-      if (isCustomAttribute(name)) {
-        // custom attributes
-        target.setAttribute(name, value);
-      } else if (name === "style") {
+      if (name === "style") {
         // style
         target[name] = isString(value)
           ? value
           : toInlineStyle(value as BasicStyle);
+      } else if (isCustomAttribute(name)) {
+        // custom attributes
+        target.setAttribute(name, value);
       } else {
         // other props
         target[name] = value;
@@ -112,7 +111,6 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   attachEvents(element: DOMHostElement, events: HostEventMap): void {
-    if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       if (!name || !listener) return;
       const normalizedName = name.slice(2).toLowerCase();
@@ -121,7 +119,6 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   removeEvents(element: DOMHostElement, events: HostEventMap): void {
-    if (!this.isHostElement(element)) return;
     Object.entries(events).forEach(([name, listener]) => {
       if (!name || !listener) return;
       const normalizedName = name.slice(2).toLowerCase();
@@ -130,7 +127,6 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   requestPaintCallback(handler: (time: number) => void): unknown {
-    if (!handler) return;
     if (typeof requestAnimationFrame === "undefined") {
       return handler(Date.now());
     }
@@ -138,18 +134,15 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   cancelPaintCallback(id: unknown): void {
-    if (!id) return;
     if (typeof cancelAnimationFrame === "undefined") return;
     if (id) cancelAnimationFrame(id as number);
   }
 
   requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown {
-    if (!handler) return;
     return requestIdleCallback(handler);
   }
 
   cancelIdleCallback(id: unknown): void {
-    if (!id) return;
     return cancelIdleCallback(id as number);
   }
 }
