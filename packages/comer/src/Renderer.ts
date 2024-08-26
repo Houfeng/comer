@@ -437,14 +437,11 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element[$Reactive]?.unsubscribe();
     element["onDestroy"]?.();
     if (this.isHostComponent(element)) {
-      cancel(element[$Host]?.[$Flush]?.handler);
+      const host = element[$Host];
+      cancel(host?.[$Flush]?.handler);
       if (!inDeletedTree) {
         inDeletedTree = true;
-        defer(() =>
-          post(
-            () => element[$Host] && this.adapter.removeElement(element[$Host]),
-          ),
-        );
+        defer(() => post(() => host && this.adapter.removeElement(host)));
       }
     }
     // broadcast to children
