@@ -507,17 +507,6 @@ export class Hr extends EC<HTMLHRElement, HTMLElementEventMap> {
 }
 
 /**
- * HTML Tag: html
- * @see https://developer.mozilla.org/docs/Web/HTML/Element/html
- * @see https://developer.mozilla.org/docs/Web/API/HTMLHtmlElement
- * @class
- * @sealed
- */
-export class Html extends EC<HTMLHtmlElement, HTMLElementEventMap> {
-  static readonly type = "html";
-}
-
-/**
  * HTML Tag: i
  * @see https://developer.mozilla.org/docs/Web/HTML/Element/i
  * @see https://developer.mozilla.org/docs/Web/API/HTMLElement

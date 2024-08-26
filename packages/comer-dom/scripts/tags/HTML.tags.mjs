@@ -51,7 +51,7 @@ export const HTMLElementTagNameMap = [{
   "header": "HTMLElement",
   "hgroup": "HTMLElement",
   "hr": "HTMLHRElement",
-  "html": "HTMLHtmlElement",
+  // "html": "HTMLHtmlElement",
   "i": "HTMLElement",
   "iframe": "HTMLIFrameElement",
   "img": "HTMLImageElement",
