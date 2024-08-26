@@ -316,7 +316,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   /**
    * Execute its own build method and return child elements
    */
-  private executeElement(element: Component): Component[] {
+  private composeElement(element: Component): Component[] {
     try {
       let results: Component[];
       if (this.isFragment(element)) {
@@ -329,7 +329,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
       return results.reduce<Component[]>((items, it) => {
         return this.isFragment(it)
-          ? [...items, ...this.executeElement(it)]
+          ? [...items, ...this.composeElement(it)]
           : [...items, it];
       }, []);
     } catch (err) {
@@ -351,7 +351,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       : post(element[$Mount]);
   }
 
-  private composeRawElement(element: Component) {
+  private getRawElement(element: Component) {
     return this.isDelegate(element) ? element.build() : element;
   }
 
@@ -359,16 +359,16 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Call executeElement to retrieve child elements
    * and perform 'update or replace or append or delete'
    */
-  private buildElement(element: Component, isCreate: boolean): void {
+  private buildElement(element: Component, isMount: boolean): void {
     if (!this.isComponent(element)) return;
     // Ensure that each change is executed only once
     if ((element[$Step] || 0) >= this.stepper.current) return;
     element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
-    if (isCreate) this.requestMount(element);
+    if (isMount) this.requestMount(element);
     // handle children
     const oldChildren = element[$Children] || [];
-    const newChildren = this.executeElement(element) || [];
+    const newChildren = this.composeElement(element) || [];
     const effectiveItems: Component[] = [];
     const linkEffectiveItem = (item: Component) => {
       item[$Parent] = element;
@@ -393,13 +393,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.unmount(oldChild);
       } else if (!oldChild && newChild) {
         // insert
-        const target = this.composeRawElement(newChild);
+        const target = this.getRawElement(newChild);
         linkEffectiveItem(target);
         this.buildElement(target, true);
       } else if (oldChild && newChild) {
         // replace
         this.unmount(oldChild);
-        const target = this.composeRawElement(newChild);
+        const target = this.getRawElement(newChild);
         linkEffectiveItem(target);
         this.buildElement(target, true);
       } else {
@@ -407,7 +407,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       }
     }
     element[$Children] = effectiveItems;
-    if (!isCreate) element["onUpdated"]?.();
+    if (!isMount) element["onUpdated"]?.();
   }
 
   private root?: Parameters<T["bindRoot"]>[0];
@@ -427,7 +427,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bindRoot(root);
-    const target = this.composeRawElement(element);
+    const target = this.getRawElement(element);
     this.buildElement(target, true);
     return target as E;
   }
