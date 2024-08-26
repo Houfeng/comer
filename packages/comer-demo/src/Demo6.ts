@@ -10,7 +10,7 @@ class Item extends Component<{ text: string }> {
 }
 
 export class Demo extends Component {
-  state = observable({ num: 100, value: 1 });
+  readonly state = observable({ num: 100, value: 1 });
   updateNum = (event: InputEvent<HTMLInputElement>) => {
     this.state.num = Number(event.target.value);
   };
