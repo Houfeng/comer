@@ -313,25 +313,22 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return !!useContext(element, Deferment);
   }
 
+  private composeFragment(fragment: Fragment): Component[] {
+    fragment.build();
+    return fragment[$Children] || [];
+  }
+
   /**
    * Execute its own build method and return child elements
    */
   private composeElement(element: Component): Component[] {
     try {
-      let results: Component[];
-      if (this.isFragment(element)) {
-        element.build();
-        results = element[$Children] || [];
-      } else {
-        // When executed for the first time, bind Reactiver
-        if (!element[$Reactive]) this.bindReactiver(element);
-        results = [element[$Reactive]!()];
-      }
-      return results.reduce<Component[]>((items, it) => {
-        return this.isFragment(it)
-          ? [...items, ...this.composeElement(it)]
-          : [...items, it];
-      }, []);
+      if (this.isFragment(element)) return this.composeFragment(element);
+      // When executed for the first time, bind Reactiver
+      if (!element[$Reactive]) this.bindReactiver(element);
+      const result = element[$Reactive]?.();
+      if (!result) return [];
+      return this.isFragment(result) ? this.composeFragment(result) : [result];
     } catch (err) {
       this.adapter.logger.error(err);
       return [];
