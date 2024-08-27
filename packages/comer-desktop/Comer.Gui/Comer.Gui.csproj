@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>exe</OutputType>
+        <!-- <OutputType>Exe</OutputType> -->
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
-        <PublishNodeModule>true</PublishNodeModule>
-        <PublishDir>bin</PublishDir>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PublishAot>true</PublishAot>
+        <OptimizationPreference>Speed</OptimizationPreference>
+        <PublishNodeModule>true</PublishNodeModule>
+        <PublishDir>bin/node</PublishDir>
     </PropertyGroup>
-    <ItemGroup>
-      <Content Remove="/Users/houfeng/.nuget/packages/microsoft.javascript.nodeapi/0.7.38/contentFiles/any/net8.0/import.cjs" />
-    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.1.3" />
         <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
-        <PackageReference Include="GtkSharp" Version="3.24.24.95" />
-        <PackageReference Include="Microsoft.JavaScript.NodeApi" Version="0.7.*-*" />
-        <PackageReference Include="Microsoft.JavaScript.NodeApi.Generator" Version="0.7.*-*" />
+        <PackageReference Include="Microsoft.JavaScript.NodeApi" Version="0.8.3" />
+        <PackageReference Include="Microsoft.JavaScript.NodeApi.Generator" Version="0.8.3" />
+        <PackageReference Include="Silk.NET.Input" Version="2.21.0" />
+        <PackageReference Include="Silk.NET.OpenGL" Version="2.21.0" />
+        <PackageReference Include="Silk.NET.Windowing" Version="2.21.0" />
+        <PackageReference Include="SkiaSharp" Version="2.88.8" />
     </ItemGroup>
 </Project>
