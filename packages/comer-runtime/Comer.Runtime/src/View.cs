@@ -89,4 +89,17 @@ public class View : Widget {
     }
   }
 
+  public string? BoxShadow {
+    get {
+      return this.Border.BoxShadow.ToString();
+    }
+    set {
+      if (value != null) {
+        this.Border.BoxShadow = BoxShadows.Parse(value);
+      } else {
+        this.Border.BoxShadow = BoxShadows.Parse("");
+      }
+    }
+  }
+
 }

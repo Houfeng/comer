@@ -21,6 +21,7 @@ view.verticalAlign = VerticalAlign.Top;
 view.horizontalAlign = HorizontalAlign.Fill;
 view.borderWidth = [5, 5, 5, 5];
 view.borderColor = 'red';
+view.boxShadow = '5 5 10 0 DarkGray';
 
 win.appendChild(view);
 win.show();
