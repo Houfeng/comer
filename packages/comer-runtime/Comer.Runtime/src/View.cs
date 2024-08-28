@@ -1,105 +1,47 @@
 
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
+using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
 
-namespace Comer.Gui;
+namespace Comer.Runtime;
 
 [JSExport]
-public class View : Widget {
-
-  private Border Border {
-    get {
-      return (Border)this.Origin;
-    }
-    set {
-      this.Origin = value;
-    }
-  }
+public class View : Control {
 
   private Panel Inner { get; set; }
 
   public View() {
-    this.Border = new Border();
     this.Inner = new Panel();
-    this.Border.Child = this.Inner;
+    this.Inner.HorizontalAlignment = HorizontalAlignment.Stretch;
+    this.Inner.VerticalAlignment = VerticalAlignment.Stretch;
+    this.__Content__ = this.Inner;
   }
 
-  public void InsertChild(Widget child, Widget? anchor) {
-    this.Inner.Children.Remove(child.Origin);
+  public virtual void RemoveChild(Control child) {
+    if (this.Inner.Children.Contains(child.__Raw__)) {
+      this.Inner.Children.Remove(child.__Raw__);
+    }
+  }
+
+  public virtual void InsertChild(Control child, Control? anchor) {
+    this.RemoveChild(child);
     if (anchor != null) {
-      var anchorIndex = this.Inner.Children.IndexOf(anchor.Origin);
-      this.Inner.Children.Insert(anchorIndex + 1, child.Origin);
+      var anchorIndex = this.Inner.Children.IndexOf(anchor.__Raw__);
+      this.Inner.Children.Insert(anchorIndex + 1, child.__Raw__);
     } else {
-      this.Inner.Children.Insert(0, child.Origin);
+      this.Inner.Children.Insert(0, child.__Raw__);
     }
   }
 
-  public void AppendChild(Widget child) {
-    this.Inner.Children.Remove(child.Origin);
+  public virtual void AppendChild(Control child) {
+    this.RemoveChild(child);
     var count = this.Inner.Children.Count;
-    this.Inner.Children.Insert(count, child.Origin);
+    this.Inner.Children.Insert(count, child.__Raw__);
   }
 
-  public void PrependChild(Widget child) {
-    this.Inner.Children.Remove(child.Origin);
-    this.Inner.Children.Insert(0, child.Origin);
-  }
-
-  public string? Background {
-    get {
-      if (this.Inner.Background == null) return null;
-      return this.Inner.Background.ToString();
-    }
-    set {
-      if (value != null) {
-        this.Inner.Background = Brush.Parse(value);
-      } else {
-        this.Inner.Background = null;
-      }
-    }
-  }
-
-  public (double, double, double, double) BorderWidth {
-    get {
-      var t = this.Border.BorderThickness.Top;
-      var r = this.Border.BorderThickness.Right;
-      var b = this.Border.BorderThickness.Bottom;
-      var l = this.Border.BorderThickness.Left;
-      return (t, r, b, l);
-    }
-    set {
-      var (t, r, b, l) = value;
-      this.Border.BorderThickness = new Thickness(l, t, r, b);
-    }
-  }
-
-  public string? BorderColor {
-    get {
-      if (this.Border.BorderBrush == null) return null;
-      return this.Border.BorderBrush.ToString();
-    }
-    set {
-      if (value != null) {
-        this.Border.BorderBrush = Brush.Parse(value);
-      } else {
-        this.Border.BorderBrush = null;
-      }
-    }
-  }
-
-  public string? BoxShadow {
-    get {
-      return this.Border.BoxShadow.ToString();
-    }
-    set {
-      if (value != null) {
-        this.Border.BoxShadow = BoxShadows.Parse(value);
-      } else {
-        this.Border.BoxShadow = BoxShadows.Parse("");
-      }
-    }
+  public virtual void PrependChild(Control child) {
+    this.RemoveChild(child);
+    this.Inner.Children.Insert(0, child.__Raw__);
   }
 
 }

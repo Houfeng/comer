@@ -1,6 +1,6 @@
 ﻿using Microsoft.JavaScript.NodeApi;
 
-namespace Comer.Gui;
+namespace Comer.Runtime;
 
 [JSExport]
 public static class Program {
@@ -11,14 +11,17 @@ public static class Program {
     Application.Init();
 
     var win = new Window();
-    win.Height = 200;
-    win.Width = 200;
+    win.Background = "#cdf";
+    win.BorderWidth = "24";
+    win.BorderColor = "black";
 
     var view = new View();
     view.Background = "blue";
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
     view.HorizontalAlign = HorizontalAlign.Fill;
+    view.BoxShadow = "5 5 10 0 DarkGray";
+
     win.AppendChild(view);
 
     win.Show();

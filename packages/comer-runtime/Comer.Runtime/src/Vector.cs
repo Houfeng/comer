@@ -1,6 +1,6 @@
 using Microsoft.JavaScript.NodeApi;
 
-namespace Comer.Gui;
+namespace Comer.Runtime;
 
 [JSExport]
 public struct Vector {

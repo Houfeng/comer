@@ -2,148 +2,191 @@ using AC = Avalonia.Controls;
 using Microsoft.JavaScript.NodeApi;
 using Avalonia;
 using Avalonia.Media;
+using Avalonia.Layout;
 
-namespace Comer.Gui;
+namespace Comer.Runtime;
 
 [JSExport]
-public class Window : Widget {
+public class Window : View {
 
-  private AC.Window Inner {
-    get {
-      return (AC.Window)this.Origin;
-    }
-    set {
-      this.Origin = value;
-    }
-  }
-
-  private View ContentView { get; set; }
+  private AC.Window Win { get; set; }
 
   public Window() {
-    this.Inner = new AC.Window();
-    this.Inner.Width = 500;
-    this.Inner.Height = 400;
-    this.ContentView = new View();
-    this.ContentView.HorizontalAlign = HorizontalAlign.Fill;
-    this.ContentView.VerticalAlign = VerticalAlign.Fill;
-    this.Inner.Content = this.ContentView.Origin;
+    this.__Raw__.VerticalAlignment = VerticalAlignment.Stretch;
+    this.__Raw__.HorizontalAlignment = HorizontalAlignment.Stretch;
+    this.Win = new AC.Window();
+    this.Win.Content = this.__Raw__;
+    this.__Raw__ = this.Win;
+    this.Win.Width = 720;
+    this.Win.Height = 480;
+    this.Win.Title = "Window";
+    // this.Inner.SystemDecorations = AC.SystemDecorations.BorderOnly;
+    // this.Inner.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
   }
 
-  public void Show() {
-    this.Inner.Show();
+  public virtual void Show() {
+    this.Win.Show();
   }
 
-  public void Hide() {
-    this.Inner.Hide();
+  public virtual void Hide() {
+    this.Win.Hide();
   }
 
-  public void Close() {
-    this.Inner.Close();
+  public virtual void Close() {
+    this.Win.Close();
   }
 
-  public void Activate() {
-    this.Inner.Activate();
+  public virtual void Activate() {
+    this.Win.Activate();
   }
 
-  public string Title {
+  public virtual string Title {
     get {
-      return this.Inner.Title ?? "";
+      return this.Win.Title ?? "";
     }
     set {
-      this.Inner.Title = value;
+      this.Win.Title = value;
     }
   }
 
-  public double Opacity {
+  public virtual bool Resizable {
     get {
-      return this.Inner.Opacity;
+      return this.Win.CanResize;
     }
     set {
-      this.Inner.Opacity = value;
+      this.Win.CanResize = value;
     }
   }
 
-  public bool Resizable {
+  public virtual double MaxWidth {
     get {
-      return this.Inner.CanResize;
+      return this.Win.MaxWidth;
     }
     set {
-      this.Inner.CanResize = value;
+      this.Win.MaxWidth = value;
     }
   }
 
-  public double MaxWidth {
+  public virtual double MaxHeight {
     get {
-      return this.Inner.MaxWidth;
+      return this.Win.MaxHeight;
     }
     set {
-      this.Inner.MaxWidth = value;
+      this.Win.MaxHeight = value;
     }
   }
 
-  public double MaxHeight {
+  public virtual double MinWidth {
     get {
-      return this.Inner.MaxHeight;
+      return this.Win.MinWidth;
     }
     set {
-      this.Inner.MaxHeight = value;
+      this.Win.MinWidth = value;
     }
   }
 
-  public double MinWidth {
+  public virtual double MinHeight {
     get {
-      return this.Inner.MinWidth;
+      return this.Win.MinHeight;
     }
     set {
-      this.Inner.MinWidth = value;
+      this.Win.MinHeight = value;
     }
   }
 
-  public double MinHeight {
+  public virtual int X {
     get {
-      return this.Inner.MinHeight;
+      return this.Win.Position.X;
     }
     set {
-      this.Inner.MinHeight = value;
+      this.Win.Position = new PixelPoint(value, this.Win.Position.Y);
     }
   }
 
-  public (double, double) Position {
+  public virtual int Y {
     get {
-      var x = this.Inner.Position.X;
-      var y = this.Inner.Position.Y;
-      return (x, y);
+      return this.Win.Position.Y;
     }
     set {
-      var (x, y) = value;
-      this.Inner.Position = new PixelPoint((int)x, (int)y);
+      this.Win.Position = new PixelPoint(this.Win.Position.Y, value);
     }
   }
 
-  public string? Background {
+  public override double Width {
     get {
-      if (this.Inner.Background == null) return null;
-      return this.Inner.Background.ToString();
+      return this.Win.Width;
+    }
+
+    set {
+      this.Win.Width = value;
+    }
+  }
+
+  public override double Height {
+    get {
+      return this.Win.Height;
+    }
+    set {
+      this.Win.Height = value;
+    }
+  }
+
+  public override string? Background {
+    get {
+      if (this.Win.Background == null) return null;
+      return this.Win.Background.ToString();
     }
     set {
       if (value != null) {
-        this.Inner.Background = Brush.Parse(value);
+        this.Win.Background = Brush.Parse(value);
       } else {
-        this.Inner.Background = null;
+        this.Win.Background = null;
       }
     }
   }
 
-  public void InsertChild(Widget child, Widget? anchor) {
-    this.ContentView.InsertChild(child, anchor);
+  public override double Opacity {
+    get {
+      return this.Win.Opacity;
+    }
+    set {
+      this.Win.Opacity = value;
+    }
   }
 
-  public void AppendChild(Widget child) {
-    this.ContentView.AppendChild(child);
+
+  public override HorizontalAlign HorizontalAlign {
+    get {
+      return (HorizontalAlign)this.Win.HorizontalAlignment;
+    }
+    set {
+      this.Win.HorizontalAlignment = (HorizontalAlignment)value;
+    }
   }
 
-  public void PrependChild(Widget child) {
-    this.ContentView.PrependChild(child);
+  public override VerticalAlign VerticalAlign {
+    get {
+      return (VerticalAlign)this.Win.VerticalAlignment;
+    }
+    set {
+      this.Win.VerticalAlignment = (VerticalAlignment)value;
+    }
+  }
+
+  public override void RemoveChild(Control child) {
+    base.RemoveChild(child);
+  }
+
+  public override void InsertChild(Control child, Control? anchor) {
+    base.InsertChild(child, anchor);
+  }
+
+  public override void AppendChild(Control child) {
+    base.AppendChild(child);
+  }
+
+  public override void PrependChild(Control child) {
+    base.PrependChild(child);
   }
 
 }

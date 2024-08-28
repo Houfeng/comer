@@ -3,7 +3,7 @@ using Avalonia.Threading;
 using Avalonia.Themes.Fluent;
 using Microsoft.JavaScript.NodeApi;
 
-namespace Comer.Gui;
+namespace Comer.Runtime;
 
 [JSExport]
 public class Application {
