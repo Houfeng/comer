@@ -1,9 +1,12 @@
 const { resolve } = require('path');
-const { Application, Window, View, HorizontalAlign, VerticalAlign, Vector } = require('../bin/node/Comer.Gui');
+const { Application, Window, View, HorizontalAlign, VerticalAlign, Vector, Widget } = require('../bin/node/Comer.Gui');
 
 process.chdir(resolve(__dirname, '../bin/node/'));
 
 Application.init();
+
+Object.setPrototypeOf(View.prototype, Widget.prototype);
+Object.setPrototypeOf(Window.prototype, Widget.prototype);
 
 const win = new Window();
 
@@ -25,5 +28,3 @@ function loop() {
   setImmediate(loop);
 }
 loop();
-
-console.log('+++++++++++');

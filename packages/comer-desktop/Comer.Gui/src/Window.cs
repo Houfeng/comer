@@ -109,14 +109,15 @@ public class Window : Widget {
     }
   }
 
-  public Vector Position {
+  public (double, double) Position {
     get {
       var x = this.Inner.Position.X;
       var y = this.Inner.Position.Y;
-      return new Vector(x, y);
+      return (x, y);
     }
     set {
-      this.Inner.Position = new PixelPoint((int)value.X, (int)value.Y);
+      var (x, y) = value;
+      this.Inner.Position = new PixelPoint((int)x, (int)y);
     }
   }
 
