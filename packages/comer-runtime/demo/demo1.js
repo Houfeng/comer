@@ -1,7 +1,7 @@
 const { resolve } = require('path');
-const { Application, Window, View, HorizontalAlign, VerticalAlign, Widget } = require('../bin/node/Comer.Gui');
+const { Application, Window, View, HorizontalAlign, VerticalAlign, Widget } = require('../Comer.Runtime/bin/node/Comer.Runtime');
 
-process.chdir(resolve(__dirname, '../bin/node/'));
+process.chdir(resolve(__dirname, '../Comer.Runtime/bin/node/'));
 
 Application.init();
 
@@ -19,6 +19,8 @@ view.background = "blue";
 view.height = 100;
 view.verticalAlign = VerticalAlign.Top;
 view.horizontalAlign = HorizontalAlign.Fill;
+view.borderWidth = [5, 5, 5, 5];
+view.borderColor = 'red';
 
 win.appendChild(view);
 win.show();

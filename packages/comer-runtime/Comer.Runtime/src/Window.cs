@@ -2,7 +2,6 @@ using AC = Avalonia.Controls;
 using Microsoft.JavaScript.NodeApi;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Controls;
 
 namespace Comer.Gui;
 
