@@ -44,4 +44,14 @@ public class View : Control {
     this.Inner.Children.Insert(0, child.__Raw__);
   }
 
+  public void test() {
+
+  }
+
+  public object test2 {
+    get {
+      return this.test;
+    }
+  }
+
 }

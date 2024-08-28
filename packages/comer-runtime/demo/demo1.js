@@ -1,11 +1,20 @@
 const { resolve } = require('path');
+const { inherits } = require('util');
+
 const {
   Application, Window, View, HorizontalAlign, VerticalAlign, Control
 } = require('../Comer.Runtime/bin/node/Comer.Runtime');
 
-Object.setPrototypeOf(View.prototype, Control.prototype);
-Object.setPrototypeOf(Window.prototype, View.prototype);
 process.chdir(resolve(__dirname, '../Comer.Runtime/bin/node/'));
+
+// Object.setPrototypeOf(View.prototype, Control.prototype);
+// Object.setPrototypeOf(View, Control);
+
+// Object.setPrototypeOf(Window.prototype, View.prototype);
+// Object.setPrototypeOf(Window, View);
+
+inherits(View, Control)
+inherits(Window, View)
 
 Application.init();
 
@@ -20,7 +29,7 @@ view.background = "blue";
 view.height = 100;
 view.verticalAlign = VerticalAlign.Top;
 view.horizontalAlign = HorizontalAlign.Fill;
-view.borderWidth = "5";
+view.borderWidth = "5 20";
 view.borderColor = 'red';
 view.boxShadow = '5 5 10 0 DarkGray';
 
@@ -30,10 +39,11 @@ view.appendChild(view2);
 win.padding = "5";
 win.background = '#aaf';
 
-// console.log('++++', Object.keys(win), win.appendChild);
-
-win.appendChild(view, view2);
+win.appendChild(view);
 win.show();
+
+console.log('++++++1', win instanceof View);
+console.log('++++++2', Reflect.apply(win.test, win, []));
 
 function loop() {
   win.title = Date.now().toString();
