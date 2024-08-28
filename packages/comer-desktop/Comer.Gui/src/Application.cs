@@ -21,22 +21,26 @@ public class Application {
   }
 
   public static void Tick() {
-    var token = new CancellationTokenSource();
-    DispatcherTimer.RunOnce(
-      () => token.Cancel(),
-      TimeSpan.FromMilliseconds(100)
-    );
-    Dispatcher.UIThread.MainLoop(token.Token);
+    try {
+      var token = new CancellationTokenSource();
+      DispatcherTimer.RunOnce(
+        () => token.Cancel(),
+        TimeSpan.FromMilliseconds(100)
+      );
+      Dispatcher.UIThread.MainLoop(token.Token);
+    } catch {
+      //TODO: emit error event
+    }
   }
 
   private static CancellationTokenSource? RunToken { get; set; }
 
-  public static void Start() {
+  internal static void Start() {
     RunToken = new CancellationTokenSource();
     Dispatcher.UIThread.MainLoop(RunToken.Token);
   }
 
-  public static void Stop() {
+  internal static void Stop() {
     if (RunToken == null) return;
     RunToken.Cancel();
   }
