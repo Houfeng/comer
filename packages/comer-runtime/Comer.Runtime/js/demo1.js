@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-const { Application, Window, View, HorizontalAlign, VerticalAlign, Vector, Widget } = require('../bin/node/Comer.Gui');
+const { Application, Window, View, HorizontalAlign, VerticalAlign, Widget } = require('../bin/node/Comer.Gui');
 
 process.chdir(resolve(__dirname, '../bin/node/'));
 
@@ -10,7 +10,7 @@ Object.setPrototypeOf(Window.prototype, Widget.prototype);
 
 const win = new Window();
 
-win.position = new Vector(10, 10);
+win.position = [100, 100];
 win.width = 200;
 win.height = 200;
 

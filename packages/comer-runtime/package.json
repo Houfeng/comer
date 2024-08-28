@@ -1,0 +1,4 @@
+{
+  "name": "comer-runtime",
+  "main": "./lib/index.js"
+}
