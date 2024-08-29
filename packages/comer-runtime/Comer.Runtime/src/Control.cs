@@ -1,5 +1,6 @@
 
 using Avalonia;
+using AI = Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Microsoft.JavaScript.NodeApi;
@@ -149,6 +150,16 @@ public partial class Control {
     }
     set {
       Frame.Opacity = value;
+    }
+  }
+
+  public virtual string Cursor {
+    get {
+      if (Frame.Cursor == null) return "";
+      return Frame.Cursor.ToString();
+    }
+    set {
+      Frame.Cursor = AI.Cursor.Parse(value ?? "");
     }
   }
 

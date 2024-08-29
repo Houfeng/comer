@@ -11,7 +11,7 @@ public static class Program {
     Application.Init();
 
     var win = new Window();
-    win.BorderWidth = "24";
+    win.BorderWidth = "4";
     win.BorderColor = "#8af";
 
     var view = new View();
