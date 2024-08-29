@@ -134,6 +134,15 @@ public partial class Control {
     }
   }
 
+  public virtual BoxSizing BoxSizing {
+    get {
+      return (BoxSizing)Frame.BackgroundSizing;
+    }
+    set {
+      Frame.BackgroundSizing = (BackgroundSizing)value;
+    }
+  }
+
   public virtual double Opacity {
     get {
       return Frame.Opacity;
