@@ -6,8 +6,8 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public class Application {
-  private class App : Avalonia.Application {
+public partial class Application {
+  private partial class App : Avalonia.Application {
   }
 
   public static void Init() {

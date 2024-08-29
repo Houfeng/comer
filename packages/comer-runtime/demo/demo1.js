@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const { inherits } = require('util');
 
 const {
   Application, Window, View, HorizontalAlign, VerticalAlign, Control
@@ -7,14 +6,11 @@ const {
 
 process.chdir(resolve(__dirname, '../Comer.Runtime/bin/node/'));
 
-// Object.setPrototypeOf(View.prototype, Control.prototype);
-// Object.setPrototypeOf(View, Control);
+Object.setPrototypeOf(View.prototype, Control.prototype);
+Object.setPrototypeOf(View, Control);
 
-// Object.setPrototypeOf(Window.prototype, View.prototype);
-// Object.setPrototypeOf(Window, View);
-
-inherits(View, Control)
-inherits(Window, View)
+Object.setPrototypeOf(Window.prototype, View.prototype);
+Object.setPrototypeOf(Window, View);
 
 Application.init();
 
@@ -43,7 +39,6 @@ win.appendChild(view);
 win.show();
 
 console.log('++++++1', win instanceof View);
-console.log('++++++2', Reflect.apply(win.test, win, []));
 
 function loop() {
   win.title = Date.now().toString();

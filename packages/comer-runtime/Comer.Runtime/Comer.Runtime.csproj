@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <!-- <OutputType>Exe</OutputType> -->
+        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -9,6 +9,7 @@
         <OptimizationPreference>Speed</OptimizationPreference>
         <PublishNodeModule>true</PublishNodeModule>
         <PublishDir>bin/node</PublishDir>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
     <!-- <ItemGroup>
         <TrimmerRootAssembly Include="Comer.Gui" />
@@ -17,6 +18,11 @@
         <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
         <TrimmerRootAssembly Include="Microsoft.JavaScript.NodeApi" />
     </ItemGroup> -->
+    <ItemGroup>
+        <ProjectReference Include="../Comer.Runtime.Generator/Comer.Runtime.Generator.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia"
                           Version="11.1.3" />

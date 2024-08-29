@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comer.Runtime", "Comer.Runtime\Comer.Runtime.csproj", "{840D8FC6-CCF0-4853-8FB4-0389D927A56A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comer.Runtime.Generator", "Comer.Runtime.Generator\Comer.Runtime.Generator.csproj", "{8090E16C-404A-4425-B336-09E86E63501F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{840D8FC6-CCF0-4853-8FB4-0389D927A56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{840D8FC6-CCF0-4853-8FB4-0389D927A56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{840D8FC6-CCF0-4853-8FB4-0389D927A56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8090E16C-404A-4425-B336-09E86E63501F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8090E16C-404A-4425-B336-09E86E63501F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8090E16C-404A-4425-B336-09E86E63501F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8090E16C-404A-4425-B336-09E86E63501F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

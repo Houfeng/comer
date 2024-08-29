@@ -1,4 +1,7 @@
 {
   "name": "comer-runtime",
-  "main": "./lib/index.js"
+  "main": "./lib/index.js",
+  "devDependencies": {
+    "taskd": "0.1.11"
+  }
 }
