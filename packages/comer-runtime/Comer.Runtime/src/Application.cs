@@ -7,17 +7,22 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class Application {
-  private partial class App : Avalonia.Application {
+  private class App : Avalonia.Application {
+    public App() {
+      Name = "Comer App";
+      var theme = new FluentTheme();
+      Styles.Add(theme);
+    }
   }
 
   public static void Init() {
     AppBuilder.Configure<App>()
     .UsePlatformDetect()
     .UseStandardRuntimePlatformSubsystem()
-    .Start((app, args) => {
-      var theme = new FluentTheme();
-      app.Styles.Add(theme);
-    }, []);
+    .With(new AvaloniaNativePlatformOptions {
+      // AvaloniaNativeLibraryPath = “[Path to your dylib]”,
+    })
+    .Start((app, args) => { }, []);
   }
 
   public static void Tick() {

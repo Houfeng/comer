@@ -11,20 +11,20 @@ public static class Program {
     Application.Init();
 
     var win = new Window();
-    win.Background = "#cdf";
     win.BorderWidth = "24";
-    win.BorderColor = "black";
+    win.BorderColor = "#8af";
 
     var view = new View();
-    view.Background = "blue";
+    view.Background = "#fa8";
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
     view.HorizontalAlign = HorizontalAlign.Fill;
-    view.BoxShadow = "5 5 10 0 DarkGray";
 
     win.AppendChild(view);
-
     win.Show();
+
+    var win2 = new Window();
+    win2.ShowOnOwner(win);
 
     Application.Start();
 

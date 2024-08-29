@@ -4,6 +4,6 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public partial class ScrollView {
+public partial class GridView {
 
 }
