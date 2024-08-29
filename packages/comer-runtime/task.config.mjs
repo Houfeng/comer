@@ -2,11 +2,12 @@ import { task, $ } from 'taskd';
 import cpy from 'cpy';
 
 export const prebuild = task('Prebuild', async () => {
+  await $`rm -rf Comer.Runtime/gen/`;
   await $`dotnet build Comer.Runtime/Comer.Runtime.prebuild.csproj`;
-  await $`shopt -s globstar`;
   await cpy(
-    'Comer.Runtime/obj/Debug/net8.0/generated/Comer.Runtime.Generator/*.g.cs',
-    'Comer.Runtime/gen/'
+    'Comer.Runtime/obj/Debug/**/generated/Comer.Runtime.Generator/**/*.g.cs',
+    'Comer.Runtime/gen/',
+    { flat: true }
   );
 });
 
