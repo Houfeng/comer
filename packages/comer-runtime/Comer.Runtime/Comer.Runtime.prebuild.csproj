@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <!-- <OutputType>Exe</OutputType> -->
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -18,11 +18,11 @@
         <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
         <TrimmerRootAssembly Include="Microsoft.JavaScript.NodeApi" />
     </ItemGroup> -->
-    <!-- <ItemGroup>
+    <ItemGroup>
         <ProjectReference Include="../Comer.Runtime.Generator/Comer.Runtime.Generator.csproj"
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false" />
-    </ItemGroup> -->
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia"
                           Version="11.1.3" />
