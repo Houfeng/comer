@@ -9,33 +9,33 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class Icon : Control {
-  private PathIcon Inner { get; set; }
+  private PathIcon Raw { get; set; }
   public Icon() {
-    Inner = new PathIcon();
-    __Inner__ = Inner;
-    Inner.VerticalAlignment = VerticalAlignment.Center;
-    Inner.HorizontalAlignment = HorizontalAlignment.Center;
-    Inner.BorderBrush = Brushes.Transparent;
+    Raw = new PathIcon();
+    xInner = Raw;
+    Raw.VerticalAlignment = VerticalAlignment.Center;
+    Raw.HorizontalAlignment = HorizontalAlignment.Center;
+    Raw.BorderBrush = Brushes.Transparent;
     this.BackgroundSizing = RangeSizing.BorderInner;
   }
 
   public virtual string Data {
     set {
-      Inner.Data = StreamGeometry.Parse(value);
+      Raw.Data = StreamGeometry.Parse(value);
     }
     get {
-      if (Inner.Data == null) return "";
-      return Inner.Data.ToString() ?? "";
+      if (Raw.Data == null) return "";
+      return Raw.Data.ToString() ?? "";
     }
   }
 
   public virtual string Color {
     get {
-      if (Inner.Foreground == null) return "";
-      return Inner.Foreground.ToString() ?? "";
+      if (Raw.Foreground == null) return "";
+      return Raw.Foreground.ToString() ?? "";
     }
     set {
-      Inner.Foreground = Brush.Parse(value ?? "");
+      Raw.Foreground = Brush.Parse(value ?? "");
     }
   }
 
@@ -45,7 +45,7 @@ public partial class Icon : Control {
     }
     set {
       base.Width = value;
-      Inner.Width = value;
+      Raw.Width = value;
     }
   }
 
@@ -55,7 +55,7 @@ public partial class Icon : Control {
     }
     set {
       base.Height = value;
-      Inner.Height = value;
+      Raw.Height = value;
     }
   }
 
@@ -65,7 +65,7 @@ public partial class Icon : Control {
     }
     set {
       base.BorderWidth = value;
-      Inner.BorderThickness = Thickness.Parse(value);
+      Raw.BorderThickness = Thickness.Parse(value);
     }
   }
 
@@ -75,7 +75,7 @@ public partial class Icon : Control {
     }
     set {
       base.BackgroundSizing = value;
-      Inner.BackgroundSizing = (BackgroundSizing)value;
+      Raw.BackgroundSizing = (BackgroundSizing)value;
     }
   }
 

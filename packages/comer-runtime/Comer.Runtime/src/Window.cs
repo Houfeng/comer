@@ -16,209 +16,209 @@ public enum WindowDefaultLocation {
 [JSExport]
 public partial class Window : View {
 
-  private AC.Window Raw { get; set; }
+  private AC.Window raw { get; set; }
 
   public Window() {
-    __Outer__.VerticalAlignment = VerticalAlignment.Stretch;
-    __Outer__.HorizontalAlignment = HorizontalAlignment.Stretch;
-    Raw = new AC.Window();
-    Raw.Content = __Outer__;
-    __Outer__ = Raw;
-    Raw.Width = 720;
-    Raw.Height = 480;
-    Raw.Title = "Window";
+    xOuter.VerticalAlignment = VerticalAlignment.Stretch;
+    xOuter.HorizontalAlignment = HorizontalAlignment.Stretch;
+    raw = new AC.Window();
+    raw.Content = xOuter;
+    xOuter = raw;
+    raw.Width = 720;
+    raw.Height = 480;
+    raw.Title = "Window";
     // this.Inner.SystemDecorations = AC.SystemDecorations.BorderOnly;
     // this.Inner.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
   }
 
   public virtual WindowDefaultLocation DefaultLocation {
     get {
-      return (WindowDefaultLocation)Raw.WindowStartupLocation;
+      return (WindowDefaultLocation)raw.WindowStartupLocation;
     }
     set {
-      Raw.WindowStartupLocation = (AC.WindowStartupLocation)value;
+      raw.WindowStartupLocation = (AC.WindowStartupLocation)value;
     }
   }
 
   public virtual void Show() {
-    Raw.Show();
+    raw.Show();
   }
 
   public virtual void ShowOnOwner(Window owner) {
-    Raw.Show(owner.Raw);
+    raw.Show(owner.raw);
   }
 
   public virtual void ShowDialog(Window owner) {
-    Raw.ShowDialog(owner.Raw);
+    raw.ShowDialog(owner.raw);
   }
 
   public virtual void Hide() {
-    Raw.Hide();
+    raw.Hide();
   }
 
   public virtual void Close() {
-    Raw.Close();
+    raw.Close();
   }
 
   public virtual Vector PointToScreen(Vector vector) {
     var point = new Point(vector.X, vector.Y);
-    var sPoint = Raw.PointToScreen(point);
+    var sPoint = raw.PointToScreen(point);
     return new Vector(sPoint.X, sPoint.Y);
   }
 
   public virtual Vector PointToClient(Vector vector) {
     var point = new PixelPoint((int)vector.X, (int)vector.Y);
-    var cPoint = Raw.PointToClient(point);
+    var cPoint = raw.PointToClient(point);
     return new Vector(cPoint.X, cPoint.Y);
   }
 
   public virtual void Activate() {
-    Raw.Activate();
+    raw.Activate();
   }
 
   public virtual void Focus() {
-    Raw.Focus();
+    raw.Focus();
   }
 
   public virtual string Title {
     get {
-      return Raw.Title ?? "";
+      return raw.Title ?? "";
     }
     set {
-      Raw.Title = value;
+      raw.Title = value;
     }
   }
 
   public virtual bool Resizable {
     get {
-      return Raw.CanResize;
+      return raw.CanResize;
     }
     set {
-      Raw.CanResize = value;
+      raw.CanResize = value;
     }
   }
 
   public virtual bool Focusable {
     get {
-      return Raw.Focusable;
+      return raw.Focusable;
     }
     set {
-      Raw.Focusable = value;
+      raw.Focusable = value;
     }
   }
 
   public virtual double MaxWidth {
     get {
-      return Raw.MaxWidth;
+      return raw.MaxWidth;
     }
     set {
-      Raw.MaxWidth = value;
+      raw.MaxWidth = value;
     }
   }
 
   public virtual double MaxHeight {
     get {
-      return Raw.MaxHeight;
+      return raw.MaxHeight;
     }
     set {
-      Raw.MaxHeight = value;
+      raw.MaxHeight = value;
     }
   }
 
   public virtual double MinWidth {
     get {
-      return Raw.MinWidth;
+      return raw.MinWidth;
     }
     set {
-      Raw.MinWidth = value;
+      raw.MinWidth = value;
     }
   }
 
   public virtual double MinHeight {
     get {
-      return Raw.MinHeight;
+      return raw.MinHeight;
     }
     set {
-      Raw.MinHeight = value;
+      raw.MinHeight = value;
     }
   }
 
   public virtual int X {
     get {
-      return Raw.Position.X;
+      return raw.Position.X;
     }
     set {
-      Raw.Position = new PixelPoint(value, Raw.Position.Y);
+      raw.Position = new PixelPoint(value, raw.Position.Y);
     }
   }
 
   public virtual int Y {
     get {
-      return Raw.Position.Y;
+      return raw.Position.Y;
     }
     set {
-      Raw.Position = new PixelPoint(Raw.Position.Y, value);
+      raw.Position = new PixelPoint(raw.Position.Y, value);
     }
   }
 
   public override double Width {
     get {
-      return Raw.Width;
+      return raw.Width;
     }
 
     set {
-      Raw.Width = value;
+      raw.Width = value;
     }
   }
 
   public override double Height {
     get {
-      return Raw.Height;
+      return raw.Height;
     }
     set {
-      Raw.Height = value;
+      raw.Height = value;
     }
   }
 
   public override string? Background {
     get {
-      if (Raw.Background == null) return null;
-      return Raw.Background.ToString();
+      if (raw.Background == null) return null;
+      return raw.Background.ToString();
     }
     set {
       if (value != null) {
-        Raw.Background = Brush.Parse(value);
+        raw.Background = Brush.Parse(value);
       } else {
-        Raw.Background = null;
+        raw.Background = null;
       }
     }
   }
 
   public override double Opacity {
     get {
-      return Raw.Opacity;
+      return raw.Opacity;
     }
     set {
-      Raw.Opacity = value;
+      raw.Opacity = value;
     }
   }
 
 
   public override HorizontalAlign HorizontalAlign {
     get {
-      return (HorizontalAlign)Raw.HorizontalAlignment;
+      return (HorizontalAlign)raw.HorizontalAlignment;
     }
     set {
-      Raw.HorizontalAlignment = (HorizontalAlignment)value;
+      raw.HorizontalAlignment = (HorizontalAlignment)value;
     }
   }
 
   public override VerticalAlign VerticalAlign {
     get {
-      return (VerticalAlign)Raw.VerticalAlignment;
+      return (VerticalAlign)raw.VerticalAlignment;
     }
     set {
-      Raw.VerticalAlignment = (VerticalAlignment)value;
+      raw.VerticalAlignment = (VerticalAlignment)value;
     }
   }
 

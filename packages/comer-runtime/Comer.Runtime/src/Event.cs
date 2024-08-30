@@ -23,7 +23,7 @@ public class EventTarget {
   private Dictionary<string, List<EventListener>> Events =
     new Dictionary<string, List<EventListener>>();
 
-  protected List<EventListener> UseEventList(string name) {
+  protected virtual List<EventListener> UseEventList(string name) {
     if (Events.ContainsKey(name)) {
       return Events[name];
     } else {
@@ -33,7 +33,7 @@ public class EventTarget {
     }
   }
 
-  protected void DispatchEvent(string name, Event e) {
+  protected virtual void DispatchEvent(string name, Event e) {
     UseEventList(name).ForEach(it => it(e));
   }
 

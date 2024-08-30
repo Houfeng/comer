@@ -8,40 +8,40 @@ namespace Comer.Runtime;
 [JSExport]
 public partial class View : Control {
 
-  private Panel Inner { get; set; }
+  private Panel raw { get; set; }
 
   public View() {
-    Inner = new Panel();
-    Inner.HorizontalAlignment = HorizontalAlignment.Stretch;
-    Inner.VerticalAlignment = VerticalAlignment.Stretch;
-    __Inner__ = Inner;
+    raw = new Panel();
+    raw.HorizontalAlignment = HorizontalAlignment.Stretch;
+    raw.VerticalAlignment = VerticalAlignment.Stretch;
+    xInner = raw;
   }
 
   public virtual void RemoveChild(Control child) {
-    if (Inner.Children.Contains(child.__Outer__)) {
-      Inner.Children.Remove(child.__Outer__);
+    if (raw.Children.Contains(child.xOuter)) {
+      raw.Children.Remove(child.xOuter);
     }
   }
 
   public virtual void InsertChild(Control child, Control? anchor) {
     RemoveChild(child);
     if (anchor != null) {
-      var anchorIndex = Inner.Children.IndexOf(anchor.__Outer__);
-      Inner.Children.Insert(anchorIndex + 1, child.__Outer__);
+      var anchorIndex = raw.Children.IndexOf(anchor.xOuter);
+      raw.Children.Insert(anchorIndex + 1, child.xOuter);
     } else {
-      Inner.Children.Insert(0, child.__Outer__);
+      raw.Children.Insert(0, child.xOuter);
     }
   }
 
   public virtual void AppendChild(Control child) {
     RemoveChild(child);
-    var count = Inner.Children.Count;
-    Inner.Children.Insert(count, child.__Outer__);
+    var count = raw.Children.Count;
+    raw.Children.Insert(count, child.xOuter);
   }
 
   public virtual void PrependChild(Control child) {
     RemoveChild(child);
-    Inner.Children.Insert(0, child.__Outer__);
+    raw.Children.Insert(0, child.xOuter);
   }
 
 }
