@@ -4,7 +4,6 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public class Clipboard
-{
+public partial class Clipboard {
 
 }

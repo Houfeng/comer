@@ -4,7 +4,7 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public class ContextMenu
+public partial class ContextMenu
 {
 
 }

@@ -1,8 +1,5 @@
-﻿using Microsoft.JavaScript.NodeApi;
+﻿namespace Comer.Runtime;
 
-namespace Comer.Runtime;
-
-[JSExport]
 public static class Program {
 
 

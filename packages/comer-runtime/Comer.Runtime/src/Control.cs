@@ -9,7 +9,7 @@ using AC = Avalonia.Controls;
 namespace Comer.Runtime;
 
 [JSExport]
-public partial class Control {
+public partial class Control : EventTarget {
 
   internal virtual AC.Control __Outer__ { get; set; }
   internal virtual AC.Control? __Inner__ {
@@ -28,6 +28,22 @@ public partial class Control {
     Frame.HorizontalAlignment = HorizontalAlignment.Center;
     Frame.VerticalAlignment = VerticalAlignment.Center;
     __Outer__ = Frame;
+    InitEvents();
+  }
+
+  protected void InitEvents() {
+    Frame.PointerEntered += (sender, args) =>
+      DispatchEvent("PointerPressed", new Event(sender, args));
+    Frame.PointerExited += (sender, args) =>
+      DispatchEvent("PointerExited", new Event(sender, args));
+    Frame.PointerMoved += (sender, args) =>
+      DispatchEvent("PointerMoved", new Event(sender, args));
+    Frame.PointerPressed += (sender, args) =>
+      DispatchEvent("PointerPressed", new Event(sender, args));
+    Frame.PointerReleased += (sender, args) =>
+      DispatchEvent("PointerReleased", new Event(sender, args));
+    Frame.PointerWheelChanged += (sender, args) =>
+      DispatchEvent("PointerWheelChanged", new Event(sender, args));
   }
 
   public virtual string? Background {

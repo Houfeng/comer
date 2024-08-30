@@ -2,6 +2,6 @@ using System;
 
 namespace Comer.Runtime;
 
-public class Tray {
+public partial class Tray {
 
 }
