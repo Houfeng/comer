@@ -28,6 +28,9 @@ view.horizontalAlign = HorizontalAlign.Fill;
 view.borderWidth = "5 20";
 view.borderColor = 'red';
 view.boxShadow = '5 5 10 0 DarkGray';
+view.addEventListener("PointerPressed", () => {
+  console.log('PointerPressed');
+});
 
 const view2 = new View();
 view.appendChild(view2);
