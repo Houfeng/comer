@@ -12,11 +12,11 @@ public partial class Icon : Control {
   private PathIcon Inner { get; set; }
   public Icon() {
     Inner = new PathIcon();
-    __Content__ = Inner;
+    __Inner__ = Inner;
     Inner.VerticalAlignment = VerticalAlignment.Center;
     Inner.HorizontalAlignment = HorizontalAlignment.Center;
     Inner.BorderBrush = Brushes.Transparent;
-    this.BoxSizing = BoxSizing.BorderInner;
+    this.BackgroundSizing = RangeSizing.BorderInner;
   }
 
   public virtual string Data {
@@ -69,12 +69,12 @@ public partial class Icon : Control {
     }
   }
 
-  public override BoxSizing BoxSizing {
+  public override RangeSizing BackgroundSizing {
     get {
-      return base.BoxSizing;
+      return base.BackgroundSizing;
     }
     set {
-      base.BoxSizing = value;
+      base.BackgroundSizing = value;
       Inner.BackgroundSizing = (BackgroundSizing)value;
     }
   }

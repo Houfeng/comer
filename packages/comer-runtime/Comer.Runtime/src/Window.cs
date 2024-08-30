@@ -19,11 +19,11 @@ public partial class Window : View {
   private AC.Window Raw { get; set; }
 
   public Window() {
-    __Raw__.VerticalAlignment = VerticalAlignment.Stretch;
-    __Raw__.HorizontalAlignment = HorizontalAlignment.Stretch;
+    __Outer__.VerticalAlignment = VerticalAlignment.Stretch;
+    __Outer__.HorizontalAlignment = HorizontalAlignment.Stretch;
     Raw = new AC.Window();
-    Raw.Content = __Raw__;
-    __Raw__ = Raw;
+    Raw.Content = __Outer__;
+    __Outer__ = Raw;
     Raw.Width = 720;
     Raw.Height = 480;
     Raw.Title = "Window";

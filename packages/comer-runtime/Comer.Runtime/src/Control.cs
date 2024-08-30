@@ -11,8 +11,8 @@ namespace Comer.Runtime;
 [JSExport]
 public partial class Control {
 
-  internal virtual AC.Control __Raw__ { get; set; }
-  internal virtual AC.Control? __Content__ {
+  internal virtual AC.Control __Outer__ { get; set; }
+  internal virtual AC.Control? __Inner__ {
     get {
       return Frame.Child;
     }
@@ -27,7 +27,7 @@ public partial class Control {
     Frame = new AC.Border();
     Frame.HorizontalAlignment = HorizontalAlignment.Center;
     Frame.VerticalAlignment = VerticalAlignment.Center;
-    __Raw__ = Frame;
+    __Outer__ = Frame;
   }
 
   public virtual string? Background {
@@ -135,9 +135,9 @@ public partial class Control {
     }
   }
 
-  public virtual BoxSizing BoxSizing {
+  public virtual RangeSizing BackgroundSizing {
     get {
-      return (BoxSizing)Frame.BackgroundSizing;
+      return (RangeSizing)Frame.BackgroundSizing;
     }
     set {
       Frame.BackgroundSizing = (BackgroundSizing)value;
