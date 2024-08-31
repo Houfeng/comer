@@ -32,6 +32,8 @@ view.borderWidth = "10";
 view.boxShadow = '0 25 30 0 DarkGray';
 view.width = 200;
 view.onPointerDown = () => {
+  win.height = 400;
+  win.width = 300;
   view.width = NaN;
 };
 
