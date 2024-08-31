@@ -5,10 +5,12 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
+using Avalonia.Input;
 
 namespace Comer.Runtime;
 
 public interface IHostControl {
+  AC.Control Raw { get; }
   AC.Classes Classes { get; }
   IBrush? Background { get; set; }
   HorizontalAlignment HorizontalAlignment { get; set; }
@@ -23,7 +25,12 @@ public interface IHostControl {
   BackgroundSizing BackgroundSizing { get; set; }
   double Opacity { get; set; }
   AI.Cursor? Cursor { get; set; }
-  AC.Control Raw { get; }
+  event EventHandler<PointerEventArgs>? PointerEntered;
+  event EventHandler<PointerEventArgs>? PointerExited;
+  event EventHandler<PointerEventArgs>? PointerMoved;
+  event EventHandler<PointerPressedEventArgs>? PointerPressed;
+  event EventHandler<PointerReleasedEventArgs>? PointerReleased;
+  event EventHandler<PointerWheelEventArgs>? PointerWheelChanged;
 }
 
 class HostControl : AC.Border, IHostControl {
@@ -41,7 +48,28 @@ public partial class Control {
 
   public Control() {
     xHostBinding();
+    EventsBinding();
   }
+
+  protected void InvokeEvent(Action? action) {
+    if (action != null) Task.Run(action);
+  }
+
+  private void EventsBinding() {
+    xHost.PointerEntered += (_, args) => InvokeEvent(OnPointerEnter);
+    xHost.PointerExited += (_, args) => InvokeEvent(OnPointerLeave);
+    xHost.PointerMoved += (_, args) => InvokeEvent(OnPointerMove);
+    xHost.PointerPressed += (_, args) => InvokeEvent(OnPointerDown);
+    xHost.PointerReleased += (_, args) => InvokeEvent(OnPointerUp);
+    xHost.PointerWheelChanged += (_, args) => InvokeEvent(OnWheel);
+  }
+
+  public Action? OnPointerEnter { get; set; }
+  public Action? OnPointerLeave { get; set; }
+  public Action? OnPointerMove { get; set; }
+  public Action? OnPointerDown { get; set; }
+  public Action? OnPointerUp { get; set; }
+  public Action? OnWheel { get; set; }
 
   public virtual string? Background {
     get {

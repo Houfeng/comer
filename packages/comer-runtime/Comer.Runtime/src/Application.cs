@@ -30,11 +30,11 @@ public partial class Application {
       var token = new CancellationTokenSource();
       DispatcherTimer.RunOnce(
         () => token.Cancel(),
-        TimeSpan.FromMilliseconds(100)
+        TimeSpan.FromMilliseconds(0)
       );
       Dispatcher.UIThread.MainLoop(token.Token);
-    } catch {
-      //TODO: emit error event
+    } catch (Exception ex) {
+      Console.WriteLine("[Error]", ex.Message, "::", ex.StackTrace);
     }
   }
 
