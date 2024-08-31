@@ -61,7 +61,6 @@ public partial class Control {
     get {
       return xHost.Width;
     }
-
     set {
       xHost.Width = value;
     }
@@ -82,6 +81,9 @@ public partial class Control {
     }
     set {
       xHost.HorizontalAlignment = (HorizontalAlignment)value;
+      if (value == HorizontalAlign.Fill) {
+        xHost.Width = double.NaN;
+      }
     }
   }
 
@@ -91,6 +93,9 @@ public partial class Control {
     }
     set {
       xHost.VerticalAlignment = (VerticalAlignment)value;
+      if (value == VerticalAlign.Fill) {
+        xHost.Height = double.NaN;
+      }
     }
   }
 

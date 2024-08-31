@@ -13,7 +13,7 @@ public enum Orientation {
 public partial class StackView : View {
   protected override AC.StackPanel xInner { get; } = new AC.StackPanel();
 
-  protected Orientation Orientation {
+  public Orientation Orientation {
     get {
       return (Orientation)xInner.Orientation;
     }
@@ -22,7 +22,7 @@ public partial class StackView : View {
     }
   }
 
-  protected double Spacing {
+  public double Spacing {
     get {
       return xInner.Spacing;
     }
