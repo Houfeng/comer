@@ -1,4 +1,6 @@
 using System;
+using Avalonia;
+using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
 using AM = Avalonia.Media;
@@ -13,54 +15,65 @@ public enum TextWrapping {
 
 [JSExport]
 public partial class TextBox : Control {
-  private AC.TextBox raw { get; set; }
+  protected override AC.TextBox xInner { get; } = new AC.TextBox();
+
   public TextBox() {
-    raw = new AC.TextBox();
-    xOuter = raw;
+    xInner.VerticalAlignment = VerticalAlignment.Stretch;
+    xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
+    xInner.BorderThickness = new Thickness(0);
+    xInner.BorderBrush = AM.Brushes.Transparent;
+    xInner.MinHeight = 0;
+    xInner.MinWidth = 0;
+    xInner.FontSize = 16;
+    xInner.LineHeight = 16;
+    xInner.Padding = new Thickness(4, 4);
+    BorderWidth = "1";
+    BorderColor = "#ddd";
+    Classes = "text-box";
   }
 
   public string Value {
     get {
-      return raw.Text ?? "";
+      return xInner.Text ?? "";
     }
     set {
-      raw.Text = value;
+      xInner.Text = value;
     }
   }
 
   public string Placeholder {
     get {
-      return raw.Watermark ?? "";
+      return xInner.Watermark ?? "";
     }
     set {
-      raw.Watermark = value;
+      xInner.Watermark = value;
     }
   }
 
   public string Mask {
     get {
-      return new string([raw.PasswordChar]);
+      return new string([xInner.PasswordChar]);
     }
     set {
-      raw.PasswordChar = value[0];
+      xInner.PasswordChar = value[0];
     }
   }
 
   public bool MultiLine {
     get {
-      return raw.AcceptsReturn;
+      return xInner.AcceptsReturn;
     }
     set {
-      raw.AcceptsReturn = value;
+      xInner.AcceptsReturn = value;
     }
   }
 
   public TextWrapping Wrapping {
     get {
-      return (TextWrapping)raw.TextWrapping;
+      return (TextWrapping)xInner.TextWrapping;
     }
     set {
-      raw.TextWrapping = (AM.TextWrapping)value;
+      xInner.TextWrapping = (AM.TextWrapping)value;
     }
   }
 

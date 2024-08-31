@@ -8,174 +8,184 @@ using AC = Avalonia.Controls;
 
 namespace Comer.Runtime;
 
+public interface IHostControl {
+  AC.Classes Classes { get; }
+  IBrush? Background { get; set; }
+  HorizontalAlignment HorizontalAlignment { get; set; }
+  VerticalAlignment VerticalAlignment { get; set; }
+  double Width { get; set; }
+  double Height { get; set; }
+  Thickness Margin { get; set; }
+  Thickness Padding { get; set; }
+  Thickness BorderThickness { get; set; }
+  IBrush? BorderBrush { get; set; }
+  BoxShadows BoxShadow { get; set; }
+  BackgroundSizing BackgroundSizing { get; set; }
+  double Opacity { get; set; }
+  AI.Cursor? Cursor { get; set; }
+  AC.Control Raw { get; }
+}
+
+class HostControl : AC.Border, IHostControl {
+  public AC.Control Raw { get { return this; } }
+}
+
 [JSExport]
-public partial class Control : EventTarget {
+public partial class Control {
+  internal virtual IHostControl xHost { get; } = new HostControl();
+  protected virtual AC.Control? xInner { get; }
 
-  internal virtual AC.Control xOuter { get; set; }
-  internal virtual AC.Control? xInner {
-    get {
-      return raw.Child;
-    }
-    set {
-      raw.Child = value;
-    }
+  protected virtual void xBindInnerToHost() {
+    ((AC.Border)xHost).Child = xInner;
   }
-
-  private AC.Border raw { get; set; }
 
   public Control() {
-    raw = new AC.Border();
-    raw.HorizontalAlignment = HorizontalAlignment.Center;
-    raw.VerticalAlignment = VerticalAlignment.Center;
-    xOuter = raw;
-    InitEvents();
-  }
-
-  protected virtual void InitEvents() {
-    raw.PointerEntered += (sender, args) =>
-      DispatchEvent("PointerPressed", new Event(sender, args));
-    raw.PointerExited += (sender, args) =>
-      DispatchEvent("PointerExited", new Event(sender, args));
-    raw.PointerMoved += (sender, args) =>
-      DispatchEvent("PointerMoved", new Event(sender, args));
-    raw.PointerPressed += (sender, args) =>
-      DispatchEvent("PointerPressed", new Event(sender, args));
-    raw.PointerReleased += (sender, args) =>
-      DispatchEvent("PointerReleased", new Event(sender, args));
-    raw.PointerWheelChanged += (sender, args) =>
-      DispatchEvent("PointerWheelChanged", new Event(sender, args));
+    xHost.HorizontalAlignment = HorizontalAlignment.Center;
+    xHost.VerticalAlignment = VerticalAlignment.Center;
+    xBindInnerToHost();
   }
 
   public virtual string? Background {
     get {
-      if (raw.Background == null) return null;
-      return raw.Background.ToString();
+      if (xHost.Background == null) return null;
+      return xHost.Background.ToString();
     }
     set {
       if (value != null) {
-        raw.Background = Brush.Parse(value);
+        xHost.Background = Brush.Parse(value);
       } else {
-        raw.Background = null;
+        xHost.Background = null;
       }
     }
   }
 
   public virtual double Width {
     get {
-      return raw.Width;
+      return xHost.Width;
     }
 
     set {
-      raw.Width = value;
+      xHost.Width = value;
     }
   }
 
   public virtual double Height {
     get {
-      return raw.Height;
+      return xHost.Height;
     }
     set {
-      raw.Height = value;
+      xHost.Height = value;
     }
   }
 
   public virtual HorizontalAlign HorizontalAlign {
     get {
-      return (HorizontalAlign)raw.HorizontalAlignment;
+      return (HorizontalAlign)xHost.HorizontalAlignment;
     }
     set {
-      raw.HorizontalAlignment = (HorizontalAlignment)value;
+      xHost.HorizontalAlignment = (HorizontalAlignment)value;
     }
   }
 
   public virtual VerticalAlign VerticalAlign {
     get {
-      return (VerticalAlign)raw.VerticalAlignment;
+      return (VerticalAlign)xHost.VerticalAlignment;
     }
     set {
-      raw.VerticalAlignment = (VerticalAlignment)value;
+      xHost.VerticalAlignment = (VerticalAlignment)value;
     }
   }
 
   public virtual string Margin {
     get {
-      return raw.Margin.ToString();
+      return xHost.Margin.ToString();
     }
     set {
-      raw.Margin = Thickness.Parse(value);
+      xHost.Margin = Thickness.Parse(value);
     }
   }
 
   public virtual string Padding {
     get {
-      return raw.Padding.ToString();
+      return xHost.Padding.ToString();
     }
     set {
-      raw.Padding = Thickness.Parse(value);
+      xHost.Padding = Thickness.Parse(value);
     }
   }
 
   public virtual string BorderWidth {
     get {
-      return raw.BorderThickness.ToString();
+      return xHost.BorderThickness.ToString();
     }
     set {
-      raw.BorderThickness = Thickness.Parse(value);
+      xHost.BorderThickness = Thickness.Parse(value);
     }
   }
 
   public virtual string? BorderColor {
     get {
-      if (raw.BorderBrush == null) return null;
-      return raw.BorderBrush.ToString();
+      if (xHost.BorderBrush == null) return null;
+      return xHost.BorderBrush.ToString();
     }
     set {
       if (value != null) {
-        raw.BorderBrush = Brush.Parse(value);
+        xHost.BorderBrush = Brush.Parse(value);
       } else {
-        raw.BorderBrush = null;
+        xHost.BorderBrush = null;
       }
     }
   }
 
   public virtual string? BoxShadow {
     get {
-      return raw.BoxShadow.ToString();
+      return xHost.BoxShadow.ToString();
     }
     set {
       if (value != null) {
-        raw.BoxShadow = BoxShadows.Parse(value);
+        xHost.BoxShadow = BoxShadows.Parse(value);
       } else {
-        raw.BoxShadow = BoxShadows.Parse("");
+        xHost.BoxShadow = BoxShadows.Parse("");
       }
     }
   }
 
   public virtual RangeSizing BackgroundSizing {
     get {
-      return (RangeSizing)raw.BackgroundSizing;
+      return (RangeSizing)xHost.BackgroundSizing;
     }
     set {
-      raw.BackgroundSizing = (BackgroundSizing)value;
+      xHost.BackgroundSizing = (BackgroundSizing)value;
     }
   }
 
   public virtual double Opacity {
     get {
-      return raw.Opacity;
+      return xHost.Opacity;
     }
     set {
-      raw.Opacity = value;
+      xHost.Opacity = value;
     }
   }
 
   public virtual string Cursor {
     get {
-      if (raw.Cursor == null) return "";
-      return raw.Cursor.ToString();
+      if (xHost.Cursor == null) return "";
+      return xHost.Cursor.ToString();
     }
     set {
-      raw.Cursor = AI.Cursor.Parse(value ?? "");
+      xHost.Cursor = AI.Cursor.Parse(value ?? "");
+    }
+  }
+
+  public virtual string Classes {
+    get {
+      return string.Join(" ", xHost.Classes);
+    }
+    set {
+      xHost.Classes.Clear();
+      value.Split(" ").ToList()
+      .ForEach(it => xHost.Classes.Add(it));
     }
   }
 

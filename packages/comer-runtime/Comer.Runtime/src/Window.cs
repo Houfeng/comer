@@ -2,9 +2,49 @@ using AC = Avalonia.Controls;
 using Microsoft.JavaScript.NodeApi;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Layout;
+using Avalonia.Input;
 
 namespace Comer.Runtime;
+
+public interface IHostWindow : IHostControl {
+  string? Title { get; set; }
+  object? Content { get; set; }
+  AC.WindowStartupLocation WindowStartupLocation { get; set; }
+  PixelPoint Position { get; set; }
+  void Show();
+  void Show(AC.Window owner);
+  void Hide();
+  void Close();
+  void Activate();
+  bool Focus(
+    NavigationMethod method = NavigationMethod.Unspecified,
+    KeyModifiers keyModifiers = KeyModifiers.None
+  );
+  bool CanResize { get; set; }
+  bool Focusable { get; set; }
+  Task<TResult> ShowDialog<TResult>(AC.Window owner);
+  PixelPoint ClientPointToScreenPoint(Point point);
+  Point ScreenPointToClientPoint(PixelPoint point);
+  double MinWidth { get; set; }
+  double MaxWidth { get; set; }
+  double MinHeight { get; set; }
+  double MaxHeight { get; set; }
+}
+
+class HostWindow : AC.Window, IHostWindow {
+  public AC.Control Raw { get { return this; } }
+
+  public BoxShadows BoxShadow {
+    get { return BoxShadows.Parse(""); }
+    set { }
+  }
+  public PixelPoint ClientPointToScreenPoint(Point point) {
+    return this.PointToScreen(point);
+  }
+  public Point ScreenPointToClientPoint(PixelPoint point) {
+    return this.PointToClient(point);
+  }
+}
 
 [JSExport]
 public enum WindowDefaultLocation {
@@ -16,209 +56,145 @@ public enum WindowDefaultLocation {
 [JSExport]
 public partial class Window : View {
 
-  private AC.Window raw { get; set; }
+  internal override IHostWindow xHost { get; } = new HostWindow();
+
+  protected override void xBindInnerToHost() {
+    ((HostWindow)xHost).Content = xInner;
+  }
 
   public Window() {
-    xOuter.VerticalAlignment = VerticalAlignment.Stretch;
-    xOuter.HorizontalAlignment = HorizontalAlignment.Stretch;
-    raw = new AC.Window();
-    raw.Content = xOuter;
-    xOuter = raw;
-    raw.Width = 720;
-    raw.Height = 480;
-    raw.Title = "Window";
-    // this.Inner.SystemDecorations = AC.SystemDecorations.BorderOnly;
-    // this.Inner.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+    xHost.Width = 720;
+    xHost.Height = 480;
+    xHost.Title = "Window";
   }
 
   public virtual WindowDefaultLocation DefaultLocation {
     get {
-      return (WindowDefaultLocation)raw.WindowStartupLocation;
+      return (WindowDefaultLocation)xHost.WindowStartupLocation;
     }
     set {
-      raw.WindowStartupLocation = (AC.WindowStartupLocation)value;
+      xHost.WindowStartupLocation = (AC.WindowStartupLocation)value;
     }
   }
 
   public virtual void Show() {
-    raw.Show();
+    xHost.Show();
   }
 
   public virtual void ShowOnOwner(Window owner) {
-    raw.Show(owner.raw);
+    xHost.Show((AC.Window)owner.xHost.Raw);
   }
 
-  public virtual void ShowDialog(Window owner) {
-    raw.ShowDialog(owner.raw);
+  public virtual Task ShowDialog(Window owner) {
+    return xHost.ShowDialog<object>((AC.Window)owner.xHost.Raw);
   }
 
   public virtual void Hide() {
-    raw.Hide();
+    xHost.Hide();
   }
 
   public virtual void Close() {
-    raw.Close();
+    xHost.Close();
   }
 
-  public virtual Vector PointToScreen(Vector vector) {
+  public virtual Vector ClientPointToScreenPoint(Vector vector) {
     var point = new Point(vector.X, vector.Y);
-    var sPoint = raw.PointToScreen(point);
+    var sPoint = xHost.ClientPointToScreenPoint(point);
     return new Vector(sPoint.X, sPoint.Y);
   }
 
-  public virtual Vector PointToClient(Vector vector) {
+  public virtual Vector ScreenPointToClientPoint(Vector vector) {
     var point = new PixelPoint((int)vector.X, (int)vector.Y);
-    var cPoint = raw.PointToClient(point);
+    var cPoint = xHost.ScreenPointToClientPoint(point);
     return new Vector(cPoint.X, cPoint.Y);
   }
 
   public virtual void Activate() {
-    raw.Activate();
+    xHost.Activate();
   }
 
   public virtual void Focus() {
-    raw.Focus();
+    xHost.Focus();
   }
 
   public virtual string Title {
     get {
-      return raw.Title ?? "";
+      return xHost.Title ?? "";
     }
     set {
-      raw.Title = value;
+      xHost.Title = value;
     }
   }
 
   public virtual bool Resizable {
     get {
-      return raw.CanResize;
+      return xHost.CanResize;
     }
     set {
-      raw.CanResize = value;
+      xHost.CanResize = value;
     }
   }
 
   public virtual bool Focusable {
     get {
-      return raw.Focusable;
+      return xHost.Focusable;
     }
     set {
-      raw.Focusable = value;
+      xHost.Focusable = value;
     }
   }
 
   public virtual double MaxWidth {
     get {
-      return raw.MaxWidth;
+      return xHost.MaxWidth;
     }
     set {
-      raw.MaxWidth = value;
+      xHost.MaxWidth = value;
     }
   }
 
   public virtual double MaxHeight {
     get {
-      return raw.MaxHeight;
+      return xHost.MaxHeight;
     }
     set {
-      raw.MaxHeight = value;
+      xHost.MaxHeight = value;
     }
   }
 
   public virtual double MinWidth {
     get {
-      return raw.MinWidth;
+      return xHost.MinWidth;
     }
     set {
-      raw.MinWidth = value;
+      xHost.MinWidth = value;
     }
   }
 
   public virtual double MinHeight {
     get {
-      return raw.MinHeight;
+      return xHost.MinHeight;
     }
     set {
-      raw.MinHeight = value;
+      xHost.MinHeight = value;
     }
   }
 
   public virtual int X {
     get {
-      return raw.Position.X;
+      return xHost.Position.X;
     }
     set {
-      raw.Position = new PixelPoint(value, raw.Position.Y);
+      xHost.Position = new PixelPoint(value, xHost.Position.Y);
     }
   }
 
   public virtual int Y {
     get {
-      return raw.Position.Y;
+      return xHost.Position.Y;
     }
     set {
-      raw.Position = new PixelPoint(raw.Position.Y, value);
-    }
-  }
-
-  public override double Width {
-    get {
-      return raw.Width;
-    }
-
-    set {
-      raw.Width = value;
-    }
-  }
-
-  public override double Height {
-    get {
-      return raw.Height;
-    }
-    set {
-      raw.Height = value;
-    }
-  }
-
-  public override string? Background {
-    get {
-      if (raw.Background == null) return null;
-      return raw.Background.ToString();
-    }
-    set {
-      if (value != null) {
-        raw.Background = Brush.Parse(value);
-      } else {
-        raw.Background = null;
-      }
-    }
-  }
-
-  public override double Opacity {
-    get {
-      return raw.Opacity;
-    }
-    set {
-      raw.Opacity = value;
-    }
-  }
-
-
-  public override HorizontalAlign HorizontalAlign {
-    get {
-      return (HorizontalAlign)raw.HorizontalAlignment;
-    }
-    set {
-      raw.HorizontalAlignment = (HorizontalAlignment)value;
-    }
-  }
-
-  public override VerticalAlign VerticalAlign {
-    get {
-      return (VerticalAlign)raw.VerticalAlignment;
-    }
-    set {
-      raw.VerticalAlignment = (VerticalAlignment)value;
+      xHost.Position = new PixelPoint(xHost.Position.Y, value);
     }
   }
 

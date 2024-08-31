@@ -1,47 +1,43 @@
 
-using Avalonia.Controls;
+using AC = Avalonia.Controls;
 using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
 
 namespace Comer.Runtime;
-
 [JSExport]
 public partial class View : Control {
-
-  private Panel raw { get; set; }
+  protected override AC.Panel xInner { get; } = new AC.Panel();
 
   public View() {
-    raw = new Panel();
-    raw.HorizontalAlignment = HorizontalAlignment.Stretch;
-    raw.VerticalAlignment = VerticalAlignment.Stretch;
-    xInner = raw;
+    xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
+    xInner.VerticalAlignment = VerticalAlignment.Stretch;
   }
 
   public virtual void RemoveChild(Control child) {
-    if (raw.Children.Contains(child.xOuter)) {
-      raw.Children.Remove(child.xOuter);
+    if (xInner.Children.Contains(child.xHost.Raw)) {
+      xInner.Children.Remove(child.xHost.Raw);
     }
   }
 
   public virtual void InsertChild(Control child, Control? anchor) {
     RemoveChild(child);
     if (anchor != null) {
-      var anchorIndex = raw.Children.IndexOf(anchor.xOuter);
-      raw.Children.Insert(anchorIndex + 1, child.xOuter);
+      var anchorIndex = xInner.Children.IndexOf(anchor.xHost.Raw);
+      xInner.Children.Insert(anchorIndex + 1, child.xHost.Raw);
     } else {
-      raw.Children.Insert(0, child.xOuter);
+      xInner.Children.Insert(0, child.xHost.Raw);
     }
   }
 
   public virtual void AppendChild(Control child) {
     RemoveChild(child);
-    var count = raw.Children.Count;
-    raw.Children.Insert(count, child.xOuter);
+    var count = xInner.Children.Count;
+    xInner.Children.Insert(count, child.xHost.Raw);
   }
 
   public virtual void PrependChild(Control child) {
     RemoveChild(child);
-    raw.Children.Insert(0, child.xOuter);
+    xInner.Children.Insert(0, child.xHost.Raw);
   }
 
 }
