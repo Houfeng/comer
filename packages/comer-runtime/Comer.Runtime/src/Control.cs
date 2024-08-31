@@ -27,13 +27,14 @@ public interface IHostControl {
 }
 
 class HostControl : AC.Border, IHostControl {
-  public AC.Control Raw { get { return this; } }
+  public AC.Control Raw => this;
 }
 
 [JSExport]
 public partial class Control {
   internal virtual IHostControl xHost { get; } = new HostControl();
   protected virtual AC.Control? xInner { get; }
+
   protected virtual void xHostBinding() {
     if (xHost is AC.Border) ((AC.Border)xHost).Child = xInner;
   }

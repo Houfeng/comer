@@ -4,6 +4,7 @@ using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
 
 namespace Comer.Runtime;
+
 [JSExport]
 public partial class View : Control {
   protected override AC.Panel xInner { get; } = new AC.Panel();

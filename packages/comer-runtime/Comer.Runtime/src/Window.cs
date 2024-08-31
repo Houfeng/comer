@@ -32,7 +32,7 @@ public interface IHostWindow : IHostControl {
 }
 
 class HostWindow : AC.Window, IHostWindow {
-  public AC.Control Raw { get { return this; } }
+  public AC.Control Raw => this;
 
   public BoxShadows BoxShadow {
     get { return BoxShadows.Parse(""); }

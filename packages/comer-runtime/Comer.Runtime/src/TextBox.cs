@@ -1,4 +1,3 @@
-using System;
 using Avalonia;
 using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
