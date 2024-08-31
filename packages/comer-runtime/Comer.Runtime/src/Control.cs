@@ -34,15 +34,14 @@ class HostControl : AC.Border, IHostControl {
 public partial class Control {
   internal virtual IHostControl xHost { get; } = new HostControl();
   protected virtual AC.Control? xInner { get; }
-
-  protected virtual void xBindInnerToHost() {
-    ((AC.Border)xHost).Child = xInner;
+  protected virtual void xHostBinding() {
+    if (xHost is AC.Border) ((AC.Border)xHost).Child = xInner;
   }
 
   public Control() {
-    xHost.HorizontalAlignment = HorizontalAlignment.Center;
-    xHost.VerticalAlignment = VerticalAlignment.Center;
-    xBindInnerToHost();
+    xHostBinding();
+    VerticalAlign = VerticalAlign.Center;
+    HorizontalAlign = HorizontalAlign.Center;
   }
 
   public virtual string? Background {
@@ -184,8 +183,7 @@ public partial class Control {
     }
     set {
       xHost.Classes.Clear();
-      value.Split(" ").ToList()
-      .ForEach(it => xHost.Classes.Add(it));
+      value.Split(" ").ToList().ForEach(xHost.Classes.Add);
     }
   }
 

@@ -1,7 +1,8 @@
 const { resolve } = require('path');
 
 const {
-  Application, Window, View, HorizontalAlign, VerticalAlign, Control
+  Application, Window, View, HorizontalAlign, VerticalAlign, Control,
+  RangeSizing
 } = require('../Comer.Runtime/bin/node/Comer.Runtime');
 
 process.chdir(resolve(__dirname, '../Comer.Runtime/bin/node/'));
@@ -17,35 +18,21 @@ Application.init();
 const win = new Window();
 
 win.title = "Demo";
-win.width = 400;
-win.height = 400;
 
 const view = new View();
-view.background = "blue";
+view.background = "black";
 view.height = 100;
 view.verticalAlign = VerticalAlign.Top;
 view.horizontalAlign = HorizontalAlign.Fill;
-view.borderWidth = "5 20";
-view.borderColor = 'red';
-view.boxShadow = '5 5 10 0 DarkGray';
-view.addEventListener("PointerPressed", () => {
-  console.log('PointerPressed');
-});
-
-const view2 = new View();
-view.appendChild(view2);
-
-win.padding = "5";
-win.background = '#aaf';
+view.borderColor = "red";
+view.borderWidth = "10";
+// view.backgroundSizing = RangeSizing.BorderOuter;
+view.boxShadow = '0 25 30 0 DarkGray';
 
 win.appendChild(view);
 win.show();
 
-console.log('++++++1', win instanceof View);
-
-function loop() {
-  win.title = Date.now().toString();
+(function loop() {
   Application.tick();
   setImmediate(loop);
-}
-loop();
+})();
