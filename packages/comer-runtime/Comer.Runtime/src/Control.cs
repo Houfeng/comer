@@ -40,8 +40,6 @@ public partial class Control {
 
   public Control() {
     xHostBinding();
-    VerticalAlign = VerticalAlign.Center;
-    HorizontalAlign = HorizontalAlign.Center;
   }
 
   public virtual string? Background {

@@ -18,18 +18,14 @@ public partial class TextBox : Control {
   protected override AC.TextBox xInner { get; } = new AC.TextBox();
 
   public TextBox() {
-    xInner.VerticalAlignment = VerticalAlignment.Stretch;
     xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
-    xInner.BorderThickness = new Thickness(0);
-    xInner.BorderBrush = AM.Brushes.Transparent;
+    xInner.VerticalAlignment = VerticalAlignment.Stretch;
     xInner.MinHeight = 0;
     xInner.MinWidth = 0;
+    xInner.Width = 100;
     xInner.FontSize = 16;
-    xInner.LineHeight = 16;
+    xInner.LineHeight = 22;
     xInner.Padding = new Thickness(4, 4);
-    BorderWidth = "1";
-    BorderColor = "#ddd";
-    Classes = "text-box";
   }
 
   public string Value {

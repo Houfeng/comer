@@ -7,30 +7,26 @@ public static class Program {
   public static void Main() {
     Application.Init();
 
+
     var win = new Window();
-    win.BorderWidth = "16";
-    win.BorderColor = "#8af";
+
+    win.Title = "Demo";
 
     var view = new View();
-    view.Background = "#fa8";
+    view.Background = "black";
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
     view.HorizontalAlign = HorizontalAlign.Fill;
+    view.BorderColor = "red";
+    view.BorderWidth = "10";
+    view.BoxShadow = "0 25 30 0 DarkGray";
+
+    var box = new TextBox();
+    box.HorizontalAlign = HorizontalAlign.Left;
+    box.MultiLine = true;
+    view.AppendChild(box);
 
     win.AppendChild(view);
-
-    var textBox = new TextBox();
-    textBox.HorizontalAlign = HorizontalAlign.Fill;
-    textBox.VerticalAlign = VerticalAlign.Bottom;
-    textBox.MultiLine = true;
-    win.AppendChild(textBox);
-
-    var textBox2 = new TextBox();
-    textBox2.HorizontalAlign = HorizontalAlign.Fill;
-    textBox2.VerticalAlign = VerticalAlign.Center;
-    textBox2.MultiLine = true;
-    win.AppendChild(textBox2);
-
     win.Show();
 
     Application.Start();
