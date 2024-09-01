@@ -1,6 +1,7 @@
 packages:
   - ./packages/comer/
   - ./packages/comer-dom/
+  - ./packages/comer-runtime/
   - ./packages/comer-devtool/
   - ./packages/comer-benchmark/
   - ./packages/comer-demo/

@@ -1,0 +1,6 @@
+{
+  "name": "comer-desktop",
+  "module": "./lib/index.js",
+  "main": "./lib/index.js",
+  "types": "./types/index.d.ts"
+}

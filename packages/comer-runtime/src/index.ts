@@ -1,9 +1,12 @@
-import { resolve } from 'path';
+import { resolve } from "path";
 
 import {
-  Application, Window, View, Control,
-  TextBox
-} from '../binary/Comer.Runtime';
+  Application,
+  Window,
+  View,
+  Control,
+  TextBox,
+} from "../binary/Comer.Runtime";
 
 // -------------------------------------------------------------------------
 
@@ -17,11 +20,14 @@ inherit(TextBox, Control);
 inherit(Window, View);
 
 // -------------------------------------------------------------------------
-process.chdir(resolve(__dirname, '../binary'));
+process.chdir(resolve(__dirname, "../binary"));
 
 function mainLoop() {
   Application.tick();
   setImmediate(mainLoop);
-};
+}
 
 Application.run = () => mainLoop();
+
+// -------------------------------------------------------------------------
+export * from "../binary/Comer.Runtime";

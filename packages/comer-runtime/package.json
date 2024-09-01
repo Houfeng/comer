@@ -1,8 +1,11 @@
 {
   "name": "comer-runtime",
+  "module": "./lib/index.js",
   "main": "./lib/index.js",
+  "types": "./types/index.d.ts",
   "devDependencies": {
+    "cpy": "11.1.0",
     "taskd": "0.1.11",
-    "cpy": "11.1.0"
+    "typescript": "5.5.4"
   }
 }
