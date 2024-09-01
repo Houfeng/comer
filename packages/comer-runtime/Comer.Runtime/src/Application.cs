@@ -36,6 +36,8 @@ public partial class Application {
     }
   }
 
+  public static void Run() { }
+
   private static CancellationTokenSource? RunToken { get; set; }
 
   internal static void Start() {

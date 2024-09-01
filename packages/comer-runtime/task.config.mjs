@@ -5,6 +5,7 @@ export const clean = task('Clean', async () => {
   await $`rm -rf Comer.Runtime/gen/`;
   await $`rm -rf Comer.Runtime/bin/`;
   await $`rm -rf Comer.Runtime/obj/`;
+  await $`rm -rf binary/`;
 });
 
 export const prebuild = task('Prebuild', [clean], async () => {
@@ -18,6 +19,11 @@ export const prebuild = task('Prebuild', [clean], async () => {
 
 export const build = task('Build', [prebuild], async () => {
   await $`dotnet publish Comer.Runtime/Comer.Runtime.publish.csproj --ucr `;
+  await cpy(
+    'Comer.Runtime/bin/node/**/*.{ts,js,cjs,node,dylib}',
+    'binary/',
+    { flat: true }
+  );
 });
 
 export const demo = task('Demo', async () => {

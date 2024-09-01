@@ -1,4 +1,8 @@
-.vscode/
-Comer.Runtime/
 *.sln
 *.editorconfig
+.vscode/
+task.config.mjs
+Comer.Runtime/
+Comer.Runtime.Generator/
+demo/
+src/
