@@ -4,6 +4,7 @@ using AL = Avalonia.Layout;
 
 namespace Comer.Runtime;
 
+[JSExport]
 public enum Orientation {
   Horizontal,
   Vertical

@@ -1,10 +1,13 @@
 import { task, $ } from 'taskd';
 import cpy from 'cpy';
 
-export const prebuild = task('Prebuild', async () => {
+export const clean = task('Clean', async () => {
   await $`rm -rf Comer.Runtime/gen/`;
   await $`rm -rf Comer.Runtime/bin/`;
   await $`rm -rf Comer.Runtime/obj/`;
+});
+
+export const prebuild = task('Prebuild', [clean], async () => {
   await $`dotnet build Comer.Runtime/Comer.Runtime.prebuild.csproj`;
   await cpy(
     'Comer.Runtime/obj/Debug/**/generated/Comer.Runtime.Generator/**/*.g.cs',

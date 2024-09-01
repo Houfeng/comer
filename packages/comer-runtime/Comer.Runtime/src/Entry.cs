@@ -2,6 +2,7 @@ using Microsoft.JavaScript.NodeApi;
 
 namespace Comer.Runtime;
 
+[JSExport]
 public enum EntryKind {
   File,
   Folder

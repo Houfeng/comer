@@ -6,8 +6,8 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public sealed partial class Application {
-  private sealed class App : Avalonia.Application {
+public partial class Application {
+  private class App : Avalonia.Application {
     public App() {
       Name = "Comer App";
       var theme = new FluentTheme();
@@ -19,9 +19,7 @@ public sealed partial class Application {
     AppBuilder.Configure<App>()
     .UsePlatformDetect()
     .UseStandardRuntimePlatformSubsystem()
-    .With(new AvaloniaNativePlatformOptions {
-      // AvaloniaNativeLibraryPath = “[Path to your dylib]”,
-    })
+    .With(new AvaloniaNativePlatformOptions { })
     .Start((app, args) => { }, []);
   }
 

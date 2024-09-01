@@ -3,6 +3,7 @@ using AC = Avalonia.Controls;
 
 namespace Comer.Runtime;
 
+[JSExport]
 public enum Dock {
   Left,
   Top,

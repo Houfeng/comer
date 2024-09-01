@@ -53,7 +53,7 @@ public partial class Control {
     EventsBinding();
   }
 
-  internal protected virtual void InvokeEvent(Action? action) {
+  internal protected void InvokeEvent(Action? action) {
     if (action != null) Task.Run(action);
   }
 
@@ -66,12 +66,12 @@ public partial class Control {
     xHost.PointerWheelChanged += (_, args) => InvokeEvent(OnWheel);
   }
 
-  public virtual Action? OnPointerEnter { get; set; }
-  public virtual Action? OnPointerLeave { get; set; }
-  public virtual Action? OnPointerMove { get; set; }
-  public virtual Action? OnPointerDown { get; set; }
-  public virtual Action? OnPointerUp { get; set; }
-  public virtual Action? OnWheel { get; set; }
+  public Action? OnPointerEnter { get; set; }
+  public Action? OnPointerLeave { get; set; }
+  public Action? OnPointerMove { get; set; }
+  public Action? OnPointerDown { get; set; }
+  public Action? OnPointerUp { get; set; }
+  public Action? OnWheel { get; set; }
 
   public virtual string? Background {
     get {
