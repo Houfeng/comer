@@ -6,6 +6,8 @@ import {
   View,
   Control,
   TextBox,
+  StackView,
+  DockView,
 } from "../binary/Comer.Runtime";
 
 // -------------------------------------------------------------------------
@@ -15,8 +17,10 @@ function inherit(sub: Function, base: Function) {
   Object.setPrototypeOf(sub, base);
 }
 
-inherit(View, Control);
 inherit(TextBox, Control);
+inherit(View, Control);
+inherit(StackView, View);
+inherit(DockView, View);
 inherit(Window, View);
 
 // -------------------------------------------------------------------------

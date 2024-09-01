@@ -3,6 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./lib/",
+    "module": "CommonJS",
+    "target": "ESNext",
     "declarationDir": "./types/",
     "lib": [
       "ESNext"

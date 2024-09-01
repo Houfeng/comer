@@ -1,5 +1,6 @@
 {
   "name": "comer-runtime",
+  "type": "commonjs",
   "module": "./lib/index.js",
   "main": "./lib/index.js",
   "types": "./types/index.d.ts",
