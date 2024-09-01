@@ -7,7 +7,7 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class View : Control {
-  protected override AC.Panel xInner { get; } = new AC.Panel();
+  internal protected override AC.Panel xInner { get; } = new AC.Panel();
 
   public View() {
     xInner.HorizontalAlignment = HorizontalAlignment.Stretch;

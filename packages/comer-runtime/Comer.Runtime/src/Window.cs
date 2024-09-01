@@ -57,7 +57,7 @@ public partial class Window : View {
 
   internal override IHostWindow xHost { get; } = new HostWindow();
 
-  protected override void xHostBinding() {
+  internal protected override void xHostBinding() {
     ((HostWindow)xHost).Content = xInner;
   }
 

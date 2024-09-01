@@ -18,7 +18,7 @@ public partial class TextBox : Control {
   // Avalonia TextBox，虽然有类似 border 的属性，
   // 因为，设置过一次 Width 再也无法 Stretch 了，以及为了所有组件一致，
   // 所以，也使用 xHost Wrapper (Border)
-  protected override AC.TextBox xInner { get; } = new AC.TextBox();
+  internal protected override AC.TextBox xInner { get; } = new AC.TextBox();
 
   public TextBox() {
     xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -29,6 +29,19 @@ public partial class TextBox : Control {
     xInner.LineHeight = 22;
     xInner.Padding = new Thickness(4, 4);
   }
+
+  internal protected override void EventsBinding() {
+    base.EventsBinding();
+    xInner.TextInput += (_, args) => InvokeEvent(OnInput);
+    xInner.TextChanged += (_, args) => InvokeEvent(OnChange);
+    xInner.KeyDown += (_, args) => InvokeEvent(OnKeyDown);
+    xInner.KeyUp += (_, args) => InvokeEvent(OnKeyUp);
+  }
+
+  public virtual Action? OnInput { get; set; }
+  public virtual Action? OnChange { get; set; }
+  public virtual Action? OnKeyDown { get; set; }
+  public virtual Action? OnKeyUp { get; set; }
 
   public string Value {
     get {

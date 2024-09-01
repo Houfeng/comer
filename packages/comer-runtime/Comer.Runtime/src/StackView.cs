@@ -11,7 +11,7 @@ public enum Orientation {
 
 [JSExport]
 public partial class StackView : View {
-  protected override AC.StackPanel xInner { get; } = new AC.StackPanel();
+  internal protected override AC.StackPanel xInner { get; } = new AC.StackPanel();
 
   public Orientation Orientation {
     get {

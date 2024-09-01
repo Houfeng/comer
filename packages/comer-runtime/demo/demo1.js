@@ -40,6 +40,9 @@ view.onPointerDown = () => {
 var box = new TextBox();
 box.horizontalAlign = HorizontalAlign.Left;
 box.multiLine = true;
+box.onChange = () => {
+  console.log('Input:', box.value);
+}
 view.appendChild(box);
 
 win.appendChild(view);

@@ -7,7 +7,7 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class Icon : Control {
-  protected override PathIcon xInner { get; } = new PathIcon();
+  internal protected override PathIcon xInner { get; } = new PathIcon();
 
   public Icon() {
     xInner.VerticalAlignment = VerticalAlignment.Center;

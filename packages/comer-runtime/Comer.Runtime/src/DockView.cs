@@ -12,7 +12,7 @@ public enum Dock {
 
 [JSExport]
 public partial class DockView : View {
-  protected override AC.DockPanel xInner { get; } = new AC.DockPanel();
+  internal protected override AC.DockPanel xInner { get; } = new AC.DockPanel();
 }
 
 [JSExport]

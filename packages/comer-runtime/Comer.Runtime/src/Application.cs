@@ -6,8 +6,8 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public partial class Application {
-  private class App : Avalonia.Application {
+public sealed partial class Application {
+  private sealed class App : Avalonia.Application {
     public App() {
       Name = "Comer App";
       var theme = new FluentTheme();

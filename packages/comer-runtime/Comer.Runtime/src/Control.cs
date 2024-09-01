@@ -24,6 +24,8 @@ public interface IHostControl {
   BoxShadows BoxShadow { get; set; }
   BackgroundSizing BackgroundSizing { get; set; }
   double Opacity { get; set; }
+  int ZIndex { get; set; }
+
   AI.Cursor? Cursor { get; set; }
   event EventHandler<PointerEventArgs>? PointerEntered;
   event EventHandler<PointerEventArgs>? PointerExited;
@@ -40,9 +42,9 @@ class HostControl : AC.Border, IHostControl {
 [JSExport]
 public partial class Control {
   internal virtual IHostControl xHost { get; } = new HostControl();
-  protected virtual AC.Control? xInner { get; }
+  internal protected virtual AC.Control? xInner { get; }
 
-  protected virtual void xHostBinding() {
+  internal protected virtual void xHostBinding() {
     if (xHost is AC.Border) ((AC.Border)xHost).Child = xInner;
   }
 
@@ -51,11 +53,11 @@ public partial class Control {
     EventsBinding();
   }
 
-  protected void InvokeEvent(Action? action) {
+  internal protected virtual void InvokeEvent(Action? action) {
     if (action != null) Task.Run(action);
   }
 
-  private void EventsBinding() {
+  internal protected virtual void EventsBinding() {
     xHost.PointerEntered += (_, args) => InvokeEvent(OnPointerEnter);
     xHost.PointerExited += (_, args) => InvokeEvent(OnPointerLeave);
     xHost.PointerMoved += (_, args) => InvokeEvent(OnPointerMove);
@@ -64,12 +66,12 @@ public partial class Control {
     xHost.PointerWheelChanged += (_, args) => InvokeEvent(OnWheel);
   }
 
-  public Action? OnPointerEnter { get; set; }
-  public Action? OnPointerLeave { get; set; }
-  public Action? OnPointerMove { get; set; }
-  public Action? OnPointerDown { get; set; }
-  public Action? OnPointerUp { get; set; }
-  public Action? OnWheel { get; set; }
+  public virtual Action? OnPointerEnter { get; set; }
+  public virtual Action? OnPointerLeave { get; set; }
+  public virtual Action? OnPointerMove { get; set; }
+  public virtual Action? OnPointerDown { get; set; }
+  public virtual Action? OnPointerUp { get; set; }
+  public virtual Action? OnWheel { get; set; }
 
   public virtual string? Background {
     get {
@@ -199,6 +201,15 @@ public partial class Control {
     }
   }
 
+  public virtual int ZIndex {
+    get {
+      return xHost.ZIndex;
+    }
+    set {
+      xHost.ZIndex = value;
+    }
+  }
+
   public virtual string Cursor {
     get {
       if (xHost.Cursor == null) return "";
@@ -209,7 +220,7 @@ public partial class Control {
     }
   }
 
-  public virtual string Classes {
+  public virtual string ClassName {
     get {
       return string.Join(" ", xHost.Classes);
     }
