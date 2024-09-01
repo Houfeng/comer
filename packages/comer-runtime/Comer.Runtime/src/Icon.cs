@@ -7,6 +7,7 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class Icon : Control {
+  [JSExport(false)]
   internal protected override PathIcon xInner { get; } = new PathIcon();
 
   public Icon() {

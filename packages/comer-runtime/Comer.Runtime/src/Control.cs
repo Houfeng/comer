@@ -42,9 +42,13 @@ class HostControl : AC.Border, IHostControl {
 
 [JSExport]
 public partial class Control {
+  [JSExport(false)]
   internal virtual IHostControl xHost { get; } = new HostControl();
+
+  [JSExport(false)]
   internal protected virtual AC.Control? xInner { get; }
 
+  [JSExport(false)]
   internal protected virtual void xHostBinding() {
     if (xHost is AC.Border) ((AC.Border)xHost).Child = xInner;
   }
@@ -54,6 +58,7 @@ public partial class Control {
     EventsBinding();
   }
 
+  [JSExport(false)]
   internal protected void InvokeEvent(Action? action) {
     if (action != null) {
 #if DEBUG 
@@ -64,6 +69,7 @@ public partial class Control {
     }
   }
 
+  [JSExport(false)]
   internal protected virtual void EventsBinding() {
     xHost.PointerEntered += (_, args) => InvokeEvent(OnPointerEnter);
     xHost.PointerExited += (_, args) => InvokeEvent(OnPointerLeave);

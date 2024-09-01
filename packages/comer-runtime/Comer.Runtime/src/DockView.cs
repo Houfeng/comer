@@ -13,6 +13,7 @@ public enum Dock {
 
 [JSExport]
 public partial class DockView : View {
+  [JSExport(false)]
   internal protected override AC.DockPanel xInner { get; } = new AC.DockPanel();
 }
 

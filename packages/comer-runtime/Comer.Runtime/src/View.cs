@@ -7,6 +7,7 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class View : Control {
+  [JSExport(false)]
   internal protected override AC.Panel xInner { get; } = new AC.Panel();
 
   public View() {

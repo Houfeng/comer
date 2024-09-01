@@ -18,6 +18,7 @@ public partial class TextBox : Control {
   // Avalonia TextBox，虽然有类似 border 的属性，
   // 因为，设置过一次 Width 再也无法 Stretch 了，以及为了所有组件一致，
   // 所以，也使用 xHost Wrapper (Border)
+  [JSExport(false)]
   internal protected override AC.TextBox xInner { get; } = new AC.TextBox();
 
   public TextBox() {
@@ -30,6 +31,7 @@ public partial class TextBox : Control {
     xInner.Padding = new Thickness(4, 4);
   }
 
+  [JSExport(false)]
   internal protected override void EventsBinding() {
     base.EventsBinding();
     xInner.TextInput += (_, args) => InvokeEvent(OnInput);

@@ -55,8 +55,10 @@ public enum WindowDefaultLocation {
 [JSExport]
 public partial class Window : View {
 
+  [JSExport(false)]
   internal override IHostWindow xHost { get; } = new HostWindow();
 
+  [JSExport(false)]
   internal protected override void xHostBinding() {
     ((HostWindow)xHost).Content = xInner;
   }

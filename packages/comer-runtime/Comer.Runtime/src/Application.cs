@@ -7,6 +7,8 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class Application {
+
+  [JSExport(false)]
   private class App : Avalonia.Application {
     public App() {
       Name = "Comer App";
@@ -38,13 +40,16 @@ public partial class Application {
 
   public static void Run() { }
 
+  [JSExport(false)]
   private static CancellationTokenSource? RunToken { get; set; }
 
+  [JSExport(false)]
   internal static void Start() {
     RunToken = new CancellationTokenSource();
     Dispatcher.UIThread.MainLoop(RunToken.Token);
   }
 
+  [JSExport(false)]
   internal static void Stop() {
     if (RunToken == null) return;
     RunToken.Cancel();
