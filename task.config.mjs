@@ -46,3 +46,11 @@ export const devtool = task('DevTool', [build], async () => {
 export const benchmark = task('Benchmark', [build], async () => {
   await $`pnpm -F comer-benchmark dev`;
 });
+
+export const rt_build = task('Runtime Build', async () => {
+  await $`cd ./packages/comer-runtime && task build`;
+});
+
+export const rt_demo = task('Runtime Demo', async () => {
+  await $`cd ./packages/comer-runtime && task demo`;
+});

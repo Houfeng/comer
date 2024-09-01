@@ -1,20 +1,4 @@
-const { resolve } = require('path');
-
-const {
-  Application, Window, View, HorizontalAlign, VerticalAlign, Control,
-  TextBox
-} = require('../Comer.Runtime/bin/node/Comer.Runtime');
-
-process.chdir(resolve(__dirname, '../Comer.Runtime/bin/node/'));
-
-Object.setPrototypeOf(View.prototype, Control.prototype);
-Object.setPrototypeOf(View, Control);
-
-Object.setPrototypeOf(TextBox.prototype, Control.prototype);
-Object.setPrototypeOf(TextBox, Control);
-
-Object.setPrototypeOf(Window.prototype, View.prototype);
-Object.setPrototypeOf(Window, View);
+import { Application, Window, View, TextBox } from '../';
 
 Application.init();
 
@@ -48,7 +32,4 @@ view.appendChild(box);
 win.appendChild(view);
 win.show();
 
-(function loop() {
-  Application.tick();
-  setImmediate(loop);
-})();
+Application.run();

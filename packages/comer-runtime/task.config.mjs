@@ -18,12 +18,13 @@ export const prebuild = task('Prebuild', [clean], async () => {
 });
 
 export const build = task('Build', [prebuild], async () => {
-  await $`dotnet publish Comer.Runtime/Comer.Runtime.publish.csproj --ucr `;
+  await $`dotnet publish Comer.Runtime/Comer.Runtime.publish.csproj --ucr`;
   await cpy(
     'Comer.Runtime/bin/node/**/*.{ts,js,cjs,node,dylib}',
     'binary/',
     { flat: true }
   );
+  await $`tsc -p tsconfig.json`;
 });
 
 export const demo = task('Demo', async () => {
