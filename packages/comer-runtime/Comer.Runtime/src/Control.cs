@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 
 namespace Comer.Runtime;
 
@@ -54,7 +55,13 @@ public partial class Control {
   }
 
   internal protected void InvokeEvent(Action? action) {
-    if (action != null) Task.Run(action);
+    if (action != null) {
+#if DEBUG 
+      Dispatcher.UIThread.Invoke(action);
+#else
+      Task.Run(action);
+#endif
+    }
   }
 
   internal protected virtual void EventsBinding() {

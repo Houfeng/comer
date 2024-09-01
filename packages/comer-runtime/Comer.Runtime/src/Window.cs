@@ -62,8 +62,8 @@ public partial class Window : View {
   }
 
   public Window() {
-    xHost.Width = 720;
-    xHost.Height = 480;
+    xHost.Width = 480;
+    xHost.Height = 320;
     xHost.Title = "Window";
   }
 

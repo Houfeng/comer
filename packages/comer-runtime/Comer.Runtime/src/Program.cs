@@ -9,7 +9,6 @@ public static class Program {
 
 
     var win = new Window();
-
     win.Title = "Demo";
 
     var stack = new StackView();
@@ -19,15 +18,13 @@ public static class Program {
     view.Background = "black";
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
-    view.Width = 200;
     view.HorizontalAlign = HorizontalAlign.Fill;
-    view.BorderColor = "red";
-    view.BorderWidth = "10";
-    view.BoxShadow = "0 25 30 0 DarkGray";
+    view.OnPointerEnter = () => view.BoxShadow = "0 25 30 0 DarkGray";
+    view.OnPointerLeave = () => view.BoxShadow = "";
     stack.AppendChild(view);
 
     var box = new TextBox();
-    box.Margin = "16";
+    box.Margin = "16 0";
     box.Width = 300;
     box.HorizontalAlign = HorizontalAlign.Fill;
     stack.AppendChild(box);
