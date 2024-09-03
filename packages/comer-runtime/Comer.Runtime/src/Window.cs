@@ -6,6 +6,7 @@ using Avalonia.Input;
 
 namespace Comer.Runtime;
 
+[JSExport(false)]
 public interface IHostWindow : IHostControl {
   string? Title { get; set; }
   object? Content { get; set; }
@@ -31,6 +32,7 @@ public interface IHostWindow : IHostControl {
   double MaxHeight { get; set; }
 }
 
+[JSExport(false)]
 class HostWindow : AC.Window, IHostWindow {
   public AC.Control Raw => this;
   public BoxShadows BoxShadow {

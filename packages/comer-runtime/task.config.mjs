@@ -15,6 +15,7 @@ export const prebuild = task('Prebuild', [clean], async () => {
     'Comer.Runtime/gen/',
     { flat: true }
   );
+  // If there are unsupported exported types in the parent class, an error will occur. Try explicitly adding `[JSExport (false)]` to the parent class, and then it's fine
 });
 
 export const build = task('Build', [prebuild], async () => {
@@ -29,4 +30,8 @@ export const build = task('Build', [prebuild], async () => {
 
 export const demo = task('Demo', async () => {
   await $`node ./demo/demo1.js`;
+});
+
+export const test = task('Test', async () => {
+  await $`dotnet publish Comer.Runtime.Test/Comer.Runtime.Test.csproj --ucr`;
 });

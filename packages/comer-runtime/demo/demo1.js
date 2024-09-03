@@ -6,12 +6,13 @@ const {
 
 Application.init();
 
-
 var win = new Window();
 win.title = "Demo";
 
 var stack = new StackView();
 stack.spacing = 16;
+
+console.log(stack instanceof View);
 
 var view = new View();
 view.background = "black";

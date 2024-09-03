@@ -10,6 +10,7 @@ using Avalonia.Threading;
 
 namespace Comer.Runtime;
 
+[JSExport(false)]
 public interface IHostControl {
   AC.Control Raw { get; }
   AC.Classes Classes { get; }
@@ -36,6 +37,7 @@ public interface IHostControl {
   event EventHandler<PointerWheelEventArgs>? PointerWheelChanged;
 }
 
+[JSExport(false)]
 class HostControl : AC.Border, IHostControl {
   public AC.Control Raw => this;
 }

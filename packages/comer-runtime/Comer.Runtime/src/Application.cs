@@ -5,17 +5,17 @@ using Microsoft.JavaScript.NodeApi;
 
 namespace Comer.Runtime;
 
+[JSExport(false)]
+internal class App : Avalonia.Application {
+  public App() {
+    Name = "Comer App";
+    var theme = new FluentTheme();
+    Styles.Add(theme);
+  }
+}
+
 [JSExport]
 public partial class Application {
-
-  [JSExport(false)]
-  private class App : Avalonia.Application {
-    public App() {
-      Name = "Comer App";
-      var theme = new FluentTheme();
-      Styles.Add(theme);
-    }
-  }
 
   public static void Init() {
     AppBuilder.Configure<App>()
