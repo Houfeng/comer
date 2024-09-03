@@ -30,6 +30,12 @@ public static class Program {
     box.HorizontalAlign = HorizontalAlign.Fill;
     stack.AppendChild(box);
 
+    var btn = new Button();
+    btn.Margin = "16 0";
+    btn.Background = "blue";
+    btn.Text = "Click";
+    stack.AppendChild(btn);
+
     win.AppendChild(stack);
     win.Show();
 

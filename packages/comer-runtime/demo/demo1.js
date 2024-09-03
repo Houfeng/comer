@@ -30,6 +30,12 @@ box.width = 300;
 box.horizontalAlign = HorizontalAlign.Fill;
 stack.appendChild(box);
 
+var btn = new Button();
+btn.margin = "16 0";
+btn.background = "blue";
+btn.text = "Click";
+stack.appendChild(btn);
+
 win.appendChild(stack);
 win.show();
 

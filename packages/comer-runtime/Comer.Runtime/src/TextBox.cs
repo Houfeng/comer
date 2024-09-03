@@ -33,16 +33,14 @@ public partial class TextBox : ComerElement {
   }
 
   private void BindEvents() {
-    xBox.TextInput += (_, args) => Invoke(OnInput);
     xBox.TextChanged += (_, args) => Invoke(OnChange);
     xBox.KeyDown += (_, args) => Invoke(OnKeyDown);
     xBox.KeyUp += (_, args) => Invoke(OnKeyUp);
   }
 
-  public virtual Action? OnInput { get; set; }
-  public virtual Action? OnChange { get; set; }
-  public virtual Action? OnKeyDown { get; set; }
-  public virtual Action? OnKeyUp { get; set; }
+  public Action? OnChange { get; set; }
+  public Action? OnKeyDown { get; set; }
+  public Action? OnKeyUp { get; set; }
 
   public string Value {
     get {
