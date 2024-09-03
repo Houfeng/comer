@@ -1,7 +1,7 @@
 const {
   Application, Window, View, TextBox,
   VerticalAlign, HorizontalAlign,
-  StackView,
+  StackView, Button
 } = require('../');
 
 Application.init();
