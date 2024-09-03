@@ -6,40 +6,45 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public partial class View : Control {
-  [JSExport(false)]
-  internal protected override AC.Panel xInner { get; } = new AC.Panel();
+public partial class View : ComerElement {
+  private AC.Panel xContainer { get; set; } = new AC.Panel();
 
-  public View() {
-    xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
-    xInner.VerticalAlignment = VerticalAlignment.Stretch;
+  internal protected void xSetContainer(AC.Panel container) {
+    xFrame.Content = container;
+    xContainer = container;
   }
 
-  public virtual void RemoveChild(Control child) {
-    if (xInner.Children.Contains(child.xHost.Raw)) {
-      xInner.Children.Remove(child.xHost.Raw);
+  public View() : base() {
+    xSetContainer(xContainer);
+    xContainer.HorizontalAlignment = HorizontalAlignment.Stretch;
+    xContainer.VerticalAlignment = VerticalAlignment.Stretch;
+  }
+
+  public void RemoveChild(ComerElement child) {
+    if (xContainer.Children.Contains(child.xFrame.Raw)) {
+      xContainer.Children.Remove(child.xFrame.Raw);
     }
   }
 
-  public virtual void InsertChild(Control child, Control? anchor) {
+  public void InsertChild(ComerElement child, ComerElement? anchor) {
     RemoveChild(child);
     if (anchor != null) {
-      var anchorIndex = xInner.Children.IndexOf(anchor.xHost.Raw);
-      xInner.Children.Insert(anchorIndex + 1, child.xHost.Raw);
+      var anchorIndex = xContainer.Children.IndexOf(anchor.xFrame.Raw);
+      xContainer.Children.Insert(anchorIndex + 1, child.xFrame.Raw);
     } else {
-      xInner.Children.Insert(0, child.xHost.Raw);
+      xContainer.Children.Insert(0, child.xFrame.Raw);
     }
   }
 
-  public virtual void AppendChild(Control child) {
+  public void AppendChild(ComerElement child) {
     RemoveChild(child);
-    var count = xInner.Children.Count;
-    xInner.Children.Insert(count, child.xHost.Raw);
+    var count = xContainer.Children.Count;
+    xContainer.Children.Insert(count, child.xFrame.Raw);
   }
 
-  public virtual void PrependChild(Control child) {
+  public void PrependChild(ComerElement child) {
     RemoveChild(child);
-    xInner.Children.Insert(0, child.xHost.Raw);
+    xContainer.Children.Insert(0, child.xFrame.Raw);
   }
 
 }

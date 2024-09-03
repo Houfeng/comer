@@ -62,11 +62,13 @@ public class InheritedPublicMethodGenerator : ISourceGenerator {
   private void GenOneClass(GeneratorExecutionContext context, INamedTypeSymbol classDeclarationSymbol) {
     if (classDeclarationSymbol == null) return;
     if (classDeclarationSymbol.BaseType == null) return;
-    var publicMethods = GetPublicMethods(classDeclarationSymbol.BaseType);
-    if (publicMethods.Count() < 1) return;
+    var basePublicMethods = GetPublicMethods(classDeclarationSymbol.BaseType);
+    if (basePublicMethods.Count() < 1) return;
+    var selfPublicMethods = GetPublicMethods(classDeclarationSymbol);
     var methodBuilder = new StringBuilder();
-    foreach (var it in publicMethods) {
+    foreach (var it in basePublicMethods) {
       var name = it.Name;
+      if (selfPublicMethods.Where(a => a.Name == it.Name).Count() > 1) continue;
       var overrideType = it.IsVirtual || it.IsOverride ? "override" : "new";
       var returnType = it.ReturnType.ToString();
       var returnKey = returnType == "void" ? "" : "return";

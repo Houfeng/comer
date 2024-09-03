@@ -2,48 +2,15 @@ using AC = Avalonia.Controls;
 using Microsoft.JavaScript.NodeApi;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Input;
 
 namespace Comer.Runtime;
 
 [JSExport(false)]
-public interface IHostWindow : IHostControl {
-  string? Title { get; set; }
-  object? Content { get; set; }
-  AC.WindowStartupLocation WindowStartupLocation { get; set; }
-  PixelPoint Position { get; set; }
-  void Show();
-  void Show(AC.Window owner);
-  void Hide();
-  void Close();
-  void Activate();
-  bool Focus(
-    NavigationMethod method = NavigationMethod.Unspecified,
-    KeyModifiers keyModifiers = KeyModifiers.None
-  );
-  bool CanResize { get; set; }
-  bool Focusable { get; set; }
-  Task<TResult> ShowDialog<TResult>(AC.Window owner);
-  PixelPoint ClientPointToScreenPoint(Point point);
-  Point ScreenPointToClientPoint(PixelPoint point);
-  double MinWidth { get; set; }
-  double MaxWidth { get; set; }
-  double MinHeight { get; set; }
-  double MaxHeight { get; set; }
-}
-
-[JSExport(false)]
-class HostWindow : AC.Window, IHostWindow {
+class FramedWindow : AC.Window, IFrame {
   public AC.Control Raw => this;
   public BoxShadows BoxShadow {
     get { return BoxShadows.Parse(""); }
     set { }
-  }
-  public PixelPoint ClientPointToScreenPoint(Point point) {
-    return this.PointToScreen(point);
-  }
-  public Point ScreenPointToClientPoint(PixelPoint point) {
-    return this.PointToClient(point);
   }
 }
 
@@ -57,147 +24,143 @@ public enum WindowDefaultLocation {
 [JSExport]
 public partial class Window : View {
 
-  [JSExport(false)]
-  internal override IHostWindow xHost { get; } = new HostWindow();
-
-  [JSExport(false)]
-  internal protected override void xHostBinding() {
-    ((HostWindow)xHost).Content = xInner;
-  }
+  private FramedWindow Win { get; } = new FramedWindow();
 
   public Window() {
-    xHost.Width = 480;
-    xHost.Height = 320;
-    xHost.Title = "Window";
+    Win.Content = xFrame;
+    xSetFrame(Win);
+    Win.Width = 480;
+    Win.Height = 320;
+    Win.Title = "Window";
   }
 
-  public virtual WindowDefaultLocation DefaultLocation {
+  public WindowDefaultLocation DefaultLocation {
     get {
-      return (WindowDefaultLocation)xHost.WindowStartupLocation;
+      return (WindowDefaultLocation)Win.WindowStartupLocation;
     }
     set {
-      xHost.WindowStartupLocation = (AC.WindowStartupLocation)value;
+      Win.WindowStartupLocation = (AC.WindowStartupLocation)value;
     }
   }
 
-  public virtual void Show() {
-    xHost.Show();
+  public void Show() {
+    Win.Show();
   }
 
-  public virtual void ShowOnOwner(Window owner) {
-    xHost.Show((AC.Window)owner.xHost.Raw);
+  public void ShowOnOwner(Window owner) {
+    Win.Show((AC.Window)owner.Win.Raw);
   }
 
-  public virtual Task ShowDialog(Window owner) {
-    return xHost.ShowDialog<object>((AC.Window)owner.xHost.Raw);
+  public Task ShowDialog(Window owner) {
+    return Win.ShowDialog<object>((AC.Window)owner.Win.Raw);
   }
 
-  public virtual void Hide() {
-    xHost.Hide();
+  public void Hide() {
+    Win.Hide();
   }
 
-  public virtual void Close() {
-    xHost.Close();
+  public void Close() {
+    Win.Close();
   }
 
-  public virtual Vector ClientPointToScreenPoint(Vector vector) {
+  public Vector ClientPointToScreenPoint(Vector vector) {
     var point = new Point(vector.X, vector.Y);
-    var sPoint = xHost.ClientPointToScreenPoint(point);
+    var sPoint = Win.PointToScreen(point);
     return new Vector(sPoint.X, sPoint.Y);
   }
 
-  public virtual Vector ScreenPointToClientPoint(Vector vector) {
+  public Vector ScreenPointToClientPoint(Vector vector) {
     var point = new PixelPoint((int)vector.X, (int)vector.Y);
-    var cPoint = xHost.ScreenPointToClientPoint(point);
+    var cPoint = Win.PointToClient(point);
     return new Vector(cPoint.X, cPoint.Y);
   }
 
-  public virtual void Activate() {
-    xHost.Activate();
+  public void Activate() {
+    Win.Activate();
   }
 
-  public virtual void Focus() {
-    xHost.Focus();
+  public void Focus() {
+    Win.Focus();
   }
 
-  public virtual string Title {
+  public string Title {
     get {
-      return xHost.Title ?? "";
+      return Win.Title ?? "";
     }
     set {
-      xHost.Title = value;
+      Win.Title = value;
     }
   }
 
-  public virtual bool Resizable {
+  public bool Resizable {
     get {
-      return xHost.CanResize;
+      return Win.CanResize;
     }
     set {
-      xHost.CanResize = value;
+      Win.CanResize = value;
     }
   }
 
-  public virtual bool Focusable {
+  public bool Focusable {
     get {
-      return xHost.Focusable;
+      return Win.Focusable;
     }
     set {
-      xHost.Focusable = value;
+      Win.Focusable = value;
     }
   }
 
-  public virtual double MaxWidth {
+  public double MaxWidth {
     get {
-      return xHost.MaxWidth;
+      return Win.MaxWidth;
     }
     set {
-      xHost.MaxWidth = value;
+      Win.MaxWidth = value;
     }
   }
 
-  public virtual double MaxHeight {
+  public double MaxHeight {
     get {
-      return xHost.MaxHeight;
+      return Win.MaxHeight;
     }
     set {
-      xHost.MaxHeight = value;
+      Win.MaxHeight = value;
     }
   }
 
-  public virtual double MinWidth {
+  public double MinWidth {
     get {
-      return xHost.MinWidth;
+      return Win.MinWidth;
     }
     set {
-      xHost.MinWidth = value;
+      Win.MinWidth = value;
     }
   }
 
-  public virtual double MinHeight {
+  public double MinHeight {
     get {
-      return xHost.MinHeight;
+      return Win.MinHeight;
     }
     set {
-      xHost.MinHeight = value;
+      Win.MinHeight = value;
     }
   }
 
-  public virtual int X {
+  public int X {
     get {
-      return xHost.Position.X;
+      return Win.Position.X;
     }
     set {
-      xHost.Position = new PixelPoint(value, xHost.Position.Y);
+      Win.Position = new PixelPoint(value, Win.Position.Y);
     }
   }
 
-  public virtual int Y {
+  public int Y {
     get {
-      return xHost.Position.Y;
+      return Win.Position.Y;
     }
     set {
-      xHost.Position = new PixelPoint(xHost.Position.Y, value);
+      Win.Position = new PixelPoint(Win.Position.Y, value);
     }
   }
 

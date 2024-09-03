@@ -13,31 +13,30 @@ public enum TextWrapping {
 }
 
 [JSExport]
-public partial class TextBox : Control {
+public partial class TextBox : ComerElement {
 
   // Avalonia TextBox，虽然有类似 border 的属性，
   // 因为，设置过一次 Width 再也无法 Stretch 了，以及为了所有组件一致，
-  // 所以，也使用 xHost Wrapper (Border)
-  [JSExport(false)]
-  internal protected override AC.TextBox xInner { get; } = new AC.TextBox();
+  // 所以，也使用 Frame 作为 Wrapper
+  private AC.TextBox xBox { get; } = new AC.TextBox();
 
-  public TextBox() {
-    xInner.HorizontalAlignment = HorizontalAlignment.Stretch;
-    xInner.VerticalAlignment = VerticalAlignment.Stretch;
-    xInner.MinHeight = 0;
-    xInner.MinWidth = 0;
-    xInner.FontSize = 16;
-    xInner.LineHeight = 22;
-    xInner.Padding = new Thickness(4, 4);
+  public TextBox() : base() {
+    xFrame.Content = xBox;
+    xBox.HorizontalAlignment = HorizontalAlignment.Stretch;
+    xBox.VerticalAlignment = VerticalAlignment.Stretch;
+    xBox.MinHeight = 0;
+    xBox.MinWidth = 0;
+    xBox.FontSize = 16;
+    xBox.LineHeight = 22;
+    xBox.Padding = new Thickness(4, 4);
+    BindEvents();
   }
 
-  [JSExport(false)]
-  internal protected override void EventsBinding() {
-    base.EventsBinding();
-    xInner.TextInput += (_, args) => InvokeEvent(OnInput);
-    xInner.TextChanged += (_, args) => InvokeEvent(OnChange);
-    xInner.KeyDown += (_, args) => InvokeEvent(OnKeyDown);
-    xInner.KeyUp += (_, args) => InvokeEvent(OnKeyUp);
+  private void BindEvents() {
+    xBox.TextInput += (_, args) => Invoke(OnInput);
+    xBox.TextChanged += (_, args) => Invoke(OnChange);
+    xBox.KeyDown += (_, args) => Invoke(OnKeyDown);
+    xBox.KeyUp += (_, args) => Invoke(OnKeyUp);
   }
 
   public virtual Action? OnInput { get; set; }
@@ -47,46 +46,46 @@ public partial class TextBox : Control {
 
   public string Value {
     get {
-      return xInner.Text ?? "";
+      return xBox.Text ?? "";
     }
     set {
-      xInner.Text = value;
+      xBox.Text = value;
     }
   }
 
   public string Placeholder {
     get {
-      return xInner.Watermark ?? "";
+      return xBox.Watermark ?? "";
     }
     set {
-      xInner.Watermark = value;
+      xBox.Watermark = value;
     }
   }
 
   public string Mask {
     get {
-      return new string([xInner.PasswordChar]);
+      return new string([xBox.PasswordChar]);
     }
     set {
-      xInner.PasswordChar = value[0];
+      xBox.PasswordChar = value[0];
     }
   }
 
   public bool MultiLine {
     get {
-      return xInner.AcceptsReturn;
+      return xBox.AcceptsReturn;
     }
     set {
-      xInner.AcceptsReturn = value;
+      xBox.AcceptsReturn = value;
     }
   }
 
   public TextWrapping Wrapping {
     get {
-      return (TextWrapping)xInner.TextWrapping;
+      return (TextWrapping)xBox.TextWrapping;
     }
     set {
-      xInner.TextWrapping = (AM.TextWrapping)value;
+      xBox.TextWrapping = (AM.TextWrapping)value;
     }
   }
 

@@ -13,18 +13,21 @@ public enum Dock {
 
 [JSExport]
 public partial class DockView : View {
-  [JSExport(false)]
-  internal protected override AC.DockPanel xInner { get; } = new AC.DockPanel();
+  private AC.DockPanel xContainer { get; } = new AC.DockPanel();
+  public DockView() : base() {
+    xSetContainer(xContainer);
+  }
 }
 
 [JSExport]
 public partial class DockItem : View {
+  public DockItem() : base() { }
   public Dock Dock {
     get {
-      return (Dock)AC.DockPanel.GetDock(xHost.Raw);
+      return (Dock)AC.DockPanel.GetDock(xFrame.Raw);
     }
     set {
-      AC.DockPanel.SetDock(xHost.Raw, (AC.Dock)value);
+      AC.DockPanel.SetDock(xFrame.Raw, (AC.Dock)value);
     }
   }
 }

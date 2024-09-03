@@ -6,34 +6,34 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime;
 
 [JSExport]
-public partial class Icon : Control {
-  [JSExport(false)]
-  internal protected override PathIcon xInner { get; } = new PathIcon();
+public partial class Icon : ComerElement {
+  private PathIcon xIcon { get; } = new PathIcon();
 
   public Icon() {
-    xInner.VerticalAlignment = VerticalAlignment.Center;
-    xInner.HorizontalAlignment = HorizontalAlignment.Center;
-    xInner.BorderBrush = Brushes.Transparent;
-    this.BackgroundSizing = RangeSizing.BorderInner;
+    xFrame.Content = xIcon;
+    xIcon.VerticalAlignment = VerticalAlignment.Center;
+    xIcon.HorizontalAlignment = HorizontalAlignment.Center;
+    xIcon.BorderBrush = Brushes.Transparent;
+    BackgroundSizing = RangeSizing.BorderInner;
   }
 
-  public virtual string Data {
+  public string Data {
     set {
-      xInner.Data = StreamGeometry.Parse(value);
+      xIcon.Data = StreamGeometry.Parse(value);
     }
     get {
-      if (xInner.Data == null) return "";
-      return xInner.Data.ToString() ?? "";
+      if (xIcon.Data == null) return "";
+      return xIcon.Data.ToString() ?? "";
     }
   }
 
-  public virtual string Color {
+  public string Color {
     get {
-      if (xInner.Foreground == null) return "";
-      return xInner.Foreground.ToString() ?? "";
+      if (xIcon.Foreground == null) return "";
+      return xIcon.Foreground.ToString() ?? "";
     }
     set {
-      xInner.Foreground = Brush.Parse(value ?? "");
+      xIcon.Foreground = Brush.Parse(value ?? "");
     }
   }
 

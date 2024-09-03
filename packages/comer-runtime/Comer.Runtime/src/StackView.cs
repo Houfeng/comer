@@ -1,3 +1,4 @@
+using Avalonia.Layout;
 using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
 using AL = Avalonia.Layout;
@@ -12,24 +13,28 @@ public enum Orientation {
 
 [JSExport]
 public partial class StackView : View {
-  [JSExport(false)]
-  internal protected override AC.StackPanel xInner { get; } = new AC.StackPanel();
+
+  private AC.StackPanel xContainer { get; } = new AC.StackPanel();
+
+  public StackView() : base() {
+    xSetContainer(xContainer);
+  }
 
   public Orientation Orientation {
     get {
-      return (Orientation)xInner.Orientation;
+      return (Orientation)xContainer.Orientation;
     }
     set {
-      xInner.Orientation = (AL.Orientation)value;
+      xContainer.Orientation = (AL.Orientation)value;
     }
   }
 
   public double Spacing {
     get {
-      return xInner.Spacing;
+      return xContainer.Spacing;
     }
     set {
-      xInner.Spacing = value;
+      xContainer.Spacing = value;
     }
   }
 

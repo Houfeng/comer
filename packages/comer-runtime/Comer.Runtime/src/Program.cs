@@ -9,13 +9,14 @@ public static class Program {
 
 
     var win = new Window();
+    win.Background = "gray";
     win.Title = "Demo";
 
     var stack = new StackView();
     stack.Spacing = 16;
 
     var view = new View();
-    view.Background = "black";
+    view.Background = "red";
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
     view.HorizontalAlign = HorizontalAlign.Fill;

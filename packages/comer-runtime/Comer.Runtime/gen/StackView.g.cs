@@ -2,19 +2,19 @@
 namespace Comer.Runtime {
 public partial class StackView {
 
-public override void RemoveChild(Comer.Runtime.Control child) {
+public new void RemoveChild(Comer.Runtime.ComerElement child) {
    base.RemoveChild(child);
 }
 
-public override void InsertChild(Comer.Runtime.Control child, Comer.Runtime.Control? anchor) {
+public new void InsertChild(Comer.Runtime.ComerElement child, Comer.Runtime.ComerElement? anchor) {
    base.InsertChild(child, anchor);
 }
 
-public override void AppendChild(Comer.Runtime.Control child) {
+public new void AppendChild(Comer.Runtime.ComerElement child) {
    base.AppendChild(child);
 }
 
-public override void PrependChild(Comer.Runtime.Control child) {
+public new void PrependChild(Comer.Runtime.ComerElement child) {
    base.PrependChild(child);
 }
 

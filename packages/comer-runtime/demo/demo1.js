@@ -7,6 +7,7 @@ const {
 Application.init();
 
 var win = new Window();
+win.background = 'gray';
 win.title = "Demo";
 
 var stack = new StackView();
@@ -15,12 +16,12 @@ stack.spacing = 16;
 console.log(stack instanceof View);
 
 var view = new View();
-view.background = "black";
+view.background = "red";
 view.height = 100;
 view.verticalAlign = VerticalAlign.Top;
 view.horizontalAlign = HorizontalAlign.Fill;
-view.onPointerEnter = () => view.BoxShadow = "0 25 30 0 DarkGray";
-view.onPointerLeave = () => view.BoxShadow = "";
+view.onPointerEnter = () => view.boxShadow = "0 25 30 0 DarkGray";
+view.onPointerLeave = () => view.boxShadow = "";
 stack.appendChild(view);
 
 var box = new TextBox();
