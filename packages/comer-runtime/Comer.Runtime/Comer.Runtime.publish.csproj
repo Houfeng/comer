@@ -10,6 +10,14 @@
         <TrimMode>full</TrimMode>
         <OptimizationPreference>Size</OptimizationPreference>
         <StripSymbols>true</StripSymbols>
+        <DebugSymbols>false</DebugSymbols>
+        <!-- <DebugType>false</DebugType> -->
+        <DebuggerSupport>false</DebuggerSupport>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+        <EventSourceSupport>false</EventSourceSupport>
+        <MetricsSupport>false</MetricsSupport>
+        <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+        <StackTraceSupport>false</StackTraceSupport>
         <InvariantGlobalization>true</InvariantGlobalization>
         <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
         <PublishNodeModule>true</PublishNodeModule>
