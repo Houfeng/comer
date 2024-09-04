@@ -10,7 +10,7 @@ public partial class Icon : ComerElement {
   private PathIcon xIcon { get; } = new PathIcon();
 
   public Icon() {
-    xFrame.Content = xIcon;
+    Bounding.Content = xIcon;
     xIcon.VerticalAlignment = VerticalAlignment.Center;
     xIcon.HorizontalAlignment = HorizontalAlignment.Center;
     xIcon.BorderBrush = Brushes.Transparent;

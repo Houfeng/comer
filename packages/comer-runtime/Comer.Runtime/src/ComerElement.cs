@@ -11,7 +11,7 @@ using Avalonia.Threading;
 namespace Comer.Runtime;
 
 [JSExport(false)]
-public interface IFrame {
+public interface IBounding {
   AC.Classes Classes { get; }
   IBrush? Background { get; set; }
   HorizontalAlignment HorizontalAlignment { get; set; }
@@ -38,7 +38,7 @@ public interface IFrame {
 }
 
 [JSExport(false)]
-public class Frame : AC.Border, IFrame {
+public class Boxing : AC.Border, IBounding {
   public AC.Control Raw => this;
   public object? Content {
     get {
@@ -54,10 +54,10 @@ public class Frame : AC.Border, IFrame {
 [JSExport]
 public partial class ComerElement {
 
-  internal IFrame xFrame { get; private set; } = new Frame();
+  internal protected IBounding Bounding { get; private set; } = new Boxing();
 
   public ComerElement() {
-    xSetFrame(xFrame);
+    SetBounding(Bounding);
   }
 
   internal protected void Invoke(Action? action) {
@@ -69,15 +69,15 @@ public partial class ComerElement {
 #endif
   }
 
-  internal protected virtual void xSetFrame(IFrame frame) {
-    xFrame.Content = null;
-    frame.PointerEntered += (_, args) => Invoke(OnPointerEnter);
-    frame.PointerExited += (_, args) => Invoke(OnPointerLeave);
-    frame.PointerMoved += (_, args) => Invoke(OnPointerMove);
-    frame.PointerPressed += (_, args) => Invoke(OnPointerDown);
-    frame.PointerReleased += (_, args) => Invoke(OnPointerUp);
-    frame.PointerWheelChanged += (_, args) => Invoke(OnWheel);
-    xFrame = frame;
+  internal protected virtual void SetBounding(IBounding box) {
+    Bounding.Content = null;
+    box.PointerEntered += (_, args) => Invoke(OnPointerEnter);
+    box.PointerExited += (_, args) => Invoke(OnPointerLeave);
+    box.PointerMoved += (_, args) => Invoke(OnPointerMove);
+    box.PointerPressed += (_, args) => Invoke(OnPointerDown);
+    box.PointerReleased += (_, args) => Invoke(OnPointerUp);
+    box.PointerWheelChanged += (_, args) => Invoke(OnWheel);
+    Bounding = box;
   }
 
   public Action? OnPointerEnter { get; set; }
@@ -89,158 +89,158 @@ public partial class ComerElement {
 
   public string? Background {
     get {
-      if (xFrame.Background == null) return null;
-      return xFrame.Background.ToString();
+      if (Bounding.Background == null) return null;
+      return Bounding.Background.ToString();
     }
     set {
       if (value != null) {
-        xFrame.Background = Brush.Parse(value);
+        Bounding.Background = Brush.Parse(value);
       } else {
-        xFrame.Background = null;
+        Bounding.Background = null;
       }
     }
   }
 
   public double Width {
     get {
-      return xFrame.Width;
+      return Bounding.Width;
     }
     set {
-      xFrame.Width = value;
+      Bounding.Width = value;
     }
   }
 
   public double Height {
     get {
-      return xFrame.Height;
+      return Bounding.Height;
     }
     set {
-      xFrame.Height = value;
+      Bounding.Height = value;
     }
   }
 
   public HorizontalAlign HorizontalAlign {
     get {
-      return (HorizontalAlign)xFrame.HorizontalAlignment;
+      return (HorizontalAlign)Bounding.HorizontalAlignment;
     }
     set {
-      xFrame.HorizontalAlignment = (HorizontalAlignment)value;
+      Bounding.HorizontalAlignment = (HorizontalAlignment)value;
       if (value == HorizontalAlign.Fill) {
-        xFrame.Width = double.NaN;
+        Bounding.Width = double.NaN;
       }
     }
   }
 
   public VerticalAlign VerticalAlign {
     get {
-      return (VerticalAlign)xFrame.VerticalAlignment;
+      return (VerticalAlign)Bounding.VerticalAlignment;
     }
     set {
-      xFrame.VerticalAlignment = (VerticalAlignment)value;
+      Bounding.VerticalAlignment = (VerticalAlignment)value;
       if (value == VerticalAlign.Fill) {
-        xFrame.Height = double.NaN;
+        Bounding.Height = double.NaN;
       }
     }
   }
 
   public string Margin {
     get {
-      return xFrame.Margin.ToString();
+      return Bounding.Margin.ToString();
     }
     set {
-      xFrame.Margin = Thickness.Parse(value);
+      Bounding.Margin = Thickness.Parse(value);
     }
   }
 
   public string Padding {
     get {
-      return xFrame.Padding.ToString();
+      return Bounding.Padding.ToString();
     }
     set {
-      xFrame.Padding = Thickness.Parse(value);
+      Bounding.Padding = Thickness.Parse(value);
     }
   }
 
   public string BorderWidth {
     get {
-      return xFrame.BorderThickness.ToString();
+      return Bounding.BorderThickness.ToString();
     }
     set {
-      xFrame.BorderThickness = Thickness.Parse(value);
+      Bounding.BorderThickness = Thickness.Parse(value);
     }
   }
 
   public string? BorderColor {
     get {
-      if (xFrame.BorderBrush == null) return null;
-      return xFrame.BorderBrush.ToString();
+      if (Bounding.BorderBrush == null) return null;
+      return Bounding.BorderBrush.ToString();
     }
     set {
       if (value != null) {
-        xFrame.BorderBrush = Brush.Parse(value);
+        Bounding.BorderBrush = Brush.Parse(value);
       } else {
-        xFrame.BorderBrush = null;
+        Bounding.BorderBrush = null;
       }
     }
   }
 
   public string? BoxShadow {
     get {
-      return xFrame.BoxShadow.ToString();
+      return Bounding.BoxShadow.ToString();
     }
     set {
       if (value != null) {
-        xFrame.BoxShadow = BoxShadows.Parse(value);
+        Bounding.BoxShadow = BoxShadows.Parse(value);
       } else {
-        xFrame.BoxShadow = BoxShadows.Parse("");
+        Bounding.BoxShadow = BoxShadows.Parse("");
       }
     }
   }
 
   public RangeSizing BackgroundSizing {
     get {
-      return (RangeSizing)xFrame.BackgroundSizing;
+      return (RangeSizing)Bounding.BackgroundSizing;
     }
     set {
-      xFrame.BackgroundSizing = (BackgroundSizing)value;
+      Bounding.BackgroundSizing = (BackgroundSizing)value;
     }
   }
 
   public double Opacity {
     get {
-      return xFrame.Opacity;
+      return Bounding.Opacity;
     }
     set {
-      xFrame.Opacity = value;
+      Bounding.Opacity = value;
     }
   }
 
   public int ZIndex {
     get {
-      return xFrame.ZIndex;
+      return Bounding.ZIndex;
     }
     set {
-      xFrame.ZIndex = value;
+      Bounding.ZIndex = value;
     }
   }
 
   public string Cursor {
     get {
-      if (xFrame.Cursor == null) return "";
-      return xFrame.Cursor.ToString();
+      if (Bounding.Cursor == null) return "";
+      return Bounding.Cursor.ToString();
     }
     set {
-      xFrame.Cursor = AI.Cursor.Parse(value ?? "");
+      Bounding.Cursor = AI.Cursor.Parse(value ?? "");
     }
   }
 
   public string ClassName {
     get {
-      return string.Join(" ", xFrame.Classes);
+      return string.Join(" ", Bounding.Classes);
     }
     set {
-      xFrame.Classes.Clear();
-      value.Split(" ").ToList().ForEach(xFrame.Classes.Add);
+      Bounding.Classes.Clear();
+      value.Split(" ").ToList().ForEach(Bounding.Classes.Add);
     }
   }
 

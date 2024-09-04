@@ -7,44 +7,45 @@ namespace Comer.Runtime;
 
 [JSExport]
 public partial class View : ComerElement {
-  private AC.Panel xContainer { get; set; } = new AC.Panel();
+  private AC.Panel Panel { get; set; } = new AC.Panel();
 
-  internal protected void xSetContainer(AC.Panel container) {
-    xFrame.Content = container;
-    xContainer = container;
+  internal protected void SetContainer(AC.Panel panel) {
+    Bounding.Content = panel;
+    Panel = panel;
   }
 
   public View() : base() {
-    xSetContainer(xContainer);
-    xContainer.HorizontalAlignment = HorizontalAlignment.Stretch;
-    xContainer.VerticalAlignment = VerticalAlignment.Stretch;
+    SetContainer(Panel);
+    Panel.HorizontalAlignment = HorizontalAlignment.Stretch;
+    Panel.VerticalAlignment = VerticalAlignment.Stretch;
   }
 
   public void RemoveChild(ComerElement child) {
-    if (xContainer.Children.Contains(child.xFrame.Raw)) {
-      xContainer.Children.Remove(child.xFrame.Raw);
+    var raw = (AC.Control)child.Bounding;
+    if (Panel.Children.Contains(raw)) {
+      Panel.Children.Remove(child.Bounding.Raw);
     }
   }
 
   public void InsertChild(ComerElement child, ComerElement? anchor) {
     RemoveChild(child);
     if (anchor != null) {
-      var anchorIndex = xContainer.Children.IndexOf(anchor.xFrame.Raw);
-      xContainer.Children.Insert(anchorIndex + 1, child.xFrame.Raw);
+      var anchorIndex = Panel.Children.IndexOf(anchor.Bounding.Raw);
+      Panel.Children.Insert(anchorIndex + 1, child.Bounding.Raw);
     } else {
-      xContainer.Children.Insert(0, child.xFrame.Raw);
+      Panel.Children.Insert(0, child.Bounding.Raw);
     }
   }
 
   public void AppendChild(ComerElement child) {
     RemoveChild(child);
-    var count = xContainer.Children.Count;
-    xContainer.Children.Insert(count, child.xFrame.Raw);
+    var count = Panel.Children.Count;
+    Panel.Children.Insert(count, child.Bounding.Raw);
   }
 
   public void PrependChild(ComerElement child) {
     RemoveChild(child);
-    xContainer.Children.Insert(0, child.xFrame.Raw);
+    Panel.Children.Insert(0, child.Bounding.Raw);
   }
 
 }

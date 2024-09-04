@@ -14,27 +14,27 @@ public enum Orientation {
 [JSExport]
 public partial class StackView : View {
 
-  private AC.StackPanel xContainer { get; } = new AC.StackPanel();
+  private AC.StackPanel Panel { get; } = new AC.StackPanel();
 
   public StackView() : base() {
-    xSetContainer(xContainer);
+    SetContainer(Panel);
   }
 
   public Orientation Orientation {
     get {
-      return (Orientation)xContainer.Orientation;
+      return (Orientation)Panel.Orientation;
     }
     set {
-      xContainer.Orientation = (AL.Orientation)value;
+      Panel.Orientation = (AL.Orientation)value;
     }
   }
 
   public double Spacing {
     get {
-      return xContainer.Spacing;
+      return Panel.Spacing;
     }
     set {
-      xContainer.Spacing = value;
+      Panel.Spacing = value;
     }
   }
 

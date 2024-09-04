@@ -6,7 +6,7 @@ using Avalonia.Media;
 namespace Comer.Runtime;
 
 [JSExport(false)]
-class FramedWindow : AC.Window, IFrame {
+class FramedWindow : AC.Window, IBounding {
   public AC.Control Raw => this;
   public BoxShadows BoxShadow {
     get { return BoxShadows.Parse(""); }
@@ -27,8 +27,8 @@ public partial class Window : View {
   private FramedWindow Win { get; } = new FramedWindow();
 
   public Window() {
-    Win.Content = xFrame;
-    xSetFrame(Win);
+    Win.Content = Bounding;
+    SetBounding(Win);
     Win.Width = 480;
     Win.Height = 320;
     Win.Title = "Window";
