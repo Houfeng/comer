@@ -24,6 +24,7 @@ public partial class View : ComerElement {
     var raw = (AC.Control)child.Bounding;
     if (Panel.Children.Contains(raw)) {
       Panel.Children.Remove(child.Bounding.Raw);
+      child.Parent = null;
     }
   }
 
@@ -35,17 +36,20 @@ public partial class View : ComerElement {
     } else {
       Panel.Children.Insert(0, child.Bounding.Raw);
     }
+    child.Parent = this;
   }
 
   public void AppendChild(ComerElement child) {
     RemoveChild(child);
     var count = Panel.Children.Count;
     Panel.Children.Insert(count, child.Bounding.Raw);
+    child.Parent = this;
   }
 
   public void PrependChild(ComerElement child) {
     RemoveChild(child);
     Panel.Children.Insert(0, child.Bounding.Raw);
+    child.Parent = this;
   }
 
 }

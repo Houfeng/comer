@@ -7,6 +7,7 @@ using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
+using Comer.Runtime.Properties;
 
 namespace Comer.Runtime.Controls;
 
@@ -43,7 +44,7 @@ public class Boxing : AC.Border, IBounding {
   public AC.Control Raw => this;
   public object? Content {
     get {
-      return Child; 
+      return Child;
     }
     set {
       if (value == null || !(value is AC.Control)) return;
@@ -55,11 +56,43 @@ public class Boxing : AC.Border, IBounding {
 [JSExport]
 public partial class ComerElement {
 
+  static ComerElement() {
+    PropertiesManager.RegisterProperty<ComerElement>("background",
+      (target) => ((ComerElement)target).Background,
+      (target, value) => { ((ComerElement)target).Background = (string)value; }
+    );
+  }
+
+  public void SetProperty(string name, object value) {
+    PropertiesManager.SetValue(this, name, value);
+  }
+
+  public object? GetProperty(string name) {
+    return PropertiesManager.GetValue(this, name);
+  }
+
   internal protected IBounding Bounding { get; private set; } = new Boxing();
 
   public ComerElement() {
     SetBounding(Bounding);
   }
+
+  public virtual string Type { get; } = "Element";
+
+  public string? Id { get; set; }
+
+  public IReadOnlyList<string> ClassList { get; private set; } = [];
+
+  public string ClassName {
+    get {
+      return string.Join(" ", ClassList);
+    }
+    set {
+      ClassList = value.Split(" ").ToArray();
+    }
+  }
+
+  public ComerElement? Parent { get; set; }
 
   internal protected void Invoke(Action? action) {
     if (action == null) return;
@@ -245,16 +278,6 @@ public partial class ComerElement {
     }
     set {
       Bounding.Cursor = AI.Cursor.Parse(value ?? "");
-    }
-  }
-
-  public string ClassName {
-    get {
-      return string.Join(" ", Bounding.Classes);
-    }
-    set {
-      Bounding.Classes.Clear();
-      value.Split(" ").ToList().ForEach(Bounding.Classes.Add);
     }
   }
 
