@@ -13,8 +13,6 @@ win.title = "Demo";
 var stack = new StackView();
 stack.spacing = 16;
 
-console.log(stack instanceof View);
-
 var view = new View();
 view.background = "red";
 view.height = 100;
@@ -28,12 +26,17 @@ var box = new TextBox();
 box.margin = "16 0";
 box.width = 300;
 box.horizontalAlign = HorizontalAlign.Fill;
+box.value = '...';
 stack.appendChild(box);
 
 var btn = new Button();
 btn.margin = "16 0";
 btn.background = "blue";
 btn.text = "Click";
+btn.onClick = () => {
+  console.log('btn.onClick');
+  box.value = 'Hello world';
+}
 stack.appendChild(btn);
 
 win.appendChild(stack);
