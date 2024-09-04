@@ -1,0 +1,10 @@
+using Microsoft.JavaScript.NodeApi;
+
+namespace Comer.Runtime.Controls;
+
+[JSExport]
+public partial class Popup : ComerElement {
+
+  public Popup() {
+  }
+}
