@@ -25,6 +25,7 @@ export const build = task('Build', [prebuild], async () => {
     'binary/',
     { flat: true }
   );
+  await $`rm -rf binary/Comer.Runtime.dylib`;
   await $`tsc -p tsconfig.json`;
 });
 
