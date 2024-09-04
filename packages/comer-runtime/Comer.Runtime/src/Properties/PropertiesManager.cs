@@ -1,7 +1,9 @@
+using Comer.Runtime.Controls;
+
 namespace Comer.Runtime.Properties;
 
-public delegate object? PropertyGetter(object target);
-public delegate void PropertySetter(object target, object value);
+public delegate object? PropertyGetter(ComerElement target);
+public delegate void PropertySetter(ComerElement target, object value);
 
 public class Property {
   private PropertyGetter Getter { get; set; }
@@ -15,11 +17,11 @@ public class Property {
     Setter = setter;
   }
 
-  internal void SetValue(object target, object value) {
+  internal void SetValue(ComerElement target, object value) {
     Setter(target, value);
   }
 
-  internal object? GetValue(object target) {
+  internal object? GetValue(ComerElement target) {
     return Getter(target);
   }
 }
@@ -62,13 +64,13 @@ public class PropertiesManager {
     return dict[name];
   }
 
-  public static void SetValue(object target, string name, object value) {
+  public static void SetValue(ComerElement target, string name, object value) {
     var property = GetProperty(target, name);
     if (property == null) return;
     property.SetValue(target, value);
   }
 
-  public static object? GetValue(object target, string name) {
+  public static object? GetValue(ComerElement target, string name) {
     var property = GetProperty(target, name);
     if (property == null) return null;
     return property.GetValue(target);

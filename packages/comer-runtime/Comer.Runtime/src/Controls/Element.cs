@@ -57,10 +57,26 @@ public class Boxing : AC.Border, IBounding {
 public partial class ComerElement {
 
   static ComerElement() {
-    PropertiesManager.RegisterProperty<ComerElement>("background",
-      (target) => ((ComerElement)target).Background,
-      (target, value) => { ((ComerElement)target).Background = (string)value; }
+    PropertiesManager.RegisterProperty<ComerElement>("Background",
+      (target) => target.Background,
+      (target, value) => { target.Background = (string)value; }
     );
+    PropertiesManager.RegisterProperty<ComerElement>("Width",
+      (target) => target.Width,
+      (target, value) => { target.Width = (double)value; }
+    );
+    PropertiesManager.RegisterProperty<ComerElement>("Height",
+      (target) => target.Height,
+      (target, value) => { target.Height = (double)value; }
+    );
+    PropertiesManager.RegisterProperty<ComerElement>("HorizontalAlign",
+      (target) => target.HorizontalAlign,
+      (target, value) => { target.HorizontalAlign = (HorizontalAlign)value; }
+    );
+    PropertiesManager.RegisterProperty<ComerElement>("VerticalAlign",
+     (target) => target.VerticalAlign,
+     (target, value) => { target.VerticalAlign = (VerticalAlign)value; }
+   );
   }
 
   public void SetProperty(string name, object value) {
@@ -69,12 +85,6 @@ public partial class ComerElement {
 
   public object? GetProperty(string name) {
     return PropertiesManager.GetValue(this, name);
-  }
-
-  internal protected IBounding Bounding { get; private set; } = new Boxing();
-
-  public ComerElement() {
-    SetBounding(Bounding);
   }
 
   public virtual string Type { get; } = "Element";
@@ -93,6 +103,14 @@ public partial class ComerElement {
   }
 
   public ComerElement? Parent { get; set; }
+
+  // -----------------------------------------------------------------------
+
+  internal protected IBounding Bounding { get; private set; } = new Boxing();
+
+  public ComerElement() {
+    SetBounding(Bounding);
+  }
 
   internal protected void Invoke(Action? action) {
     if (action == null) return;
