@@ -55,9 +55,10 @@ public class Boxing : AC.Border, IBounding {
 
 [JSExport]
 public partial class ComerElement {
+  public virtual string Type { get; } = nameof(ComerElement);
 
   static ComerElement() {
-    PropertiesManager.UseAccessors<ComerElement>()
+    PropertiesManager.UseAccessors<ComerElement>(nameof(ComerElement))
     .Register("Background",
       (target) => target.Background,
       (target, value) => target.Background = (string)value
@@ -83,8 +84,6 @@ public partial class ComerElement {
   public object? GetProperty(string name) {
     return PropertiesManager.GetValue(this, name);
   }
-
-  public string Type { get; } = nameof(ComerElement);
 
   public string? Id { get; set; }
 

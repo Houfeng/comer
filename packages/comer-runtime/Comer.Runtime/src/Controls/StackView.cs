@@ -9,8 +9,10 @@ namespace Comer.Runtime.Controls;
 [JSExport]
 public partial class StackView : View {
 
+  public override string Type { get; } = nameof(StackView);
+
   static StackView() {
-    PropertiesManager.UseAccessors<StackView>()
+    PropertiesManager.UseAccessors<StackView>(nameof(StackView))
     .Register("Orientation",
      (target) => target.Orientation,
      (target, value) => target.Orientation = (Orientation)value

@@ -72,8 +72,7 @@ public class PropertiesManager {
   private static Dictionary<string, IPropertyAccessors<ComerElement>> AccessorsMap { get; }
     = new Dictionary<string, IPropertyAccessors<ComerElement>>();
 
-  public static IPropertyAccessors<T> UseAccessors<T>() where T : ComerElement {
-    var type = nameof(T);
+  public static IPropertyAccessors<T> UseAccessors<T>(string type) where T : ComerElement {
     if (AccessorsMap.ContainsKey(type)) {
       return (IPropertyAccessors<T>)AccessorsMap[type];
     }
