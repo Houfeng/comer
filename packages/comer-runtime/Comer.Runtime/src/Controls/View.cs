@@ -17,7 +17,7 @@ public partial class View : ComerElement {
   public View() : base() {
     SetContainer(Panel);
     Panel.HorizontalAlignment = HorizontalAlignment.Stretch;
-    Panel.VerticalAlignment = VerticalAlignment.Stretch;
+    Panel.VerticalAlignment = VerticalAlignment.Stretch; 
   }
 
   public void RemoveChild(ComerElement child) {

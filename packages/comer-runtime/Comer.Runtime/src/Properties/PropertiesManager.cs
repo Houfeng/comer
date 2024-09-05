@@ -2,49 +2,43 @@ using Comer.Runtime.Controls;
 
 namespace Comer.Runtime.Properties;
 
-public delegate object? PropertyGetter<T>(T target) where T : ComerElement;
-public delegate void PropertySetter<T>(T target, object value) where T : ComerElement;
+public delegate object? PropertyGetter<in T>(T target) where T : ComerElement;
+public delegate void PropertySetter<in T>(T target, object value) where T : ComerElement;
 
 public class PropertyAccessor<T> where T : ComerElement {
-  private PropertyGetter<T> Getter { get; set; }
-  private PropertySetter<T> Setter { get; set; }
+  private PropertyGetter<ComerElement> Getter { get; set; }
+  private PropertySetter<ComerElement> Setter { get; set; }
 
   public PropertyAccessor(
     PropertyGetter<T> getter,
     PropertySetter<T> setter
   ) {
-    Getter = getter;
-    Setter = setter;
+    Getter = target => getter((T)target);
+    Setter = (target, value) => setter((T)target, value);
   }
 
-  public void SetValue(T target, object value) {
+  public void SetValue(ComerElement target, object value) {
     Setter(target, value);
   }
 
-  public object? GetValue(T target) {
+  public object? GetValue(ComerElement target) {
     return Getter(target);
   }
 }
 
-public interface IPropertyAccessors<T> where T : ComerElement {
-  IPropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor);
+public interface IPropertyAccessors<out T> where T : ComerElement {
   IPropertyAccessors<T> Register(
     string name,
     PropertyGetter<T> getter,
     PropertySetter<T> setter
   );
-  void SetValue(T target, string name, object value);
-  object? GetValue(T target, string name);
+  void SetValue(ComerElement target, string name, object value);
+  object? GetValue(ComerElement target, string name);
 }
 
 public class PropertyAccessors<T> : IPropertyAccessors<T> where T : ComerElement {
   private Dictionary<string, PropertyAccessor<T>> Accessors { get; } =
     new Dictionary<string, PropertyAccessor<T>>();
-
-  public IPropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor) {
-    Accessors.Add(name, accessor);
-    return this;
-  }
 
   public IPropertyAccessors<T> Register(
     string name,
@@ -52,16 +46,17 @@ public class PropertyAccessors<T> : IPropertyAccessors<T> where T : ComerElement
     PropertySetter<T> setter
   ) {
     var accessor = new PropertyAccessor<T>(getter, setter);
-    return Register(name, accessor);
+    Accessors.Add(name, accessor);
+    return this;
   }
 
-  public void SetValue(T target, string name, object value) {
+  public void SetValue(ComerElement target, string name, object value) {
     if (!Accessors.ContainsKey(name)) return;
     var accessor = Accessors[name];
     accessor.SetValue(target, value);
   }
 
-  public object? GetValue(T target, string name) {
+  public object? GetValue(ComerElement target, string name) {
     if (!Accessors.ContainsKey(name)) return null;
     var accessor = Accessors[name];
     return accessor.GetValue(target);
@@ -77,7 +72,7 @@ public class PropertiesManager {
       return (IPropertyAccessors<T>)AccessorsMap[type];
     }
     var accessors = new PropertyAccessors<T>();
-    AccessorsMap.Add(type, (IPropertyAccessors<ComerElement>)accessors);
+    AccessorsMap.Add(type, accessors);
     return accessors;
   }
 

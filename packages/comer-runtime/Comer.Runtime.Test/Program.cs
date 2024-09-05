@@ -18,6 +18,7 @@ public static class Program {
 
     var view = new View();
     view.Background = "red";
+    view.SetProperty("Background", "blue");
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
     view.HorizontalAlign = HorizontalAlign.Fill;
