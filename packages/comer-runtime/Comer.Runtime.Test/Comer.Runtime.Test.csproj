@@ -8,8 +8,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PublishAot>true</PublishAot>
         <OptimizationPreference>Speed</OptimizationPreference>
-        <PublishNodeModule>true</PublishNodeModule>
-        <PublishDir>bin/node</PublishDir>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
     <ItemGroup>
