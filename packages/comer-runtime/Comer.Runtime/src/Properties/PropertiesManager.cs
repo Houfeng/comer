@@ -84,7 +84,6 @@ public class PropertiesManager {
         accessors = AccessorsMap[type];
         break;
       }
-      type = target.Parent?.Type;
     }
     return accessors;
   }

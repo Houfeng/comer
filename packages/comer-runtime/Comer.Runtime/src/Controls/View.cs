@@ -7,6 +7,8 @@ namespace Comer.Runtime.Controls;
 
 [JSExport]
 public partial class View : ComerElement {
+  public override string Type { get; } = nameof(View);
+
   private AC.Panel Panel { get; set; } = new AC.Panel();
 
   internal protected void SetContainer(AC.Panel panel) {
@@ -17,7 +19,7 @@ public partial class View : ComerElement {
   public View() : base() {
     SetContainer(Panel);
     Panel.HorizontalAlignment = HorizontalAlignment.Stretch;
-    Panel.VerticalAlignment = VerticalAlignment.Stretch; 
+    Panel.VerticalAlignment = VerticalAlignment.Stretch;
   }
 
   public void RemoveChild(ComerElement child) {

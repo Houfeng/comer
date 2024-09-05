@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Layout;
 using Comer.Runtime.Layouts;
+using Comer.Runtime.Properties;
 using Microsoft.JavaScript.NodeApi;
 using AC = Avalonia.Controls;
 using AM = Avalonia.Media;
@@ -9,6 +10,17 @@ namespace Comer.Runtime.Controls;
 
 [JSExport]
 public partial class TextBox : ComerElement {
+
+  public override string Type { get; } = nameof(TextBox);
+
+
+  static TextBox() {
+    PropertiesManager.UseAccessors<TextBox>(nameof(TextBox))
+    .Register("Wrapping",
+     (target) => target.Wrapping,
+     (target, value) => target.Wrapping = (TextWrapping)value
+    );
+  }
 
   // Avalonia TextBox，虽然有类似 border 的属性，
   // 因为，设置过一次 Width 再也无法 Stretch 了，以及为了所有组件一致，

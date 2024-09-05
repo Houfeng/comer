@@ -3,6 +3,7 @@ using Microsoft.JavaScript.NodeApi;
 using Avalonia;
 using Avalonia.Media;
 using Comer.Runtime.Layouts;
+using Comer.Runtime.Properties;
 
 namespace Comer.Runtime.Controls;
 
@@ -17,6 +18,31 @@ class FramedWindow : AC.Window, IBounding {
 
 [JSExport]
 public partial class Window : View {
+
+  public override string Type { get; } = nameof(Window);
+
+  static Window() {
+    PropertiesManager.UseAccessors<Window>(nameof(Window))
+    .Register("X",
+     (target) => target.X,
+     (target, value) => target.X = (int)value
+    ).Register("Y",
+     (target) => target.Y,
+     (target, value) => target.Y = (int)value
+    ).Register("MinWidth",
+     (target) => target.MinWidth,
+     (target, value) => target.MinWidth = (int)value
+    ).Register("MaxWidth",
+     (target) => target.MaxWidth,
+     (target, value) => target.MaxWidth = (int)value
+    ).Register("MinHeight",
+     (target) => target.MinHeight,
+     (target, value) => target.MinHeight = (int)value
+    ).Register("MaxHeight",
+     (target) => target.MaxHeight,
+     (target, value) => target.MaxHeight = (int)value
+    );
+  }
 
   private FramedWindow Win { get; } = new FramedWindow();
 

@@ -9,6 +9,8 @@ namespace Comer.Runtime.Controls;
 [JSExport]
 public partial class Button : ComerElement {
 
+  public override string Type { get; } = nameof(Button);
+
   private AC.Button Btn { get; } = new AC.Button();
 
   public Button() : base() {

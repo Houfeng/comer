@@ -44,7 +44,7 @@ public class Boxing : AC.Border, IBounding {
   public AC.Control Raw => this;
   public object? Content {
     get {
-      return Child;
+      return Child; 
     }
     set {
       if (value == null || !(value is AC.Control)) return;

@@ -10,14 +10,14 @@ public static class Program {
     Application.Init();
 
     var win = new Window();
-    win.SetProperty("Background", "#daffee");
+    // win.SetProperty("Background", "#daffee");
     win.Title = "Demo";
 
     var stack = new StackView();
     stack.Spacing = 16;
 
     var view = new View();
-    view.Background = "red";
+    // view.Background = "red";
     view.SetProperty("Background", "blue");
     view.Height = 100;
     view.VerticalAlign = VerticalAlign.Top;
@@ -30,6 +30,7 @@ public static class Program {
     box.Margin = "16 0";
     box.Width = 300;
     box.HorizontalAlign = HorizontalAlign.Fill;
+    // box.SetProperty("Background", "red");
     stack.AppendChild(box);
 
     var btn = new Button();
