@@ -26,16 +26,27 @@ public class PropertyAccessor<T> where T : ComerElement {
   }
 }
 
-public class PropertyAccessors<T> where T : ComerElement {
+public interface IPropertyAccessors<T> where T : ComerElement {
+  IPropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor);
+  IPropertyAccessors<T> Register(
+    string name,
+    PropertyGetter<T> getter,
+    PropertySetter<T> setter
+  );
+  void SetValue(T target, string name, object value);
+  object? GetValue(T target, string name);
+}
+
+public class PropertyAccessors<T> : IPropertyAccessors<T> where T : ComerElement {
   private Dictionary<string, PropertyAccessor<T>> Accessors { get; } =
     new Dictionary<string, PropertyAccessor<T>>();
 
-  public PropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor) {
+  public IPropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor) {
     Accessors.Add(name, accessor);
     return this;
   }
 
-  public PropertyAccessors<T> Register(
+  public IPropertyAccessors<T> Register(
     string name,
     PropertyGetter<T> getter,
     PropertySetter<T> setter
@@ -58,28 +69,28 @@ public class PropertyAccessors<T> where T : ComerElement {
 }
 
 public class PropertiesManager {
-  private static Dictionary<Type, PropertyAccessors<ComerElement>> AccessorsMap { get; }
-    = new Dictionary<Type, PropertyAccessors<ComerElement>>();
+  private static Dictionary<string, IPropertyAccessors<ComerElement>> AccessorsMap { get; }
+    = new Dictionary<string, IPropertyAccessors<ComerElement>>();
 
-  public static PropertyAccessors<T> UseAccessors<T>() where T : ComerElement {
-    var type = typeof(T);
+  public static IPropertyAccessors<T> UseAccessors<T>() where T : ComerElement {
+    var type = nameof(T);
     if (AccessorsMap.ContainsKey(type)) {
-      return (AccessorsMap[type] as PropertyAccessors<T>)!;
+      return (IPropertyAccessors<T>)AccessorsMap[type];
     }
     var accessors = new PropertyAccessors<T>();
-    AccessorsMap.Add(type, (accessors as PropertyAccessors<ComerElement>)!);
+    AccessorsMap.Add(type, (IPropertyAccessors<ComerElement>)accessors);
     return accessors;
   }
 
-  private static PropertyAccessors<ComerElement>? GetAccessors(ComerElement target) {
-    var type = target.GetType();
-    PropertyAccessors<ComerElement>? accessors = null;
-    while (type != null && type != typeof(object)) {
+  private static IPropertyAccessors<ComerElement>? GetAccessors(ComerElement target) {
+    var type = target.Type;
+    IPropertyAccessors<ComerElement>? accessors = null;
+    while (type != null && type != "Object") {
       if (AccessorsMap.ContainsKey(type)) {
         accessors = AccessorsMap[type];
         break;
       }
-      type = type.BaseType;
+      type = target.Parent?.Type;
     }
     return accessors;
   }

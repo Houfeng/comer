@@ -60,19 +60,19 @@ public partial class ComerElement {
     PropertiesManager.UseAccessors<ComerElement>()
     .Register("Background",
       (target) => target.Background,
-      (target, value) => { target.Background = (string)value; }
+      (target, value) => target.Background = (string)value
     ).Register("Width",
      (target) => target.Width,
-     (target, value) => { target.Width = (double)value; }
+     (target, value) => target.Width = (double)value
     ).Register("Height",
      (target) => target.Height,
-     (target, value) => { target.Height = (double)value; }
+     (target, value) => target.Height = (double)value
     ).Register("HorizontalAlign",
       (target) => target.HorizontalAlign,
-      (target, value) => { target.HorizontalAlign = (HorizontalAlign)value; }
+      (target, value) => target.HorizontalAlign = (HorizontalAlign)value
     ).Register("VerticalAlign",
       (target) => target.VerticalAlign,
-      (target, value) => { target.VerticalAlign = (VerticalAlign)value; }
+      (target, value) => target.VerticalAlign = (VerticalAlign)value
     );
   }
 
@@ -84,7 +84,7 @@ public partial class ComerElement {
     return PropertiesManager.GetValue(this, name);
   }
 
-  public virtual string Type { get; } = "Element";
+  public string Type { get; } = nameof(ComerElement);
 
   public string? Id { get; set; }
 
