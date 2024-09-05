@@ -15,7 +15,7 @@ public partial class TextBox : ComerElement {
 
 
   static TextBox() {
-    PropertiesManager.UseAccessors<TextBox>(nameof(TextBox))
+    PropertiesManager.UseAccessors<TextBox>()
     .Register("Wrapping",
      (target) => target.Wrapping,
      (target, value) => target.Wrapping = (TextWrapping)value

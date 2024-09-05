@@ -44,7 +44,7 @@ public class Boxing : AC.Border, IBounding {
   public AC.Control Raw => this;
   public object? Content {
     get {
-      return Child; 
+      return Child;
     }
     set {
       if (value == null || !(value is AC.Control)) return;
@@ -53,12 +53,17 @@ public class Boxing : AC.Border, IBounding {
   }
 }
 
+public class ComerElementBase {
+  internal IEnumerable<string> GetTypeChain() {
+    return [];
+  }
+}
+
 [JSExport]
-public partial class ComerElement {
-  public virtual string Type { get; } = nameof(ComerElement);
+public partial class ComerElement : ComerElementBase {
 
   static ComerElement() {
-    PropertiesManager.UseAccessors<ComerElement>(nameof(ComerElement))
+    PropertiesManager.UseAccessors<ComerElement>()
     .Register("Background",
       (target) => target.Background,
       (target, value) => target.Background = (string)value
@@ -84,6 +89,8 @@ public partial class ComerElement {
   public object? GetProperty(string name) {
     return PropertiesManager.GetValue(this, name);
   }
+
+  public virtual string Type { get; } = nameof(ComerElement);
 
   public string? Id { get; set; }
 

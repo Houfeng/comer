@@ -12,7 +12,7 @@ public partial class Icon : ComerElement {
   public override string Type { get; } = nameof(Icon);
 
   static Icon() {
-    PropertiesManager.UseAccessors<Icon>(nameof(Icon))
+    PropertiesManager.UseAccessors<Icon>()
     .Register("Color",
      (target) => target.Color,
      (target, value) => target.Color = (string)value

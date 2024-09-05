@@ -22,7 +22,7 @@ public partial class Window : View {
   public override string Type { get; } = nameof(Window);
 
   static Window() {
-    PropertiesManager.UseAccessors<Window>(nameof(Window))
+    PropertiesManager.UseAccessors<Window>()
     .Register("X",
      (target) => target.X,
      (target, value) => target.X = (int)value
