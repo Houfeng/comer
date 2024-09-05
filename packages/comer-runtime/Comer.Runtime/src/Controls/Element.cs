@@ -57,26 +57,23 @@ public class Boxing : AC.Border, IBounding {
 public partial class ComerElement {
 
   static ComerElement() {
-    PropertiesManager.RegisterProperty<ComerElement>("Background",
+    PropertiesManager.Register(typeof(ComerElement), new PropertyAccessors<ComerElement>())
+    .Register("Background",
       (target) => target.Background,
       (target, value) => { target.Background = (string)value; }
-    );
-    PropertiesManager.RegisterProperty<ComerElement>("Width",
-      (target) => target.Width,
-      (target, value) => { target.Width = (double)value; }
-    );
-    PropertiesManager.RegisterProperty<ComerElement>("Height",
-      (target) => target.Height,
-      (target, value) => { target.Height = (double)value; }
-    );
-    PropertiesManager.RegisterProperty<ComerElement>("HorizontalAlign",
+    ).Register("Width",
+     (target) => target.Width,
+     (target, value) => { target.Width = (double)value; }
+    ).Register("Height",
+     (target) => target.Height,
+     (target, value) => { target.Height = (double)value; }
+    ).Register("HorizontalAlign",
       (target) => target.HorizontalAlign,
       (target, value) => { target.HorizontalAlign = (HorizontalAlign)value; }
+    ).Register("VerticalAlign",
+      (target) => target.VerticalAlign,
+      (target, value) => { target.VerticalAlign = (VerticalAlign)value; }
     );
-    PropertiesManager.RegisterProperty<ComerElement>("VerticalAlign",
-     (target) => target.VerticalAlign,
-     (target, value) => { target.VerticalAlign = (VerticalAlign)value; }
-   );
   }
 
   public void SetProperty(string name, object value) {

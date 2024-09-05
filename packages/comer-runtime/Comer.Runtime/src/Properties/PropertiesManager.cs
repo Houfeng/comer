@@ -2,78 +2,94 @@ using Comer.Runtime.Controls;
 
 namespace Comer.Runtime.Properties;
 
-public delegate object? PropertyGetter(ComerElement target);
-public delegate void PropertySetter(ComerElement target, object value);
+public delegate object? PropertyGetter<T>(T target) where T : ComerElement;
+public delegate void PropertySetter<T>(T target, object value) where T : ComerElement;
 
-public class Property {
-  private PropertyGetter Getter { get; set; }
-  private PropertySetter Setter { get; set; }
+public class PropertyAccessor<T> where T : ComerElement {
+  private PropertyGetter<T> Getter { get; set; }
+  private PropertySetter<T> Setter { get; set; }
 
-  public Property(
-    PropertyGetter getter,
-    PropertySetter setter
+  public PropertyAccessor(
+    PropertyGetter<T> getter,
+    PropertySetter<T> setter
   ) {
     Getter = getter;
     Setter = setter;
   }
 
-  internal void SetValue(ComerElement target, object value) {
+  public void SetValue(T target, object value) {
     Setter(target, value);
   }
 
-  internal object? GetValue(ComerElement target) {
+  public object? GetValue(T target) {
     return Getter(target);
   }
 }
 
+public class PropertyAccessors<T> where T : ComerElement {
+  private Dictionary<string, PropertyAccessor<T>> Accessors { get; } =
+    new Dictionary<string, PropertyAccessor<T>>();
+
+  public PropertyAccessors<T> Register(string name, PropertyAccessor<T> accessor) {
+    Accessors.Add(name, accessor);
+    return this;
+  }
+
+  public PropertyAccessors<T> Register(
+    string name,
+    PropertyGetter<T> getter,
+    PropertySetter<T> setter
+  ) {
+    var accessor = new PropertyAccessor<T>(getter, setter);
+    return Register(name, accessor);
+  }
+
+  public void SetValue(T target, string name, object value) {
+    if (!Accessors.ContainsKey(name)) return;
+    var accessor = Accessors[name];
+    accessor.SetValue(target, value);
+  }
+
+  public object? GetValue(T target, string name) {
+    if (!Accessors.ContainsKey(name)) return null;
+    var accessor = Accessors[name];
+    return accessor.GetValue(target);
+  }
+}
+
 public class PropertiesManager {
-  private static Dictionary<Type, Dictionary<string, Property>> Properties { get; }
-    = new Dictionary<Type, Dictionary<string, Property>>();
+  private static Dictionary<Type, PropertyAccessors<ComerElement>> AccessorsMap { get; }
+    = new Dictionary<Type, PropertyAccessors<ComerElement>>();
 
-  private static Dictionary<string, Property> UseTypedProperties<T>() {
-    var type = typeof(T);
-    if (Properties.ContainsKey(type)) return Properties[type];
-    var dict = new Dictionary<string, Property>();
-    Properties.Add(type, dict);
-    return dict;
+  public static T Register<T>(Type type, T accessors) where T : PropertyAccessors<ComerElement> {
+    if (AccessorsMap.ContainsKey(type)) return (T)AccessorsMap[type];
+    AccessorsMap.Add(type, accessors);
+    return accessors;
   }
 
-  public static void RegisterProperty<T>(string name, Property property) {
-    var dict = UseTypedProperties<T>();
-    dict.Add(name, property);
-  }
-
-  public static void RegisterProperty<T>(string name, PropertyGetter getter,
-   PropertySetter setter) {
-    var property = new Property(getter, setter);
-    RegisterProperty<T>(name, property);
-  }
-
-  private static Property? GetProperty(object target, string name) {
+  private static PropertyAccessors<ComerElement>? GetAccessors(ComerElement target) {
     var type = target.GetType();
-    Dictionary<string, Property>? dict = null;
-    var objectType = typeof(object);
-    while (type != null && type != objectType) {
-      if (Properties.ContainsKey(type)) {
-        dict = Properties[type];
+    PropertyAccessors<ComerElement>? accessors = null;
+    while (type != null && type != typeof(object)) {
+      if (AccessorsMap.ContainsKey(type)) {
+        accessors = AccessorsMap[type];
         break;
       }
       type = type.BaseType;
     }
-    if (dict == null || !dict.ContainsKey(name)) return null;
-    return dict[name];
+    return accessors;
   }
 
   public static void SetValue(ComerElement target, string name, object value) {
-    var property = GetProperty(target, name);
-    if (property == null) return;
-    property.SetValue(target, value);
+    var accessors = GetAccessors(target);
+    if (accessors == null) return;
+    accessors.SetValue(target, name, value);
   }
 
   public static object? GetValue(ComerElement target, string name) {
-    var property = GetProperty(target, name);
-    if (property == null) return null;
-    return property.GetValue(target);
+    var accessors = GetAccessors(target);
+    if (accessors == null) return null;
+    return accessors.GetValue(target, name);
   }
 
 }
