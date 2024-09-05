@@ -61,9 +61,13 @@ public class PropertiesManager {
   private static Dictionary<Type, PropertyAccessors<ComerElement>> AccessorsMap { get; }
     = new Dictionary<Type, PropertyAccessors<ComerElement>>();
 
-  public static T Register<T>(Type type, T accessors) where T : PropertyAccessors<ComerElement> {
-    if (AccessorsMap.ContainsKey(type)) return (T)AccessorsMap[type];
-    AccessorsMap.Add(type, accessors);
+  public static PropertyAccessors<T> UseAccessors<T>() where T : ComerElement {
+    var type = typeof(T);
+    if (AccessorsMap.ContainsKey(type)) {
+      return (AccessorsMap[type] as PropertyAccessors<T>)!;
+    }
+    var accessors = new PropertyAccessors<T>();
+    AccessorsMap.Add(type, (accessors as PropertyAccessors<ComerElement>)!);
     return accessors;
   }
 

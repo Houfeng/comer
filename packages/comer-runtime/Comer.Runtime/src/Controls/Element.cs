@@ -57,7 +57,7 @@ public class Boxing : AC.Border, IBounding {
 public partial class ComerElement {
 
   static ComerElement() {
-    PropertiesManager.Register(typeof(ComerElement), new PropertyAccessors<ComerElement>())
+    PropertiesManager.UseAccessors<ComerElement>()
     .Register("Background",
       (target) => target.Background,
       (target, value) => { target.Background = (string)value; }
