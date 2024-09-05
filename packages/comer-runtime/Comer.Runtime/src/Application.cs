@@ -38,19 +38,22 @@ public partial class Application {
     }
   }
 
+  /// <summary>
+  /// only for typescript types
+  /// </summary>
   public static void Run() { }
 
   [JSExport(false)]
   private static CancellationTokenSource? RunToken { get; set; }
 
   [JSExport(false)]
-  internal static void Start() {
+  public static void Start() {
     RunToken = new CancellationTokenSource();
     Dispatcher.UIThread.MainLoop(RunToken.Token);
   }
 
   [JSExport(false)]
-  internal static void Stop() {
+  public static void Stop() {
     if (RunToken == null) return;
     RunToken.Cancel();
   }

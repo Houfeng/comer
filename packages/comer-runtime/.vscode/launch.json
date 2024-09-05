@@ -12,7 +12,7 @@
         "task": "build",
         "type": "dotnet"
       },
-      "program": "${workspaceFolder}/Comer.Runtime/bin/Debug/net8.0/Comer.Runtime.dll",
+      "program": "${workspaceFolder}/Comer.Runtime.Test/bin/Debug/net8.0/Comer.Runtime.Test.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
     }

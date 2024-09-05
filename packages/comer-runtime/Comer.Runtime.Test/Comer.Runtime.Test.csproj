@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <AssemblyName>Comer.Runtime.Test</AssemblyName>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -12,15 +13,6 @@
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia"
-                          Version="11.1.3" />
-        <PackageReference Include="Avalonia.Desktop"
-                          Version="11.1.3" />
-        <PackageReference Include="Avalonia.Themes.Fluent"
-                          Version="11.1.3" />
-        <PackageReference Include="Microsoft.JavaScript.NodeApi"
-                          Version="0.8.5" />
-        <PackageReference Include="Microsoft.JavaScript.NodeApi.Generator"
-                          Version="0.8.5" />
+      <ProjectReference Include="..\Comer.Runtime\Comer.Runtime.csproj" />
     </ItemGroup>
 </Project>
