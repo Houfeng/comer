@@ -39,6 +39,13 @@ btn.onClick = () => {
 }
 stack.appendChild(btn);
 
+console.time('update');
+for (let i = 0; i < 50000; i++) {
+  box.value = `NO. ${i}`;
+  btn.text = `NO. ${i}`;
+}
+console.timeEnd('update');
+
 win.appendChild(stack);
 win.show();
 
