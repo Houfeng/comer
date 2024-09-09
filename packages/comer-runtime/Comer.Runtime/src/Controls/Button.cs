@@ -29,7 +29,7 @@ public partial class Button : ComerElement {
     Btn.Foreground = AM.Brushes.White;
     Padding = "4 6";
     BorderWidth = "1";
-    BorderRadius = "3";
+    BorderRadius = "8";
     Background = "#0055ff";
     BorderColor = "#0055ff";
     BindEvents();
