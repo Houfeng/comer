@@ -16,8 +16,8 @@ public partial class Button : ComerElement {
 
   public Button() : base() {
     Bounding.Content = Btn;
-    Btn.HorizontalAlignment = HorizontalAlignment.Stretch;
-    Btn.VerticalAlignment = VerticalAlignment.Stretch;
+    Btn.HorizontalAlignment = HorizontalAlignment.Center;
+    Btn.VerticalAlignment = VerticalAlignment.Center;
     Btn.MinHeight = 0;
     Btn.MinWidth = 0;
     Btn.FontSize = 16;
