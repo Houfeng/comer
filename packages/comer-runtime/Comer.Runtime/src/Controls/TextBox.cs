@@ -47,7 +47,7 @@ public partial class TextBox : ComerElement {
     Box.Background = AM.Brushes.Transparent;
     Padding = "8 4";
     BorderWidth = "1";
-    BorderRadius = "8";
+    BorderRadius = "6";
     BorderColor = "gray";
     BindEvents();
   }
