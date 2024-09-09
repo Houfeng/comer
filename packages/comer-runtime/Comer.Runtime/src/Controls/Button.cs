@@ -27,7 +27,7 @@ public partial class Button : ComerElement {
     // Btn.BorderBrush = AM.Brushes.Transparent;
     Btn.Background = AM.Brushes.Transparent;
     Btn.Foreground = AM.Brushes.White;
-    Padding = "8 4";
+    Padding = "8 6";
     BorderWidth = "1";
     BorderRadius = "8";
     Background = "#0055ff";
