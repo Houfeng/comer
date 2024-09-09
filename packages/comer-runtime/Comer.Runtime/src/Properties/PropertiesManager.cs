@@ -38,8 +38,7 @@ public interface IPropertiesAccessor<out T> where T : ComerElement {
 }
 
 public class PropertiesAccessor<T> : IPropertiesAccessor<T> where T : ComerElement {
-  private Dictionary<string, PropertyAccessor<T>> Accessors { get; } =
-    new Dictionary<string, PropertyAccessor<T>>();
+  private Dictionary<string, PropertyAccessor<T>> Accessors { get; } = new();
 
   public IPropertiesAccessor<T> Register(
     string name,
@@ -70,7 +69,7 @@ public class PropertiesAccessor<T> : IPropertiesAccessor<T> where T : ComerEleme
 
 public class PropertiesManager {
   private static Dictionary<Type, IPropertiesAccessor<ComerElement>> Accessors { get; }
-    = new Dictionary<Type, IPropertiesAccessor<ComerElement>>();
+    = new();
 
   public static IPropertiesAccessor<T> UseAccessors<T>() where T : ComerElement {
     var type = typeof(T);

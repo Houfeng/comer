@@ -25,7 +25,7 @@ public partial class TextBox : ComerElement {
   // Avalonia TextBox，虽然有类似 border 的属性，
   // 因为，设置过一次 Width 再也无法 Stretch 了，以及为了所有组件一致，
   // 所以，也使用 Frame 作为 Wrapper
-  private AC.TextBox Box { get; } = new AC.TextBox();
+  private AC.TextBox Box { get; } = new();
 
   public TextBox() : base() {
     Bounding.Content = Box;
@@ -35,7 +35,20 @@ public partial class TextBox : ComerElement {
     Box.MinWidth = 0;
     Box.FontSize = 16;
     Box.LineHeight = 22;
-    Box.Padding = new Thickness(4, 4);
+    Box.TextAlignment = AM.TextAlignment.Left;
+    Box.Foreground = AM.Brushes.Black;
+    Box.CaretBrush = AM.Brushes.Black;
+    Box.SelectionBrush = AM.Brushes.Black;
+    Box.SelectionForegroundBrush = AM.Brushes.WhiteSmoke;
+    Box.Margin = new Thickness(0);
+    Box.Padding = new Thickness(0);
+    Box.BorderThickness = new Thickness(0);
+    Box.BorderBrush = AM.Brushes.Transparent;
+    Box.Background = AM.Brushes.Transparent;
+    Padding = "4";
+    BorderWidth = "1";
+    BorderRadius = "3";
+    BorderColor = "gray";
     BindEvents();
   }
 

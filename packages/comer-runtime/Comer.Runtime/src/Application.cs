@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Threading;
-using Avalonia.Themes.Fluent;
+using Avalonia.Themes.Simple;
 using Microsoft.JavaScript.NodeApi;
 
 namespace Comer.Runtime;
@@ -9,7 +9,7 @@ namespace Comer.Runtime;
 internal class App : Avalonia.Application {
   public App() {
     Name = "Comer App";
-    var theme = new FluentTheme();
+    var theme = new SimpleTheme();
     Styles.Add(theme);
   }
 }
