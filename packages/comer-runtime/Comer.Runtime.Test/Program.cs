@@ -10,7 +10,7 @@ public static class Program {
     Application.Init();
 
     var win = new Window();
-    win.SetProperty("Background", "#eeffee");
+    win.SetProperty("Background", "#FFF");
     win.Title = "Demo";
 
     var stack = new StackView();
