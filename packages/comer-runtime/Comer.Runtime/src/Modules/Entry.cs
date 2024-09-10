@@ -3,7 +3,7 @@ using Microsoft.JavaScript.NodeApi;
 namespace Comer.Runtime.Modules;
 
 [JSExport]
-public enum EntryKind {
+public enum EntryType {
   File,
   Folder
 }
@@ -11,13 +11,13 @@ public enum EntryKind {
 [JSExport]
 public partial class Entry {
   public Entry() {
-    Kind = EntryKind.File;
+    Type = EntryType.File;
     Path = "";
-    Size = 0;
+    Size = double.NaN;
   }
-  public EntryKind Kind { get; set; }
+  public EntryType Type { get; set; }
   public string Path { get; set; }
   public double Size { get; set; }
   public string? Name { get; set; }
-  public string? Type { get; set; }
+  public string? Mime { get; set; }
 }

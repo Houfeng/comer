@@ -1,4 +1,5 @@
 ﻿using Comer.Runtime.Controls;
+using Comer.Runtime.Modules;
 
 namespace Comer.Runtime.Debugging;
 
@@ -36,6 +37,12 @@ public static class Program {
     var btn = new Button();
     btn.Margin = "16 0";
     btn.Text = "Click";
+    btn.OnKeyDown = async () => {
+      var files = await EntryPicker.Open(win, new EntryPickerOptions {
+        Type = EntryType.File
+      });
+      Console.WriteLine(files);
+    };
     stack.AppendChild(btn);
 
     win.AppendChild(stack);
