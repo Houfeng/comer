@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Comer.Runtime.Controls;
@@ -19,7 +18,7 @@ public partial class Clipboard {
   private static IClipboard? GetClipboard(ComerElement owner) {
     var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
     if (topLevel == null) return null;
-    return topLevel.Clipboard;
+    return topLevel.Clipboard; 
   }
 
   public static async Task SetData(ComerElement owner, string type, object data) {

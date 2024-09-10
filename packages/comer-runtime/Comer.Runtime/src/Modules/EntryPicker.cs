@@ -51,7 +51,7 @@ public partial class EntryPicker {
     if (provider == null) return null;
     var items = await provider
     .OpenFilePickerAsync(new FilePickerOpenOptions {
-      Title = options.Title ?? "File",
+      Title = options.Title ?? "Select file",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
@@ -101,7 +101,7 @@ public partial class EntryPicker {
     if (provider == null) return null;
     var items = await provider
     .OpenFolderPickerAsync(new FolderPickerOpenOptions {
-      Title = options.Title ?? "Folder",
+      Title = options.Title ?? "Select folder",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null

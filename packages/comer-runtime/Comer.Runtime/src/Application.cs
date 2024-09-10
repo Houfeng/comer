@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Threading;
 using Avalonia.Themes.Simple;
 using Microsoft.JavaScript.NodeApi;
+using Comer.Runtime.Controls;
 
 namespace Comer.Runtime;
 
@@ -11,6 +12,9 @@ internal class App : Avalonia.Application {
     Name = "Comer App";
     var theme = new SimpleTheme();
     Styles.Add(theme);
+  }
+  public override void OnFrameworkInitializationCompleted() {
+    Menu.SetMenu(this);
   }
 }
 

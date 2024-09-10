@@ -5,7 +5,6 @@ namespace Comer.Runtime.Debugging;
 
 public static class Program {
 
-
   [STAThread]
   public static void Main() {
     Application.Init();
