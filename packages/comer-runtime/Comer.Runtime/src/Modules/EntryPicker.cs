@@ -36,19 +36,26 @@ public class EntryPickerOpenFolderOptions : EntryPickerOptions { }
 
 [JSExport]
 public partial class EntryPicker {
+
+  private static IStorageProvider? GetStorageProvider(ComerElement owner) {
+    var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
+    if (topLevel == null) return null;
+    return topLevel.StorageProvider;
+  }
+
   public static async Task<IReadOnlyList<Entry>?> OpenFile(
     ComerElement owner,
     EntryPickerOpenFileOptions options
   ) {
-    var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
-    if (topLevel == null) return null;
-    var items = await topLevel.StorageProvider
+    var provider = GetStorageProvider(owner);
+    if (provider == null) return null;
+    var items = await provider
     .OpenFilePickerAsync(new FilePickerOpenOptions {
       Title = options.Title ?? "File",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
-      ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
+      ? await provider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
       FileTypeFilter = options.Filters != null
       ? options.Filters.Select(it => new FilePickerFileType(it.Title ?? "Files") {
@@ -68,14 +75,14 @@ public partial class EntryPicker {
     ComerElement owner,
     EntryPickerSaveFileOptions options
   ) {
-    var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
-    if (topLevel == null) return null;
-    var file = await topLevel.StorageProvider
+    var provider = GetStorageProvider(owner);
+    if (provider == null) return null;
+    var file = await provider
     .SaveFilePickerAsync(new FilePickerSaveOptions {
       Title = options.Title ?? "Save file",
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
-      ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
+      ? await provider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
     });
     if (file == null) return null;
@@ -90,15 +97,15 @@ public partial class EntryPicker {
     ComerElement owner,
     EntryPickerOpenFolderOptions options
   ) {
-    var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
-    if (topLevel == null) return null;
-    var items = await topLevel.StorageProvider
+    var provider = GetStorageProvider(owner);
+    if (provider == null) return null;
+    var items = await provider
     .OpenFolderPickerAsync(new FolderPickerOpenOptions {
       Title = options.Title ?? "Folder",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
-      ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
+      ? await provider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
     });
     if (items == null) return null;
