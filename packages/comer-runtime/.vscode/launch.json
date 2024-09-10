@@ -15,6 +15,7 @@
       "program": "${workspaceFolder}/Comer.Runtime.Test/bin/Debug/net8.0/Comer.Runtime.Test.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
+      "brokeredServicePipeName": "undefined",
     }
   ]
 }
