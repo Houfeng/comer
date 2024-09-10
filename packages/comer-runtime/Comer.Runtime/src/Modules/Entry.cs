@@ -13,11 +13,10 @@ public partial class Entry {
   public Entry() {
     Type = EntryType.File;
     Path = "";
-    Size = double.NaN;
   }
   public EntryType Type { get; set; }
   public string Path { get; set; }
-  public double Size { get; set; }
+  public double? Size { get; set; }
   public string? Name { get; set; }
   public string? Mime { get; set; }
 }

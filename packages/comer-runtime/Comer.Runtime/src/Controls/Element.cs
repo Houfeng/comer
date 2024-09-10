@@ -53,14 +53,9 @@ public class Boxing : AC.Border, IBounding {
   }
 }
 
-public class ComerElementBase {
-  internal IEnumerable<string> GetTypeChain() {
-    return [];
-  }
-}
 
 [JSExport]
-public partial class ComerElement : ComerElementBase {
+public partial class ComerElement {
 
   static ComerElement() {
     PropertiesManager.UseAccessors<ComerElement>()

@@ -17,12 +17,12 @@ public class EntryPickerOptions {
 [JSExport]
 public class EntryPickerFilter {
   public string Title { get; set; } = "All files";
-  public IEnumerable<string> Patterns = ["*.*"];
+  public string[] Patterns { get; set; } = ["*.*"];
 }
 
 [JSExport]
 public class EntryPickerOpenFileOptions : EntryPickerOptions {
-  public IEnumerable<EntryPickerFilter>? Filters;
+  public EntryPickerFilter[]? Filters { get; set; }
 }
 
 [JSExport]
