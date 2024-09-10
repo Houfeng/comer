@@ -37,7 +37,7 @@ public static class Program {
     var btn = new Button();
     btn.Margin = "16 0";
     btn.Text = "Click";
-    btn.OnKeyDown = async () => {
+    btn.OnPointerDown = async () => {
       var files = await EntryPicker.Open(win, new EntryPickerOptions {
         Type = EntryType.File
       });
