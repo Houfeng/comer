@@ -32,7 +32,7 @@ public partial class EntryPicker {
       ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
       FileTypeFilter = [new FilePickerFileType(string.Empty) {
-        Patterns=options.Patterns
+        Patterns = options.Patterns ?? ["*.*"],
       }]
     });
     return items.Select(it => new Entry() {
