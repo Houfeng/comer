@@ -7,42 +7,56 @@ namespace Comer.Runtime.Modules;
 
 [JSExport]
 public class EntryPickerOptions {
-  public EntryType Type { get; set; }
   public string? Title { get; set; }
-  public bool? Multi { get; set; }
-  public IReadOnlyList<EntryPickerFilter>? Filters;
+  public bool? Multiple { get; set; }
   public string? Name { get; set; }
   public string? Location { get; set; }
 }
 
+
 [JSExport]
 public class EntryPickerFilter {
   public string Title { get; set; } = "All files";
-  public IReadOnlyList<string> Patterns = ["*.*"];
+  public IEnumerable<string> Patterns = ["*.*"];
 }
 
 [JSExport]
+public class EntryPickerOpenFileOptions : EntryPickerOptions {
+  public IEnumerable<EntryPickerFilter>? Filters;
+}
+
+[JSExport]
+public class EntryPickerSaveFileOptions : EntryPickerOpenFileOptions {
+  public string? Extension { get; set; }
+  public bool? OverwritePrompt { get; set; }
+}
+
+[JSExport]
+public class EntryPickerOpenFolderOptions : EntryPickerOptions { }
+
+[JSExport]
 public partial class EntryPicker {
-  private static async Task<IReadOnlyList<Entry>> OpenFile(
+  public static async Task<IReadOnlyList<Entry>?> OpenFile(
     ComerElement owner,
-    EntryPickerOptions options
+    EntryPickerOpenFileOptions options
   ) {
     var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
-    if (topLevel == null) return [];
+    if (topLevel == null) return null;
     var items = await topLevel.StorageProvider
     .OpenFilePickerAsync(new FilePickerOpenOptions {
       Title = options.Title ?? "File",
-      AllowMultiple = options.Multi ?? false,
+      AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
       ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
       FileTypeFilter = options.Filters != null
       ? options.Filters.Select(it => new FilePickerFileType(it.Title ?? "Files") {
-        Patterns = it.Patterns ?? ["*.*"],
+        Patterns = (it.Patterns ?? ["*.*"]).ToArray(),
       }).ToArray()
       : null,
     });
+    if (items == null) return null;
     return items.Select(it => new Entry() {
       Type = EntryType.File,
       Name = it.Name,
@@ -50,37 +64,49 @@ public partial class EntryPicker {
     }).ToArray();
   }
 
-  private static async Task<IReadOnlyList<Entry>> OpenFolder(
+  public static async Task<Entry?> SaveFile(
     ComerElement owner,
-    EntryPickerOptions options
+    EntryPickerSaveFileOptions options
   ) {
     var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
-    if (topLevel == null) return [];
-    var items = await topLevel.StorageProvider
-    .OpenFolderPickerAsync(new FolderPickerOpenOptions {
-      Title = options.Title ?? "Folder",
-      AllowMultiple = options.Multi ?? false,
+    if (topLevel == null) return null;
+    var file = await topLevel.StorageProvider
+    .SaveFilePickerAsync(new FilePickerSaveOptions {
+      Title = options.Title ?? "Save file",
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
       ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
       : null,
     });
+    if (file == null) return null;
+    return new Entry() {
+      Type = EntryType.File,
+      Name = file.Name,
+      Path = file.Path.AbsolutePath,
+    };
+  }
+
+  public static async Task<IReadOnlyList<Entry>?> OpenFolder(
+    ComerElement owner,
+    EntryPickerOpenFolderOptions options
+  ) {
+    var topLevel = AC.TopLevel.GetTopLevel(owner.Bounding.Raw);
+    if (topLevel == null) return null;
+    var items = await topLevel.StorageProvider
+    .OpenFolderPickerAsync(new FolderPickerOpenOptions {
+      Title = options.Title ?? "Folder",
+      AllowMultiple = options.Multiple ?? false,
+      SuggestedFileName = options.Name ?? "",
+      SuggestedStartLocation = options.Location != null
+      ? await topLevel.StorageProvider.TryGetFolderFromPathAsync(new Uri(options.Location))
+      : null,
+    });
+    if (items == null) return null;
     return items.Select(it => new Entry() {
       Type = EntryType.File,
       Name = it.Name,
       Path = it.Path.AbsolutePath,
     }).ToArray();
-  }
-
-  public static async Task<IReadOnlyList<Entry>> Open(
-    ComerElement owner,
-    EntryPickerOptions options
-  ) {
-    if (options.Type == EntryType.File) {
-      return await OpenFile(owner, options);
-    } else {
-      return await OpenFolder(owner, options);
-    }
   }
 
 }
