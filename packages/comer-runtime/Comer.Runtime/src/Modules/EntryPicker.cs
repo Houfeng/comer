@@ -16,7 +16,7 @@ public class EntryPickerOptions {
 
 [JSExport]
 public class EntryPickerFilter {
-  public string Title { get; set; } = "All files";
+  public string? Title { get; set; } = "All files";
   public string[] Patterns { get; set; } = ["*.*"];
 }
 
@@ -51,7 +51,7 @@ public partial class EntryPicker {
     if (provider == null) return null;
     var items = await provider
     .OpenFilePickerAsync(new FilePickerOpenOptions {
-      Title = options.Title ?? "Select file",
+      Title = options.Title ?? "",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
@@ -79,7 +79,7 @@ public partial class EntryPicker {
     if (provider == null) return null;
     var file = await provider
     .SaveFilePickerAsync(new FilePickerSaveOptions {
-      Title = options.Title ?? "Save file",
+      Title = options.Title ?? "",
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null
       ? await provider.TryGetFolderFromPathAsync(new Uri(options.Location))
@@ -101,7 +101,7 @@ public partial class EntryPicker {
     if (provider == null) return null;
     var items = await provider
     .OpenFolderPickerAsync(new FolderPickerOpenOptions {
-      Title = options.Title ?? "Select folder",
+      Title = options.Title ?? "",
       AllowMultiple = options.Multiple ?? false,
       SuggestedFileName = options.Name ?? "",
       SuggestedStartLocation = options.Location != null

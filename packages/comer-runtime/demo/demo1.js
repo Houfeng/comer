@@ -1,7 +1,9 @@
 const {
   ComerApp, Window, View, TextBox,
   VerticalAlign, HorizontalAlign,
-  StackView, Button
+  StackView, Button,
+  Menu,
+  MenuItem
 } = require('../');
 
 ComerApp.init();
@@ -39,14 +41,10 @@ btn.onClick = () => {
 }
 stack.appendChild(btn);
 
-console.time('update');
-for (let i = 0; i < 50000; i++) {
-  box.value = `NO. ${i}`;
-  btn.text = `NO. ${i}`;
-}
-console.timeEnd('update');
-
 win.appendChild(stack);
 win.show();
+
+// var menu = new Menu();
+// var menuItem = new MenuItem();
 
 ComerApp.run();
