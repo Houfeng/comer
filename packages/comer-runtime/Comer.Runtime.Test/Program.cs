@@ -45,8 +45,9 @@ public static class Program {
     win.AppendChild(stack);
     win.Show();
 
-    ComerApp.Start();
+    win.ShowMenu();
 
+    ComerApp.Start();
   }
 
 }

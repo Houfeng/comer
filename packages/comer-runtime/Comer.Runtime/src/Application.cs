@@ -16,6 +16,7 @@ class InnerApp : Application {
 
   public override void OnFrameworkInitializationCompleted() {
     AC.NativeMenu.GetMenu(this)?.Items.Clear();
+    if (ComerApp.Ready != null) ComerApp.Ready();
   }
 }
 
@@ -23,6 +24,8 @@ class InnerApp : Application {
 public partial class ComerApp {
 
   internal static Application? AppDelegate { get; private set; }
+
+  public static Action? Ready { get; set; }
 
   public static void Init() {
     AppBuilder.Configure<InnerApp>()

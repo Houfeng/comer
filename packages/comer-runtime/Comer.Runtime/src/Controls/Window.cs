@@ -184,4 +184,18 @@ public partial class Window : View {
     }
   }
 
+  public void ShowMenu() {
+    var win = new AC.Window();
+    var menu = AC.NativeMenu.GetMenu(win) ?? new AC.NativeMenu();
+    var item = new AC.NativeMenuItem("测试");
+    item.IsVisible = true;
+    item.IsEnabled = true;
+    item.Click += (_, _) => { };
+    menu.Add(item);
+    // AC.NativeMenu.SetMenu(Win, menu);
+    var bar = new AC.NativeMenuBar();
+    win.Content = bar;
+    win.Show();
+  }
+
 }
