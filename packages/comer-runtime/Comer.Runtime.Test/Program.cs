@@ -7,7 +7,7 @@ public static class Program {
 
   [STAThread]
   public static void Main() {
-    Application.Init();
+    ComerApp.Init();
 
     var win = new Window();
     win.SetProperty("Background", "#FFF");
@@ -45,7 +45,7 @@ public static class Program {
     win.AppendChild(stack);
     win.Show();
 
-    Application.Start();
+    ComerApp.Start();
 
   }
 

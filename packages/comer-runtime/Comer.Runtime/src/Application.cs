@@ -2,31 +2,36 @@ using Avalonia;
 using Avalonia.Threading;
 using Avalonia.Themes.Simple;
 using Microsoft.JavaScript.NodeApi;
+using AC = Avalonia.Controls;
 using Comer.Runtime.Controls;
 
 namespace Comer.Runtime;
 
-[JSExport(false)]
-internal class App : Avalonia.Application {
-  public App() {
+class InnerApp : Application {
+  public InnerApp() {
     Name = "Comer App";
     var theme = new SimpleTheme();
     Styles.Add(theme);
   }
+
   public override void OnFrameworkInitializationCompleted() {
-    Menu.SetMenu(this);
+    AC.NativeMenu.GetMenu(this)?.Items.Clear();
   }
 }
 
 [JSExport]
-public partial class Application {
+public partial class ComerApp {
+
+  internal static Application? AppDelegate { get; private set; }
 
   public static void Init() {
-    AppBuilder.Configure<App>()
+    AppBuilder.Configure<InnerApp>()
     .UsePlatformDetect()
     .UseStandardRuntimePlatformSubsystem()
     .With(new AvaloniaNativePlatformOptions { })
-    .Start((app, args) => { }, []);
+    .Start((app, args) => {
+      AppDelegate = app;
+    }, []);
   }
 
   public static void Tick() {
@@ -47,7 +52,6 @@ public partial class Application {
   /// </summary>
   public static void Run() { }
 
-  [JSExport(false)]
   private static CancellationTokenSource? RunToken { get; set; }
 
   [JSExport(false)]
@@ -60,6 +64,20 @@ public partial class Application {
   public static void Stop() {
     if (RunToken == null) return;
     RunToken.Cancel();
+  }
+
+  private static Menu? _menu { get; set; }
+
+  public static Menu? Menu {
+    get {
+      return _menu;
+    }
+    set {
+      if (AppDelegate == null || value == null) return;
+      var appMenu = AC.NativeMenu.GetMenu(AppDelegate);
+      if (appMenu == null) return;
+      value.Itmes.ToList().ForEach(it => appMenu.Add(it.ToNative()));
+    }
   }
 
 }

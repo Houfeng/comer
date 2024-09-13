@@ -1,10 +1,10 @@
 const {
-  Application, Window, View, TextBox,
+  ComerApp, Window, View, TextBox,
   VerticalAlign, HorizontalAlign,
   StackView, Button
 } = require('../');
 
-Application.init();
+ComerApp.init();
 
 var win = new Window();
 win.background = 'gray';
@@ -49,4 +49,4 @@ console.timeEnd('update');
 win.appendChild(stack);
 win.show();
 
-Application.run();
+ComerApp.run();
