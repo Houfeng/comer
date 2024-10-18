@@ -42,7 +42,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private scheduler = new Scheduler(this.adapter);
   private stepper = new Stepper();
@@ -192,6 +192,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isComponent(element)) return;
     const { ref } = element[$Props];
     if (!ref) return;
+    if (ref[$Value]) throw new Error("Ref cannot be repeatedly bound");
     ref[$Value] = this.isHostComponent(element) ? element[$Host] : element;
   }
 
@@ -359,7 +360,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private buildElement(element: Component, isMount: boolean): void {
     if (!this.isComponent(element)) return;
     // Ensure that each change is executed only once
-    if ((element[$Step] || 0) >= this.stepper.current) return;
+    // if ((element[$Step] || 0) >= this.stepper.current) return;
     element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
     if (isMount) this.requestMount(element);
