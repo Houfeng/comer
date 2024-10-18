@@ -87,6 +87,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (this.isDelegate(element) || this.isFragment(element)) return;
     // Normalize the props of element
     this.normalizeProps(element);
+    this.hideReservedProps(element);
     // unless: Make the props of the instance observable
     // unless: element[$Props] = observable(element[$Props]);
     // Bind a schedule task
@@ -235,6 +236,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     } else {
       element[$Props] = ctor.normalizeProps(element[$Props]);;
     }
+  }
+
+  private hideReservedProps(element: Component) {
+    const props = element[$Props];
+    Object.defineProperties(props, {
+      key: { enumerable: false, value: props.key },
+      ref: { enumerable: false, value: props.ref },
+    });
   }
 
   private applyLatestProps(
