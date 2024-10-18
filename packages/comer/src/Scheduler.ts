@@ -7,7 +7,7 @@ export type TaskPriority = "flush" | "immed" | "usual" | "defer";
 export type TaskContext = () => any;
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private priority = Flag<TaskPriority>("usual");
 
@@ -90,11 +90,14 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
     if (!task) return;
     const priority = this.current;
     if (priority === "immed" || priority === "flush") {
+      this.immedTasks.delete(task);
       this.immedTasks.add(task);
     } else if (priority === "defer") {
+      this.deferTasks.delete(task);
       this.deferTasks.add(task);
       this.requestRunDeferTasks();
     } else {
+      this.usualTasks.delete(task);
       this.usualTasks.add(task);
       this.requestRunUsualTasks();
     }
@@ -102,6 +105,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
 
   paint = (task: TaskHandler): void => {
     if (!task) return;
+    this.paintTasks.delete(task);
     this.paintTasks.add(task);
     this.requestRunPaintTasks();
   };

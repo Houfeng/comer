@@ -1,5 +1,5 @@
 export class Stepper {
-  private _current = 1;
+  private _current = 0;
 
   get current() {
     return this._current;

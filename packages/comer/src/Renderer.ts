@@ -88,8 +88,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Normalize the props of element
     this.normalizeProps(element);
     this.hideReservedProps(element);
-    // unless: Make the props of the instance observable
-    // unless: element[$Props] = observable(element[$Props]);
+    // uneless: Make the props of the instance observable
+    // uneless: element[$Props] = observable(element[$Props]);
     // Bind a schedule task
     element[$Build] = () => this.buildElement(element, false);
     // Request rebuild function
@@ -231,11 +231,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private normalizeProps(element: Component): void {
     const ctor = this.getComponentConstructor(element);
     if (!ctor.normalizeProps) return;
-    if (isObservable(element[$Props])) {
-      throw new Error("Cannot normalize props of already created components");
-    } else {
-      element[$Props] = ctor.normalizeProps(element[$Props]);;
-    }
+    element[$Props] = ctor.normalizeProps(element[$Props]);;
+    // useless:
+    // if (isObservable(element[$Props])) {
+    //   throw new Error("Cannot normalize props of already created components");
+    // } else {
+    //   element[$Props] = ctor.normalizeProps(element[$Props]);;
+    // }
   }
 
   private hideReservedProps(element: Component) {
@@ -368,7 +370,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private buildElement(element: Component, isMount: boolean): void {
     if (!this.isComponent(element)) return;
     // Ensure that each change is executed only once
-    // if ((element[$Step] || 0) >= this.stepper.current) return;
+    if ((element[$Step] ?? -1) >= this.stepper.current) return;
     element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
     if (isMount) this.requestMount(element);
