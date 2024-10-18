@@ -192,7 +192,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!this.isComponent(element)) return;
     const { ref } = element[$Props];
     if (!ref) return;
-    if (ref[$Value]) throw new Error("Ref cannot be repeatedly bound");
+    // if (ref[$Value]) throw new Error("Ref cannot be repeatedly bound");
     ref[$Value] = this.isHostComponent(element) ? element[$Host] : element;
   }
 
@@ -230,11 +230,10 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private normalizeProps(element: Component): void {
     const ctor = this.getComponentConstructor(element);
     if (!ctor.normalizeProps) return;
-    const normalizedProps = ctor.normalizeProps(element[$Props]);
     if (isObservable(element[$Props])) {
       throw new Error("Cannot normalize props of already created components");
     } else {
-      element[$Props] = normalizedProps;
+      element[$Props] = ctor.normalizeProps(element[$Props]);;
     }
   }
 
