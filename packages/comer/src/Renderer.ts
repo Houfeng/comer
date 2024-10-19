@@ -1,6 +1,6 @@
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, ComponentConstructor, useContext } from "./Component";
-import { isObservable, reactivable } from "ober";
+import { reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import {
@@ -231,7 +231,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private normalizeProps(element: Component): void {
     const ctor = this.getComponentConstructor(element);
     if (!ctor.normalizeProps) return;
-    element[$Props] = ctor.normalizeProps(element[$Props]);;
+    element[$Props] = ctor.normalizeProps(element[$Props]);
     // useless:
     // if (isObservable(element[$Props])) {
     //   throw new Error("Cannot normalize props of already created components");

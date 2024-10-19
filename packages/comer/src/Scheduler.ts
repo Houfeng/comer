@@ -7,7 +7,7 @@ export type TaskPriority = "flush" | "immed" | "usual" | "defer";
 export type TaskContext = () => any;
 
 export class Scheduler<T extends HostAdapter<HostElement>> {
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private priority = Flag<TaskPriority>("usual");
 

@@ -23,12 +23,14 @@ export class Demo extends Component {
       children: [
         new Input({ value: String(num), onInput: this.updateNum }),
         new Input({ value: String(value), onInput: this.updateValue }),
-        new Deferment(new Div({
-          style: { wordWrap: "break-word", wordBreak: "break-all" },
-          children: new Array(num)
-            .fill(" ")
-            .map((_, i) => new Item({ text: `${i}:${value}, ` })),
-        })),
+        new Deferment(
+          new Div({
+            style: { wordWrap: "break-word", wordBreak: "break-all" },
+            children: new Array(num)
+              .fill(" ")
+              .map((_, i) => new Item({ text: `${i}:${value}, ` })),
+          }),
+        ),
       ],
     });
   }
