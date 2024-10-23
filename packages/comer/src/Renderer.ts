@@ -83,7 +83,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       : this.getComponentConstructor(element);
   }
 
-  private isSomeComponentType(el1: Component, el2: Component): boolean {
+  private isSameComponentType(el1: Component, el2: Component): boolean {
     return this.getComponentType(el1) === this.getComponentType(el2);
   }
 
@@ -257,7 +257,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     oldElement: Component,
     newElement: Component = oldElement,
   ): boolean {
-    if (!this.isSomeComponentType(oldElement, newElement)) {
+    if (!this.isSameComponentType(oldElement, newElement)) {
       throw new Error("Update with mismatched types");
     }
     // ----
@@ -317,7 +317,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
   private canUpdate(oldElement: Component, newElement: Component): boolean {
     if (!oldElement || !newElement) return false;
     const isSameKey = oldElement[$Props].key === newElement[$Props].key;
-    return isSameKey && this.isSomeComponentType(oldElement, newElement);
+    return isSameKey && this.isSameComponentType(oldElement, newElement);
   }
 
   private canDefer(element: Component): boolean {
