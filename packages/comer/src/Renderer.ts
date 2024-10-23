@@ -16,6 +16,7 @@ import {
   $Mount,
   $Update,
   $Step,
+  $ChildKMap,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferment } from "./Deferment";
@@ -33,6 +34,10 @@ function isEventKey(name: string) {
 function isReservedKey(name: string) {
   return name === "key" || name === "ref";
 }
+
+type NblComponent = Component | undefined | null;
+type NblComponentArray = Array<NblComponent>;
+type NblComponentMap = Record<string, NblComponent>;
 
 /**
  * Comer renderer, rendering elements to the host surface
@@ -375,22 +380,26 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Besides secondary updates, mounting is usually required
     if (isMount) this.requestMount(element);
     // handle children
-    const oldChildren = element[$Children] || [];
-    const newChildren = this.composeElement(element) || [];
-    const effectiveItems: Component[] = [];
-    const linkEffectiveItem = (item: Component) => {
+    const oldChildren: NblComponentArray = element[$Children] || [];
+    const newChildren: NblComponentArray = this.composeElement(element) || [];
+    const children: Component[] = [];
+    const oldChildKMap: NblComponentMap = element[$ChildKMap] || {};
+    const childKMap: Record<string, Component> = {};
+    const linkChild = (item: Component) => {
       item[$Parent] = element;
-      item[$Prev] = effectiveItems[effectiveItems.length - 1];
-      effectiveItems.push(item);
+      item[$Prev] = children[children.length - 1];
+      children.push(item);
+      const { key } = item[$Props];
+      if (key) childKMap[key] = item;
     };
     const length = Math.max(oldChildren.length, newChildren.length);
     for (let i = 0; i < length; i++) {
-      const oldChild = oldChildren[i];
       const newChild = newChildren[i];
-      // TODO: Optimize KEY based reuse
-      if (this.canUpdate(oldChild, newChild)) {
+      const key = newChild?.[$Props].key ?? "";
+      const oldChild = oldChildKMap[key] ?? oldChildren[i];
+      if (oldChild && newChild && this.canUpdate(oldChild, newChild)) {
         // update
-        linkEffectiveItem(oldChild);
+        linkChild(oldChild);
         // Normalize the props of new child
         this.normalizeProps(newChild);
         // apply & update
@@ -402,19 +411,20 @@ export class Renderer<T extends HostAdapter<HostElement>> {
       } else if (!oldChild && newChild) {
         // insert
         const target = this.getRawElement(newChild);
-        linkEffectiveItem(target);
+        linkChild(target);
         this.buildElement(target, true);
       } else if (oldChild && newChild) {
         // replace
         this.unmount(oldChild);
         const target = this.getRawElement(newChild);
-        linkEffectiveItem(target);
+        linkChild(target);
         this.buildElement(target, true);
       } else {
         throw new Error("Build element error");
       }
     }
-    element[$Children] = effectiveItems;
+    element[$Children] = children;
+    element[$ChildKMap] = childKMap;
     if (!isMount) element["onUpdated"]?.();
   }
 

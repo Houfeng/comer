@@ -1,5 +1,6 @@
 export const $Props = Symbol("Props");
 export const $Children = Symbol("Children");
+export const $ChildKMap = Symbol("ChildKMap");
 export const $Parent = Symbol("Parent");
 export const $Prev = Symbol("Prev");
 export const $Reactive = Symbol("Reactive");

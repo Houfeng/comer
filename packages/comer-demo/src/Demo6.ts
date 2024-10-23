@@ -21,8 +21,8 @@ export class Demo extends Component {
     const { num, value } = this.state;
     return new Div({
       children: [
-        new Input({ value: String(num), onInput: this.updateNum }),
-        new Input({ value: String(value), onInput: this.updateValue }),
+        new Input({ key: "n", value: String(num), onInput: this.updateNum }),
+        new Input({ key: "v", value: String(value), onInput: this.updateValue }),
         new Deferment(
           new Div({
             style: { wordWrap: "break-word", wordBreak: "break-all" },
