@@ -1,6 +1,6 @@
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, ComponentConstructor, useContext } from "./Component";
-import { nextTick, reactivable } from "ober";
+import { reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import {
@@ -45,7 +45,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private scheduler = new Scheduler(this.adapter);
 
@@ -84,12 +84,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return this.getComponentType(el1) === this.getComponentType(el2);
   }
 
-
   private rendering?: Set<Component>;
 
-  private newRendering() {
+  private endReadering = () => {
+    this.rendering = void 0;
+  };
+
+  private beginRendering() {
     this.rendering = new Set<Component>();
-    nextTick(() => (this.rendering = void 0));
   }
 
   private bindReactiver(element: Component): void {
@@ -105,16 +107,19 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Request rebuild function
     element[$Update] = () => {
       if (!element[$Build]) return;
-      // Prevent duplicate rendering within the same synchronization cycle
-      if (!this.rendering) this.newRendering();
+      // Prevent duplicate rendering : begin
+      const isNewTick = !this.rendering;
+      if (isNewTick) this.beginRendering();
+      // Check duplicate rendering
       if (this.rendering?.has(element)) return;
       this.rendering?.add(element);
-      // --
+      // Invoke build method
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
-      return willDefer
-        ? defer(() => post(element[$Build]!))
-        : post(element[$Build]);
+      if (willDefer) defer(() => post(element[$Build]!));
+      else post(element[$Build]);
+      // Prevent duplicate rendering : end
+      if (isNewTick) this.scheduler.post(this.endReadering);
     };
     // Create a reactiver
     element[$Reactive] = createReactiver(
@@ -412,7 +417,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.normalizeProps(newChild);
         // apply & update
         const changed = this.applyLatestProps(oldChild, newChild);
-        if (changed) oldChild[$Update]?.();
+        const update = oldChild[$Update];
+        if (changed && update) this.scheduler.immed(update);
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
