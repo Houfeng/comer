@@ -139,7 +139,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
   }
 
   requestIdleCallback(handler: (deadline: HostIdleDeadline) => void): unknown {
-    return requestIdleCallback(handler);
+    return requestIdleCallback(handler, { timeout: 5000 });
   }
 
   cancelIdleCallback(id: unknown): void {
