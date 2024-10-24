@@ -325,6 +325,8 @@ export class Renderer<T extends HostAdapter<HostElement>> {
 
   private canDefer(element: Component): boolean {
     if (!element) return false;
+    const { isDeferSuported = true } = this.adapter;
+    if (!isDeferSuported) return false;
     const { current } = this.scheduler;
     if (current === "flush") return false;
     if (current === "defer") return true;

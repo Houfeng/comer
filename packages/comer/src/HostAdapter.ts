@@ -58,7 +58,14 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    * unbind
    * @param root App root
    */
-  unbind?(root: TRoot): void;
+  unbind(root: TRoot): void;
+
+  /**
+   * Is defer supported
+   * If false is returned, it will render the defense invalid,
+   * just like a fragment.
+   */
+  isDeferSuported: boolean;
 
   /**
    * Check if it is a host element
@@ -143,7 +150,7 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    * Cancel a change and rendering task from the host's event loop
    * @param id Task id
    */
-  cancelPaintCallback?(id: unknown): void;
+  cancelPaintCallback(id: unknown): void;
 
   /**
    *  Add a deferrable task
@@ -159,5 +166,5 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    * Remove a deferrable task
    * @param id Task id
    */
-  cancelIdleCallback?(id: unknown): void;
+  cancelIdleCallback(id: unknown): void;
 }

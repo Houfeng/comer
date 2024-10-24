@@ -43,11 +43,17 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     return console;
   }
 
+  get isDeferSuported(): boolean {
+    return true;
+  }
+
   bind(root: DOMElement): void {
     if (!this.isHostElement(root)) return;
     if (root instanceof Text) throw new Error("Invalid host root");
     if (root.children.length > 0) throw new Error("Root is not empty");
   }
+
+  unbind(_root: DOMElement): void {}
 
   isHostElement(value: unknown): value is DOMHostElement {
     return (
