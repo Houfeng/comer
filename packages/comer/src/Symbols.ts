@@ -12,4 +12,3 @@ export const $Host = Symbol("Host");
 export const $Update = Symbol("Update");
 export const $Build = Symbol("Build");
 export const $Mount = Symbol("Mount");
-export const $Step = Symbol("Step");

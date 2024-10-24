@@ -1,6 +1,6 @@
 import { HostAdapter, HostElement } from "./HostAdapter";
 import { Component, ComponentConstructor, useContext } from "./Component";
-import { reactivable } from "ober";
+import { nextTick, reactivable } from "ober";
 import { HostComponent } from "./HostComponent";
 import { Fragment } from "./Fragment";
 import {
@@ -15,13 +15,11 @@ import {
   $Build,
   $Mount,
   $Update,
-  $Step,
   $ChildKMap,
 } from "./Symbols";
 import { Delegate } from "./Delegate";
 import { Deferment } from "./Deferment";
 import { Scheduler } from "./Scheduler";
-import { Stepper } from "./Stepper";
 
 function createReactiver(build: () => Component, update: () => void) {
   return reactivable(build, { update, batch: false });
@@ -47,10 +45,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) {}
+  constructor(protected adapter: T) { }
 
   private scheduler = new Scheduler(this.adapter);
-  private stepper = new Stepper();
 
   private isComponent(value: unknown): value is Component {
     return !!value && value instanceof Component;
@@ -87,6 +84,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     return this.getComponentType(el1) === this.getComponentType(el2);
   }
 
+
+  private rendering?: Set<Component>;
+
+  private newRendering() {
+    this.rendering = new Set<Component>();
+    nextTick(() => (this.rendering = void 0));
+  }
+
   private bindReactiver(element: Component): void {
     if (element[$Reactive]) return;
     if (this.isDelegate(element) || this.isFragment(element)) return;
@@ -98,12 +103,13 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     // Bind a schedule task
     element[$Build] = () => this.buildElement(element, false);
     // Request rebuild function
-    element[$Update] = (nextStep = true) => {
+    element[$Update] = () => {
       if (!element[$Build]) return;
-      if (nextStep) this.stepper.next();
-      // Ensure that each change is executed only once
-      if ((element[$Step] ?? -1) >= this.stepper.current) return;
-      element[$Step] = this.stepper.current;
+      // Prevent duplicate rendering within the same synchronization cycle
+      if (!this.rendering) this.newRendering();
+      if (this.rendering?.has(element)) return;
+      this.rendering?.add(element);
+      // --
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
       return willDefer
@@ -406,7 +412,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
         this.normalizeProps(newChild);
         // apply & update
         const changed = this.applyLatestProps(oldChild, newChild);
-        if (changed) oldChild[$Update]?.(false);
+        if (changed) oldChild[$Update]?.();
       } else if (oldChild && !newChild) {
         // remove
         this.unmount(oldChild);
@@ -445,7 +451,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     }
     this.root = root;
     this.adapter.bind(root);
-    this.stepper.bind();
     const target = this.getRawElement(element);
     this.buildElement(target, true);
     return target as E;
@@ -510,7 +515,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   destroy() {
     this.checkDestroyState();
-    this.stepper.unbind();
     if (this.root) this.adapter.unbind?.(this.root);
     this._destroyed = true;
   }
