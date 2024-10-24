@@ -28,16 +28,16 @@ export type ComponentProps<TProps extends object, TRef extends object> = {
  */
 export type ComponentParameters<TProps extends object, TRef extends object> =
   RequiredKeyOf<TProps> extends never
-  ? OptionalKeyOf<TProps> extends never
-  ? Parameters<() => void>
-  : Parameters<(props?: ComponentProps<TProps, TRef>) => void>
-  : Parameters<(props: ComponentProps<TProps, TRef>) => void>;
+    ? OptionalKeyOf<TProps> extends never
+      ? Parameters<() => void>
+      : Parameters<(props?: ComponentProps<TProps, TRef>) => void>
+    : Parameters<(props: ComponentProps<TProps, TRef>) => void>;
 
 /**
  * Component class constructor
  */
 export type ComponentConstructor<TProps extends object, TRef extends object> = {
-  new(...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;
+  new (...params: ComponentParameters<TProps, TRef>): Component<TProps, TRef>;
   normalizeProps?: (props: object) => object;
 };
 
@@ -154,7 +154,7 @@ export abstract class Component<
 
 export interface ProviderConstructorLike<TValue = any> {
   readonly [$Identify]: "Provider";
-  new(...args: any): {
+  new (...args: any): {
     readonly value: TValue;
   };
 }

@@ -22,7 +22,11 @@ export class Demo extends Component {
     return new Div({
       children: [
         new Input({ key: "n", value: String(num), onInput: this.updateNum }),
-        new Input({ key: "v", value: String(value), onInput: this.updateValue }),
+        new Input({
+          key: "v",
+          value: String(value),
+          onInput: this.updateValue,
+        }),
         new Deferment(
           new Div({
             style: { wordWrap: "break-word", wordBreak: "break-all" },

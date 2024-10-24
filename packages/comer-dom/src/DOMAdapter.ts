@@ -43,7 +43,7 @@ export class DOMAdapter implements HostAdapter<DOMHostElement, DOMElement> {
     return console;
   }
 
-  bindRoot(root: DOMElement): void {
+  bind(root: DOMElement): void {
     if (!this.isHostElement(root)) return;
     if (root instanceof Text) throw new Error("Invalid host root");
     if (root.children.length > 0) throw new Error("Root is not empty");

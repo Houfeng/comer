@@ -52,7 +52,13 @@ export interface HostAdapter<TElement extends HostElement, TRoot = TElement> {
    *
    * @param root App root
    */
-  bindRoot(root: TRoot): void;
+  bind(root: TRoot): void;
+
+  /**
+   * unbind
+   * @param root App root
+   */
+  unbind?(root: TRoot): void;
 
   /**
    * Check if it is a host element

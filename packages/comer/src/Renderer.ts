@@ -47,7 +47,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * Create a comer renderer instance using the specified adapter
    * @param adapter Host adapter (eg. DOMAdapter)
    */
-  constructor(protected adapter: T) { }
+  constructor(protected adapter: T) {}
 
   private scheduler = new Scheduler(this.adapter);
   private stepper = new Stepper();
@@ -101,6 +101,9 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     element[$Update] = (nextStep = true) => {
       if (!element[$Build]) return;
       if (nextStep) this.stepper.next();
+      // Ensure that each change is executed only once
+      if ((element[$Step] ?? -1) >= this.stepper.current) return;
+      element[$Step] = this.stepper.current;
       const willDefer = this.canDefer(element);
       const { defer, post } = this.scheduler;
       return willDefer
@@ -374,9 +377,6 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    */
   private buildElement(element: Component, isMount: boolean): void {
     if (!this.isComponent(element)) return;
-    // Ensure that each change is executed only once
-    if ((element[$Step] ?? -1) >= this.stepper.current) return;
-    element[$Step] = this.stepper.current;
     // Besides secondary updates, mounting is usually required
     if (isMount) this.requestMount(element);
     // handle children
@@ -428,7 +428,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
     if (!isMount) element["onUpdated"]?.();
   }
 
-  private root?: Parameters<T["bindRoot"]>[0];
+  private root?: Parameters<T["bind"]>[0];
 
   /**
    * Render and mount the component tree of the application to the root
@@ -436,15 +436,14 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * @param root Mount root（HostElement or other supported Host object）
    * @returns
    */
-  render<E extends Component>(
-    element: E,
-    root: Parameters<T["bindRoot"]>[0],
-  ): E {
+  render<E extends Component>(element: E, root: Parameters<T["bind"]>[0]): E {
+    this.checkDestroyState();
     if (!this.adapter.isHostElement(root)) {
       throw new Error("Invalid host root");
     }
     this.root = root;
-    this.adapter.bindRoot(root);
+    this.adapter.bind(root);
+    this.stepper.bind();
     const target = this.getRawElement(element);
     this.buildElement(target, true);
     return target as E;
@@ -478,6 +477,7 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * @returns
    */
   unmount(element: Component): void {
+    this.checkDestroyState();
     this.unmountElement(element, false);
   }
 
@@ -486,6 +486,30 @@ export class Renderer<T extends HostAdapter<HostElement>> {
    * please use with caution as it may cause lag.
    */
   flushSync<H extends () => any>(handler: H): ReturnType<H> {
+    this.checkDestroyState();
     return this.scheduler.flush(handler);
+  }
+
+  private _destroyed = false;
+
+  private checkDestroyState() {
+    if (this._destroyed) throw new Error("Renderer is destroyed");
+  }
+
+  /**
+   * Check if the current instance has been destroyed
+   */
+  public get destroyed() {
+    return this._destroyed;
+  }
+
+  /**
+   * Destroy the renderer instance
+   */
+  destroy() {
+    this.checkDestroyState();
+    this.stepper.unbind();
+    if (this.root) this.adapter.unbind?.(this.root);
+    this._destroyed = true;
   }
 }

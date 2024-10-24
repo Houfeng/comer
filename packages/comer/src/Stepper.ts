@@ -8,4 +8,10 @@ export class Stepper {
   next() {
     return this._current++;
   }
+
+  /** @internal */
+  bind() {}
+
+  /** @internal */
+  unbind() {}
 }
