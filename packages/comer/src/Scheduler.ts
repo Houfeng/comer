@@ -121,10 +121,12 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   // ---------------------------- context -----------------------------
 
   defer = <C extends TaskContext>(fn: C): ReturnType<C> => {
+    if (this.priority.current() === "defer") return fn();
     return this.priority.run("defer", fn);
   };
 
   immed = <C extends TaskContext>(fn: C): ReturnType<C> => {
+    if (this.priority.current() === "immed") return fn();
     return this.priority.run("immed", () => {
       const result = fn();
       this.runImmedTasks();
@@ -133,6 +135,7 @@ export class Scheduler<T extends HostAdapter<HostElement>> {
   };
 
   flush = <C extends TaskContext>(fn: C): ReturnType<C> => {
+    if (this.priority.current() === "flush") return fn();
     return this.priority.run("flush", () => {
       const result = fn();
       this.runImmedTasks();
