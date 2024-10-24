@@ -33,9 +33,9 @@ export const build = task('Build', [clean, generate, lint], async () => {
 });
 
 export const dev = task('Dev', [build], async () => {
-  await $`tsc -v`;
-  $`tsc -w -p ./packages/comer`;
-  $`tsc -w -p ./packages/comer-dom`;
+  // await $`tsc -v`;
+  // $`tsc -w -p ./packages/comer`;
+  // $`tsc -w -p ./packages/comer-dom`;
   await $`pnpm -F comer-demo dev`;
 });
 

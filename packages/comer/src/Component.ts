@@ -71,7 +71,7 @@ export abstract class Component<
   protected [$Build]?(): void;
 
   /** @internal */
-  protected [$Update]?(nextStep?: boolean): void;
+  protected [$Update]?(): void;
 
   /** @internal */
   protected [$Mount]?(): void;

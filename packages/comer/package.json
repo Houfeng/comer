@@ -5,6 +5,7 @@
   "module": "./dist/comer.esm.js",
   "main": "./dist/comer.cjs.js",
   "types": "./types/index.d.ts",
+  "__debug:main": "./src/index.ts",
   "scripts": {
     "build": "NODE_ENV=production rollup -c"
   },

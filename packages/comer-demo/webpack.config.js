@@ -28,7 +28,7 @@ module.exports = {
   target: 'web',
   resolve: {
     extensions: ['.ts', '.js'],
-    mainFields: ['browser', 'module', 'main'],
+    mainFields: ['__debug:main', 'browser', 'module', 'main'],
   },
   module: {
     rules: [
