@@ -2,8 +2,8 @@
   "name": "comer-dom",
   "version": "0.1.0",
   "description": "",
-  "module": "./lib/index.js",
-  "main": "./lib/index.js",
+  "module": "./dist/comer-dom.esm.js",
+  "main": "./dist/comer-dom.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "generate": "node ./scripts/generate.mjs",

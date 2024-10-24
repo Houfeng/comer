@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./lib/",
     "declarationDir": "./types/",
+    "esModuleInterop": false,
     "lib": [
       "ESNext"
     ]

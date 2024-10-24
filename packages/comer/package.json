@@ -2,8 +2,8 @@
   "name": "comer",
   "version": "0.1.0",
   "description": "",
-  "module": "./lib/index.js",
-  "main": "./lib/index.js",
+  "module": "./dist/comer.esm.js",
+  "main": "./dist/comer.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production rollup -c"
